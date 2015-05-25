@@ -3,13 +3,14 @@ package org.quartzpowered.network.codec;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
+import org.quartzpowered.common.factory.Factory;
+import org.quartzpowered.common.factory.FactoryRegistry;
 import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.Protocol;
 import org.quartzpowered.network.protocol.ProtocolState;
 import org.quartzpowered.network.protocol.codec.Codec;
 import org.quartzpowered.network.protocol.codec.CodecRegistry;
 import org.quartzpowered.network.protocol.packet.Packet;
-import org.quartzpowered.network.protocol.packet.PacketFactory;
 import org.quartzpowered.network.protocol.packet.PacketRegistry;
 import org.quartzpowered.network.session.Session;
 import org.quartzpowered.network.session.SessionManager;
@@ -21,6 +22,7 @@ import java.util.List;
 public class PacketCodec extends ByteToMessageCodec<Packet> {
     @Inject private Logger logger;
     @Inject private SessionManager sessionManager;
+    @Inject private FactoryRegistry factoryRegistry;
 
     @Override
     @SuppressWarnings("unchecked")
@@ -72,7 +74,7 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
             return;
         }
 
-        PacketFactory packetFactory = PacketFactory.get(type);
+        Factory<Packet> packetFactory = factoryRegistry.get(type);
         Packet packet = packetFactory.create();
 
         codec.decode(buffer, packet);
