@@ -7,6 +7,7 @@ import org.quartzpowered.protocol.codec.v1_8_R1.login.client.EncryptionRequestCo
 import org.quartzpowered.protocol.codec.v1_8_R1.login.client.LoginResponseCodec;
 import org.quartzpowered.protocol.codec.v1_8_R1.login.server.EncryptionResponseCodec;
 import org.quartzpowered.protocol.codec.v1_8_R1.login.server.LoginRequestCodec;
+import org.quartzpowered.protocol.codec.v1_8_R1.play.client.ChatMessageCodec;
 import org.quartzpowered.protocol.codec.v1_8_R1.play.client.ChunkBulkCodec;
 import org.quartzpowered.protocol.codec.v1_8_R1.play.client.ChunkDataCodec;
 import org.quartzpowered.protocol.codec.v1_8_R1.play.client.JoinGameCodec;
@@ -21,6 +22,7 @@ import org.quartzpowered.protocol.packet.login.client.EncryptionRequestPacket;
 import org.quartzpowered.protocol.packet.login.client.LoginResponsePacket;
 import org.quartzpowered.protocol.packet.login.server.EncryptionResponsePacket;
 import org.quartzpowered.protocol.packet.login.server.LoginRequestPacket;
+import org.quartzpowered.protocol.packet.play.client.ChatMessagePacket;
 import org.quartzpowered.protocol.packet.play.client.ChunkBulkPacket;
 import org.quartzpowered.protocol.packet.play.client.ChunkDataPacket;
 import org.quartzpowered.protocol.packet.play.client.JoinGamePacket;
@@ -60,6 +62,7 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(LOGIN, 0x02, LoginResponsePacket.class, new LoginResponseCodec());
 
         clientBoundPacket(PLAY, 0x01, JoinGamePacket.class, new JoinGameCodec());
+        clientBoundPacket(PLAY, 0x02, ChatMessagePacket.class, new ChatMessageCodec());
         clientBoundPacket(PLAY, 0x08, PlayerPositionAndLookPacket.class, new PlayerPositionAndLookCodec());
         clientBoundPacket(PLAY, 0x21, ChunkDataPacket.class, new ChunkDataCodec());
         clientBoundPacket(PLAY, 0x26, ChunkBulkPacket.class, new ChunkBulkCodec());
