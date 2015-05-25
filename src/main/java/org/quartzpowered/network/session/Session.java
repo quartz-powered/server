@@ -8,6 +8,8 @@ import io.netty.channel.ChannelHandler;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.quartzpowered.engine.observe.Observer;
+import org.quartzpowered.engine.observe.ObserverFactory;
 import org.quartzpowered.network.codec.CodecFactory;
 import org.quartzpowered.network.pipeline.CompressionHandler;
 import org.quartzpowered.network.pipeline.EncryptionHandler;
@@ -16,6 +18,7 @@ import org.quartzpowered.network.pipeline.NoopHandler;
 import org.quartzpowered.network.protocol.Protocol;
 import org.quartzpowered.network.protocol.ProtocolState;
 import org.quartzpowered.network.protocol.packet.Packet;
+import org.quartzpowered.network.session.attribute.AttributeStorage;
 import org.quartzpowered.network.session.profile.PlayerProfile;
 
 import javax.crypto.SecretKey;
@@ -55,6 +58,14 @@ public class Session {
 
     @Getter @Setter
     private PlayerProfile profile;
+
+    @Getter
+    private final Observer observer;
+
+    @Inject
+    public Session(ObserverFactory observerFactory) {
+        this.observer = observerFactory.create(this);
+    }
 
     public ChannelFuture send(Packet packet) {
         return channel.writeAndFlush(packet);

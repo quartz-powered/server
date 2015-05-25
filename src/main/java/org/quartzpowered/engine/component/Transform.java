@@ -1,4 +1,4 @@
-package org.quartzpowered.engine;
+package org.quartzpowered.engine.component;
 
 import lombok.Getter;
 
