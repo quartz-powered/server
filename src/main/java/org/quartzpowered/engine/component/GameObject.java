@@ -1,22 +1,37 @@
-package org.quartzpowered.engine;
+package org.quartzpowered.engine.component;
 
 import org.quartzpowered.common.factory.FactoryRegistry;
+import org.quartzpowered.engine.observe.Observable;
+import org.quartzpowered.engine.observe.Observer;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
-public class GameObject {
+public class GameObject implements Observable {
     @Inject private FactoryRegistry factoryRegistry;
 
-    private final List<Component> components = new ArrayList<Component>();
+    private final List<Component> components = new ArrayList<>();
+    private final List<Observer> observers = new ArrayList<>();
+
+    @Inject
+    private GameObject() {
+        addComponent(Transform.class);
+    }
 
     public <T extends Component> T addComponent(Class<T> type) {
         T component = factoryRegistry.get(type).create();
         component.setGameObject(this);
         components.add(component);
+        observers.forEach(component::startObserving);
         return component;
+    }
+
+    public void removeComponent(Component component) {
+        if (components.remove(component)) {
+            observers.forEach(component::endObserving);
+        }
     }
 
     public <T extends Component> T getComponent(Class<T> type) {
@@ -127,5 +142,17 @@ public class GameObject {
                 parent.getComponentsInParent(type, result);
             }
         }
+    }
+
+    @Override
+    public void startObserving(Observer observer) {
+        observers.add(observer);
+        components.forEach(component -> component.startObserving(observer));
+    }
+
+    @Override
+    public void endObserving(Observer observer) {
+        observers.remove(observer);
+        components.forEach(component -> component.endObserving(observer));
     }
 }

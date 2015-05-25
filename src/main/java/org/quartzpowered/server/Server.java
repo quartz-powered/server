@@ -70,6 +70,8 @@ public class Server {
 
             session.setState(PLAY);
 
+
+
             JoinGamePacket joinGamePacket = new JoinGamePacket();
             joinGamePacket.setGamemode(Gamemode.CREATIVE);
             joinGamePacket.setDimension(Dimension.NETHER);
