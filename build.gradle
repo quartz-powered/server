@@ -1,0 +1,28 @@
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+version = '1.0'
+
+repositories {
+    mavenCentral()
+}
+
+configurations {
+    provided
+    compile.extendsFrom(provided)
+}
+
+dependencies {
+    provided 'org.projectlombok:lombok:1.16.4'
+
+    compile 'io.netty:netty-all:5.0.0.Alpha2'
+
+    compile 'com.google.guava:guava:18.0'
+    compile 'com.google.inject:guice:4.0'
+    compile 'com.google.inject.extensions:guice-assistedinject:4.0'
+
+    compile 'com.esotericsoftware:reflectasm:1.11.0'
+    compile 'net.engio:mbassador:1.2.1'
+    compile 'io.fastjson:boon:0.33'
+    compile 'ch.qos.logback:logback-classic:1.1.3'
+}
