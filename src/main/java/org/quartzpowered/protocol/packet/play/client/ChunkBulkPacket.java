@@ -1,0 +1,14 @@
+package org.quartzpowered.protocol.packet.play.client;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.quartzpowered.network.protocol.packet.Packet;
+
+import java.util.List;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class ChunkBulkPacket extends Packet {
+    private boolean skylight;
+    private List<ChunkDataPacket> chunks;
+}
