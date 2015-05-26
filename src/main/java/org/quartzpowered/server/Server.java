@@ -14,7 +14,8 @@ import org.quartzpowered.protocol.data.component.TextComponent;
 import org.quartzpowered.protocol.packet.login.client.LoginResponsePacket;
 import org.quartzpowered.protocol.packet.play.client.ChatMessagePacket;
 import org.quartzpowered.protocol.packet.play.client.JoinGamePacket;
-import org.quartzpowered.protocol.packet.play.client.PlayerTeleportPacket;
+import org.quartzpowered.protocol.packet.play.client.PlayerPositionAndLookPacket;
+import org.quartzpowered.protocol.packet.play.client.UpdateHealthPacket;
 import org.quartzpowered.server.event.player.PlayerLoginEvent;
 import org.quartzpowered.server.network.HandshakeHandler;
 import org.quartzpowered.server.network.LoginHandler;
@@ -82,13 +83,21 @@ public class Server {
             joinGamePacket.setLevelType("default");
             session.send(joinGamePacket);
 
-            PlayerTeleportPacket playerTeleportPacket = new PlayerTeleportPacket();
-            session.send(playerTeleportPacket);
+            PlayerPositionAndLookPacket playerPositionAndLookPacket = new PlayerPositionAndLookPacket();
+            session.send(playerPositionAndLookPacket);
 
             ChatMessagePacket chatMessagePacket =  new ChatMessagePacket();
             chatMessagePacket.setMessage(new TextComponent("Welcome to QuartzPowered!"));
             chatMessagePacket.setPosition(ChatPosition.CHAT);
             session.send(chatMessagePacket);
+
+            UpdateHealthPacket updateHealthPacket = new UpdateHealthPacket();
+            updateHealthPacket.setHealth(10);
+            updateHealthPacket.setFoodLevel(4);
+            updateHealthPacket.setSaturation(5.0f);
+            session.send(updateHealthPacket);
+
+
 
         });
 

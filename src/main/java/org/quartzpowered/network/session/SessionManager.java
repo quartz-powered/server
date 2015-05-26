@@ -4,7 +4,6 @@ import io.netty.channel.Channel;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.util.Attribute;
 import io.netty.util.AttributeKey;
-import io.netty.util.AttributeMap;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;

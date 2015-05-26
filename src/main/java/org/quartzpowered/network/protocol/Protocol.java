@@ -1,7 +1,5 @@
 package org.quartzpowered.network.protocol;
 
-import lombok.Getter;
-import lombok.ToString;
 import org.quartzpowered.network.protocol.codec.Codec;
 import org.quartzpowered.network.protocol.codec.CodecRegistry;
 import org.quartzpowered.network.protocol.packet.Packet;

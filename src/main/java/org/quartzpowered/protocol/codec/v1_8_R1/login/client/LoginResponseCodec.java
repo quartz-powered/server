@@ -4,7 +4,6 @@ import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.codec.Codec;
 import org.quartzpowered.protocol.packet.login.client.LoginResponsePacket;
 
-import java.util.Objects;
 import java.util.UUID;
 
 public class LoginResponseCodec implements Codec<LoginResponsePacket> {

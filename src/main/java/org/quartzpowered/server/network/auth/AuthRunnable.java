@@ -5,10 +5,10 @@ import org.boon.json.ObjectMapper;
 import org.quartzpowered.common.eventbus.EventBus;
 import org.quartzpowered.common.util.UuidUtil;
 import org.quartzpowered.network.session.Session;
-import org.quartzpowered.protocol.data.component.TextComponent;
-import org.quartzpowered.protocol.packet.common.client.KickPacket;
 import org.quartzpowered.network.session.profile.PlayerProfile;
 import org.quartzpowered.network.session.profile.PlayerProperty;
+import org.quartzpowered.protocol.data.component.TextComponent;
+import org.quartzpowered.protocol.packet.common.client.KickPacket;
 import org.quartzpowered.server.event.player.PlayerLoginEvent;
 import org.slf4j.Logger;
 
