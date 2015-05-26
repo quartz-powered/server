@@ -26,5 +26,42 @@
  */
 package org.quartzpowered.server.network;
 
+import net.engio.mbassy.listener.Handler;
+import org.quartzpowered.network.session.Session;
+import org.quartzpowered.protocol.data.ChatPosition;
+import org.quartzpowered.protocol.data.component.TextComponent;
+import org.quartzpowered.protocol.packet.play.client.ChatMessagePacketOut;
+import org.quartzpowered.protocol.packet.play.server.ChatMessagePacketIn;
+import org.quartzpowered.protocol.packet.play.shared.KeepAlivePacket;
+
+import javax.xml.soap.Text;
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlayHandler {
+    List<Session> sessionList = new ArrayList<>();
+    @Handler
+    public void onChat(ChatMessagePacketIn packet){
+        Session session = packet.getSender();
+
+        if(!sessionList.contains(session)) {
+            sessionList.add(session);
+        }
+
+        KeepAlivePacket keepAlivePacket = new KeepAlivePacket();
+        keepAlivePacket.setKeepAliveId(10);
+        session.send(keepAlivePacket);
+
+        String formatChat = session.getProfile().getName()+": "+packet.getMessage();
+
+        ChatMessagePacketOut chatMessagePacketOut = new ChatMessagePacketOut();
+        chatMessagePacketOut.setMessage(new TextComponent(formatChat));
+        chatMessagePacketOut.setPosition(ChatPosition.CHAT);
+
+        for(Session listSession : sessionList){
+            listSession.send(chatMessagePacketOut);
+        }
+
+        System.out.println(formatChat);
+    }
 }
