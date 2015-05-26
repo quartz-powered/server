@@ -85,11 +85,14 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
 
         serverBoundPacket(PLAY, 0x00, KeepAlivePacket.class, new KeepAliveCodec());
         serverBoundPacket(PLAY, 0x01, ChatMessagePacketIn.class, new ChatMessageCodecIn());
+        serverBoundPacket(PLAY, 0x02, UseEntityPacketIn.class, new UseEntityCodecIn());
         serverBoundPacket(PLAY, 0x03, PlayerPacketIn.class, new PlayerCodecIn());
         serverBoundPacket(PLAY, 0x04, PlayerPositionPacketIn.class, new PlayerPositionCodecIn());
         serverBoundPacket(PLAY, 0x05, PlayerLookPacketIn.class, new PlayerLookCodecIn());
         serverBoundPacket(PLAY, 0x06, PlayerPositionLookPacketIn.class, new PlayerPositionLookCodecIn());
         serverBoundPacket(PLAY, 0x09, HeldItemChangePacketIn.class, new HeldItemChangeCodecIn());
+        serverBoundPacket(PLAY, 0x0A, AnimationPacketIn.class, new AnimationCodecIn());
+        serverBoundPacket(PLAY, 0x0B, EntityActionPacketIn.class, new EntityActionCodecIn());
         serverBoundPacket(PLAY, 0x0D, CloseWindowPacketIn.class, new CloseWindowCodecIn());
         serverBoundPacket(PLAY, 0x13, PlayerAbilitiesPacketIn.class, new PlayerAbilitiesCodecIn());
         serverBoundPacket(PLAY, 0x15, ClientSettingsPacketIn.class, new ClientSettingsCodecIn());
