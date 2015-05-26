@@ -26,13 +26,10 @@
  */
 package org.quartzpowered.server;
 
-import io.netty.buffer.ByteBuf;
-import io.netty.buffer.Unpooled;
 import lombok.Getter;
 import net.engio.mbassy.listener.Handler;
 import org.quartzpowered.common.eventbus.EventBus;
 import org.quartzpowered.common.util.CryptoUtil;
-import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.engine.level.Level;
 import org.quartzpowered.engine.level.LevelFactory;
 import org.quartzpowered.network.server.NetworkServer;
@@ -172,7 +169,7 @@ public class Server {
             playerPositionLookPacket.setY(16);
             session.send(playerPositionLookPacket);
 
-            ChatMessagePacket chatMessagePacket =  new ChatMessagePacket();
+            ChatMessagePacket chatMessagePacket = new ChatMessagePacket();
             chatMessagePacket.setMessage(new TextComponent("Welcome to QuartzPowered!"));
             chatMessagePacket.setPosition(ChatPosition.CHAT);
             session.send(chatMessagePacket);
@@ -182,7 +179,6 @@ public class Server {
             updateHealthPacket.setFoodLevel(4);
             updateHealthPacket.setSaturation(5.0f);
             session.send(updateHealthPacket);
-
 
 
         });
