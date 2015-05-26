@@ -34,5 +34,5 @@ import org.quartzpowered.protocol.data.ClientStatusAction;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ClientStatusPacket extends Packet {
-    private ClientStatusAction actionId;
+    private ClientStatusAction action;
 }

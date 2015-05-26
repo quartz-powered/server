@@ -34,11 +34,11 @@ import org.quartzpowered.protocol.packet.play.server.ClientStatusPacket;
 public class ClientStatusCodec implements Codec<ClientStatusPacket> {
     @Override
     public void encode(Buffer buffer, ClientStatusPacket packet) {
-        buffer.writeVarInt(packet.getActionId().getId());
+        buffer.writeVarInt(packet.getAction().getId());
     }
 
     @Override
     public void decode(Buffer buffer, ClientStatusPacket packet) {
-        packet.setActionId(ClientStatusAction.fromId(buffer.readVarInt()));
+        packet.setAction(ClientStatusAction.fromId(buffer.readVarInt()));
     }
 }
