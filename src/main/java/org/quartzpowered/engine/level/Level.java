@@ -31,14 +31,23 @@ import org.quartzpowered.engine.component.GameObject;
 import org.quartzpowered.engine.component.GameObjectFactory;
 
 import javax.inject.Inject;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ScheduledFuture;
+import java.util.concurrent.TimeUnit;
+
+import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public class Level {
-
     @Getter
     private final GameObject root;
 
     @Inject
-    private Level(GameObjectFactory gameObjectFactory) {
-        this.root = gameObjectFactory.create();
+    private Level(GameObjectFactory gameObjectFactory, ScheduledExecutorService scheduler) {
+        root = gameObjectFactory.create();
+        scheduler.scheduleAtFixedRate(this::update, 50, 50, MILLISECONDS);
+    }
+
+    public void update() {
+        root.broadcastMessage("update");
     }
 }
