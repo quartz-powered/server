@@ -19,13 +19,14 @@ import org.quartzpowered.server.event.player.PlayerLoginEvent;
 import org.quartzpowered.server.network.HandshakeHandler;
 import org.quartzpowered.server.network.LoginHandler;
 import org.quartzpowered.server.network.PingHandler;
+import org.quartzpowered.server.network.PlayHandler;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.security.KeyPair;
 
-import static org.quartzpowered.network.protocol.ProtocolState.*;
+import static org.quartzpowered.network.protocol.ProtocolState.PLAY;
 
 @Singleton
 public class Server {
@@ -35,6 +36,7 @@ public class Server {
     @Inject private HandshakeHandler handshakeHandler;
     @Inject private PingHandler pingHandler;
     @Inject private LoginHandler loginHandler;
+    @Inject private PlayHandler playHandler;
 
     @Inject private NetworkServer networkServer;
 
@@ -56,6 +58,7 @@ public class Server {
         eventBus.subscribe(handshakeHandler);
         eventBus.subscribe(pingHandler);
         eventBus.subscribe(loginHandler);
+        eventBus.subscribe(playHandler);
         eventBus.subscribe(this);
     }
 
