@@ -1,8 +1,8 @@
 package org.quartzpowered.protocol.codec.indentifier;
 
 import org.quartzpowered.network.protocol.Protocol;
-import org.quartzpowered.protocol.codec.indentifier.handshake.server.HandshakeCodec;
 import org.quartzpowered.protocol.codec.indentifier.common.client.KickCodec;
+import org.quartzpowered.protocol.codec.indentifier.handshake.server.HandshakeCodec;
 import org.quartzpowered.protocol.packet.common.client.KickPacket;
 import org.quartzpowered.protocol.packet.handshake.server.HandshakePacket;
 

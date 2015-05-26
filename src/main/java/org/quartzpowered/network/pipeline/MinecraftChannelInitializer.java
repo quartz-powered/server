@@ -3,10 +3,6 @@ package org.quartzpowered.network.pipeline;
 import io.netty.channel.ChannelInitializer;
 import io.netty.channel.socket.SocketChannel;
 import org.quartzpowered.network.codec.CodecFactory;
-import org.quartzpowered.network.codec.FrameCodec;
-import org.quartzpowered.network.codec.PacketCodec;
-import org.quartzpowered.network.session.Session;
-import org.quartzpowered.network.session.SessionManager;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
