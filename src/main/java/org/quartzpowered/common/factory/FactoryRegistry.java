@@ -33,14 +33,13 @@ import javax.inject.Singleton;
 
 @Singleton
 public class FactoryRegistry {
-
     @Inject private Injector injector;
 
     private final ClassValue<Factory<Object>> factories = new ClassValue<Factory<Object>>() {
         @Override
         @SuppressWarnings("unchecked")
-        protected Factory computeValue(Class<?> type) {
-            return new Factory<>(injector, type);
+        protected Factory<Object> computeValue(Class<?> type) {
+            return new Factory(injector, type);
         }
     };
 

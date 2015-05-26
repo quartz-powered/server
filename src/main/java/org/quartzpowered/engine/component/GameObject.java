@@ -27,17 +27,23 @@
 package org.quartzpowered.engine.component;
 
 import org.quartzpowered.common.factory.FactoryRegistry;
+import org.quartzpowered.common.reflector.Reflector;
+import org.quartzpowered.common.reflector.ReflectorRegistry;
 import org.quartzpowered.engine.observe.Observable;
 import org.quartzpowered.engine.observe.Observer;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.function.Consumer;
 
 public class GameObject implements Observable {
-
+    @Inject private Logger logger;
     @Inject private FactoryRegistry factoryRegistry;
+    @Inject private ReflectorRegistry reflectorRegistry;
 
     private final List<Component> components = new ArrayList<>();
     private final List<Observer> observers = new ArrayList<>();
@@ -135,6 +141,63 @@ public class GameObject implements Observable {
         return result;
     }
 
+    public void sendMessage(String name, Object... args) {
+        for (Component component : components) {
+            Class<? extends Component> componentType = component.getClass();
+
+            Method[] methods = componentType.getMethods();
+            for (Method method : methods) {
+
+                if (method.getName().equals(name) &&
+                        method.getAnnotation(MessageHandler.class) != null) {
+
+                    Class<?>[] parameters = method.getParameterTypes();
+                    if (matchParameters(parameters, args)) {
+                        Reflector<Component> reflector = reflectorRegistry.get(componentType);
+                        reflector.invoke(component, name, args);
+                        break;
+                    } else {
+                        logger.warn("@MessageHandler found with invalid signature {} in {}",  method, componentType);
+                    }
+                }
+            }
+        }
+    }
+
+    public void broadcastMessage(String name, Object... args) {
+        sendMessage(name, args);
+        forEachChild(child -> child.broadcastMessage(name, args));
+    }
+
+    public void sendMessageToParent(String name, Object... args) {
+        sendMessage(name, args);
+        forParent(parent -> parent.sendMessageToParent(name, args));
+    }
+
+    private void forEachChild(Consumer<GameObject> consumer) {
+        final Transform transform = getTransform();
+        if (transform != null) {
+            for (Transform childTransform : transform.getChildren()) {
+                final GameObject child = childTransform.getGameObject();
+
+                consumer.accept(child);
+            }
+        }
+    }
+
+    private void forParent(Consumer<GameObject> consumer) {
+        Transform transform = getTransform();
+        if (transform != null) {
+            Transform parentTransform = transform.getParent();
+
+            if (parentTransform != null) {
+                GameObject parent = parentTransform.getGameObject();
+
+                consumer.accept(parent);
+            }
+        }
+    }
+
     public Transform getTransform() {
         return getComponent(Transform.class);
     }
@@ -149,28 +212,21 @@ public class GameObject implements Observable {
 
     private <T extends Component> void getComponentsInChildren(Class<T> type, Collection<T> result) {
         getComponents(type, result);
-        Transform transform = getTransform();
-        if (transform != null) {
-            for (Transform childTransform : transform.getChildren()) {
-                GameObject child = childTransform.getGameObject();
-
-                getComponentsInChildren(type, result);
-            }
-        }
+        forEachChild(child -> child.getComponentsInChildren(type, result));
     }
 
     private <T extends Component> void getComponentsInParent(Class<T> type, Collection<T> result) {
         getComponents(type, result);
-        Transform transform = getTransform();
-        if (transform != null) {
-            Transform parentTransform = transform.getParent();
+        forParent(parent -> parent.getComponentsInParent(type, result));
+    }
 
-            if (parentTransform != null) {
-                GameObject parent = parentTransform.getGameObject();
-
-                parent.getComponentsInParent(type, result);
+    private boolean matchParameters(Class<?>[] types, Object[] args) {
+        for (int i = 0; i < types.length; i++) {
+            if (!types[i].isInstance(args[i])) {
+                return false;
             }
         }
+        return true;
     }
 
     @Override
