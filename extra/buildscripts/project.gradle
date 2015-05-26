@@ -1,0 +1,90 @@
+// Apply Plugins
+
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+
+// Default Tasks
+
+defaultTasks 'licenseFormat', 'build'
+
+// Basic Project Info
+
+group = 'org.quartzpowered'
+archivesBaseName = project.name.toLowerCase()
+
+// Maven Repository
+
+repositories {
+  mavenCentral()
+  maven {
+    name = 'rails'
+    url = 'http://repo.quartzpowered.org/maven'
+  }
+}
+
+// Java Compatibility
+
+sourceCompatibility = '1.8'
+targetCompatibility = '1.8'
+
+// Compile Encoding
+
+configure([compileJava, compileTestJava]) {
+    options.compilerArgs += ['-Xlint:all', '-Xlint:-path']
+    options.deprecation = true
+    options.encoding = 'UTF-8'
+}
+
+// Manifest Attributes
+
+jar {
+  manifest {
+    attributes(
+                'Built-By': System.properties['user.name'],
+                'Created-By': "${System.properties['java.vm.version']} (${System.properties['java.vm.vendor']})",
+                'Implementation-Description': project.name,
+                'Implementation-Version': project.version,
+                'Implementation-Vendor': project.url
+    )
+  }
+}
+
+// Java 8 Compatibility
+
+if (JavaVersion.current().isJava8Compatible()) {
+    tasks.withType(Javadoc) {
+        options.addStringOption('Xdoclint:none', '-quiet')
+    }
+}
+
+// Task - Set Source Jar
+
+task setSourceJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+// Task - Set Javadoc
+
+task setJavadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+// Artifacts
+
+artifacts {
+    archives setSourceJar
+    archives setJavadocJar
+}
+
+// Task - Get Wrapper
+
+task getWrapper(type: Wrapper) {
+    gradleVersion = '2.4'
+}
+
+// Gradle - Checkstyle
+
+apply from: project.file('extra/buildscripts/checkstyle.gradle')

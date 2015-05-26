@@ -1,0 +1,46 @@
+// Apply Plugins
+
+apply plugin: 'maven'
+
+// Configurations
+
+configurations {
+    deployerJars
+}
+
+// Dependencies
+
+dependencies {
+    deployerJars 'org.apache.maven.wagon:wagon-ftp:2.8'
+}
+
+// Maven Deployment
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            configuration = configurations.deployerJars
+            if(project.hasProperty('repo')) {
+                repository(url: project.repo) {
+                    authentication(userName: project.repoUsername, password: project.repoPassword)
+                }
+            }
+            pom {
+                groupId = project.group
+                artifactId = project.archivesBaseName
+                version = project.version
+                project {
+                    name project.archivesBaseName
+                    description project.description
+                    packaging 'jar'
+                    url project.url
+                    scm {
+                        url "https://github.com/$project.organization/$project.name"
+                        connection "scm:git:https://github.com/$project.organization/${project.name}.git"
+                        developerConnection "scm:git:git@github.com:$project.organization/${project.name}.git"
+                    }
+                }
+            }
+        }
+    }
+}
