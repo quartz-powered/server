@@ -10,22 +10,17 @@ import lombok.Setter;
 import lombok.ToString;
 import org.quartzpowered.engine.observe.Observer;
 import org.quartzpowered.engine.observe.ObserverFactory;
-import org.quartzpowered.network.codec.CodecFactory;
 import org.quartzpowered.network.pipeline.CompressionHandler;
-import org.quartzpowered.network.pipeline.EncryptionHandler;
 import org.quartzpowered.network.pipeline.HandlerFactory;
 import org.quartzpowered.network.pipeline.NoopHandler;
 import org.quartzpowered.network.protocol.Protocol;
 import org.quartzpowered.network.protocol.ProtocolState;
 import org.quartzpowered.network.protocol.packet.Packet;
-import org.quartzpowered.network.session.attribute.AttributeStorage;
 import org.quartzpowered.network.session.profile.PlayerProfile;
 
 import javax.crypto.SecretKey;
 import javax.inject.Inject;
-
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
 
 import static org.quartzpowered.network.protocol.ProtocolState.HANDSHAKE;
 
