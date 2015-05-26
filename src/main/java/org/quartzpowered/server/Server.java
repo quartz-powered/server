@@ -40,10 +40,7 @@ import org.quartzpowered.protocol.data.Dimension;
 import org.quartzpowered.protocol.data.Gamemode;
 import org.quartzpowered.protocol.data.component.TextComponent;
 import org.quartzpowered.protocol.packet.login.client.LoginResponsePacket;
-import org.quartzpowered.protocol.packet.play.client.ChatMessagePacket;
-import org.quartzpowered.protocol.packet.play.client.JoinGamePacket;
-import org.quartzpowered.protocol.packet.play.client.PlayerTeleportPacket;
-import org.quartzpowered.protocol.packet.play.client.UpdateHealthPacket;
+import org.quartzpowered.protocol.packet.play.client.*;
 import org.quartzpowered.server.event.player.PlayerLoginEvent;
 import org.quartzpowered.server.network.HandshakeHandler;
 import org.quartzpowered.server.network.LoginHandler;
@@ -54,6 +51,8 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import javax.inject.Singleton;
 import java.security.KeyPair;
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.quartzpowered.network.protocol.ProtocolState.PLAY;
 
@@ -105,19 +104,72 @@ public class Server {
 
             session.setState(PLAY);
 
-
-
             JoinGamePacket joinGamePacket = new JoinGamePacket();
             joinGamePacket.setGamemode(Gamemode.CREATIVE);
-            joinGamePacket.setDimension(Dimension.NETHER);
+            joinGamePacket.setDimension(Dimension.OVERWORLD);
             joinGamePacket.setDifficulty(Difficulty.NORMAL);
             joinGamePacket.setLevelType("default");
             session.send(joinGamePacket);
 
+            ChunkBulkPacket chunkBulkPacket = new ChunkBulkPacket();
+            chunkBulkPacket.setSkylight(true);
+
+            List<ChunkDataPacket> chunkPackets = new ArrayList<>();
+
+            for (int cx = -1; cx < 6; cx++) {
+                for (int cz = -1; cz < 6; cz++) {
+                    ChunkDataPacket chunkPacket = new ChunkDataPacket();
+                    chunkPacket.setX(cx);
+                    chunkPacket.setZ(cz);
+
+                    chunkPacket.setMask(0b1);
+
+                    byte[] bytes = new byte[8192 + 2048 * 2 + 256];
+                    int pos = 0;
+
+                    for (int i = 0; i < 4096; i++) {
+                        int y = i >> 8;
+                        int z = ((cz + 1) << 4) + ((i >> 4) & 0xf);
+                        int x = (cx << 4) + (i & 0xf);
+
+                        z++;
+
+                        int id = 35;
+                        if (y != 10) {
+                            id = 0;
+                        }
+                        int meta = ((x ^ z) & 1) != 0 ? (Math.abs(x + 0x80) >> 4) & 0xf : (Math.abs(z) >> 4) & 0xf;
+                        int block = (id << 4) | meta;
+
+                        bytes[pos++] = (byte) (block & 0xff);
+                        bytes[pos++] = (byte) ((block >> 8) & 0xff);
+                    }
+
+                    for (int i = 0; i < 2048; i++) {
+                        bytes[pos++] = (byte) 0xff;
+                    }
+
+                    for (int i = 0; i < 2048; i++) {
+                        bytes[pos++] = (byte) 0xff;
+                    }
+
+                    for (int i = 0; i < 256; i++) {
+                        bytes[pos++] = (byte) (i % 10);
+                    }
+
+                    chunkPacket.setData(bytes);
+                    chunkPackets.add(chunkPacket);
+                }
+            }
+
+            chunkBulkPacket.setChunks(chunkPackets);
+            session.send(chunkBulkPacket);
+
             PlayerTeleportPacket playerPositionLookPacket = new PlayerTeleportPacket();
+            playerPositionLookPacket.setY(16);
             session.send(playerPositionLookPacket);
 
-            ChatMessagePacket chatMessagePacket =  new ChatMessagePacket();
+            ChatMessagePacket chatMessagePacket = new ChatMessagePacket();
             chatMessagePacket.setMessage(new TextComponent("Welcome to QuartzPowered!"));
             chatMessagePacket.setPosition(ChatPosition.CHAT);
             session.send(chatMessagePacket);
@@ -127,7 +179,6 @@ public class Server {
             updateHealthPacket.setFoodLevel(4);
             updateHealthPacket.setSaturation(5.0f);
             session.send(updateHealthPacket);
-
 
 
         });
