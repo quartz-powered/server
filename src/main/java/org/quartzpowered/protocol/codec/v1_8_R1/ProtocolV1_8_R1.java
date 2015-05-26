@@ -35,6 +35,7 @@ import org.quartzpowered.protocol.codec.v1_8_R1.login.server.EncryptionResponseC
 import org.quartzpowered.protocol.codec.v1_8_R1.login.server.LoginRequestCodec;
 import org.quartzpowered.protocol.codec.v1_8_R1.play.client.*;
 import org.quartzpowered.protocol.codec.v1_8_R1.play.server.*;
+import org.quartzpowered.protocol.codec.v1_8_R1.play.shared.ConfirmTransactionCodec;
 import org.quartzpowered.protocol.codec.v1_8_R1.play.shared.KeepAliveCodec;
 import org.quartzpowered.protocol.codec.v1_8_R1.play.shared.PluginMessageCodec;
 import org.quartzpowered.protocol.codec.v1_8_R1.status.client.PongCodec;
@@ -49,6 +50,7 @@ import org.quartzpowered.protocol.packet.login.server.EncryptionResponsePacket;
 import org.quartzpowered.protocol.packet.login.server.LoginRequestPacket;
 import org.quartzpowered.protocol.packet.play.client.*;
 import org.quartzpowered.protocol.packet.play.server.*;
+import org.quartzpowered.protocol.packet.play.shared.ConfirmTransactionPacket;
 import org.quartzpowered.protocol.packet.play.shared.HeldItemChangePacket;
 import org.quartzpowered.protocol.packet.play.shared.KeepAlivePacket;
 import org.quartzpowered.protocol.packet.play.shared.PluginMessagePacket;
@@ -95,6 +97,7 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         serverBoundPacket(PLAY, 0x07, PlayerDiggingPacket.class, new PlayerDiggingCodec());
         serverBoundPacket(PLAY, 0x09, HeldItemChangePacket.class, new HeldItemChangeCodec());
         serverBoundPacket(PLAY, 0x0D, CloseWindowPacket.class, new CloseWindowCodec());
+        serverBoundPacket(PLAY, 0x0F, ConfirmTransactionPacket.class, new ConfirmTransactionCodec());
         serverBoundPacket(PLAY, 0x13, PlayerAbilitiesPacket.class, new PlayerAbilitiesCodec());
         serverBoundPacket(PLAY, 0x15, ClientSettingsPacket.class, new ClientSettingsCodec());
         serverBoundPacket(PLAY, 0x16, ClientStatusPacket.class, new ClientStatusCodec());
@@ -109,6 +112,7 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(PLAY, 0x09, HeldItemChangePacket.class, new PlayerHeldItemChangeCodec());
         clientBoundPacket(PLAY, 0x21, ChunkDataPacket.class, new ChunkDataCodec());
         clientBoundPacket(PLAY, 0x26, ChunkBulkPacket.class, new ChunkBulkCodec());
+        clientBoundPacket(PLAY, 0x32, ConfirmTransactionPacket.class, new ConfirmTransactionCodec());
         clientBoundPacket(PLAY, 0x40, KickPacket.class, new KickCodec());
         clientBoundPacket(PLAY, 0x46, CompressionPacket.class, new CompressionCodec());
 

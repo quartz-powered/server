@@ -57,4 +57,27 @@ public class Quaternion {
         this.z = newZ;
         this.w = newW;
     }
+
+    public int getGimbalPole() {
+        final float t = (float) (y * x + z * w);
+        return t > 0.499f ? 1 : (t < -0.499f ? -1 : 0);
+    }
+
+    public float getPitch() {
+        final int pole = getGimbalPole();
+        final float radians = pole == 0 ? (float) Math.asin(MathUtil.clamp((float) (2f * (w * x - z * y)), -1f, 1f)) : ((float) pole * MathUtil.FLOAT_PI * 0.5f);
+        return radians * MathUtil.radiansToDegrees;
+    }
+
+    public float getYaw() {
+        final int pole = getGimbalPole();
+        final float radians = pole == 0 ? (float) Math.atan2(2f * (y * w + x * z), 1f - 2f * (y * y + x * x)) : 0f;
+        return radians * MathUtil.radiansToDegrees;
+    }
+
+    public float getRoll() {
+        final int pole = getGimbalPole();
+        final float radians = pole == 0 ? (float) Math.atan2(2f * (w * z + y * x), 1f - 2f * (x * x + z * z)) : (float) pole * 2f * (float) Math.atan2(y, w);
+        return radians * MathUtil.radiansToDegrees;
+    }
 }

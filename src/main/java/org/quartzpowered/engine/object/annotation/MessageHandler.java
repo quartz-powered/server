@@ -1,4 +1,4 @@
-package org.quartzpowered.engine.component;
+package org.quartzpowered.engine.object.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -24,7 +24,9 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.engine.component;
+package org.quartzpowered.engine.object;
+
+import org.quartzpowered.engine.object.GameObject;
 
 public interface GameObjectFactory {
 

@@ -34,16 +34,22 @@ import org.quartzpowered.common.inject.logger.LoggerTypeListener;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
 public class CommonModule extends AbstractModule {
 
     @Override
     protected void configure() {
         // Inject anonymous logger by default
-        this.bind(Logger.class).toInstance(LoggerFactory.getLogger("Anonymous"));
+        bind(Logger.class).toInstance(LoggerFactory.getLogger("Anonymous"));
 
         // Replace logger with non-anonymous logger
-        this.bindListener(Matchers.any(), new LoggerTypeListener());
+        bindListener(Matchers.any(), new LoggerTypeListener());
 
-        this.bind(ObjectMapper.class).toInstance(JsonFactory.create());
+        bind(ObjectMapper.class).toInstance(JsonFactory.create());
+
+        // TODO make this configurable
+        bind(ScheduledExecutorService.class).toInstance(Executors.newSingleThreadScheduledExecutor());
     }
 }

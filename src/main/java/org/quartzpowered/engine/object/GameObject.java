@@ -24,13 +24,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.engine.component;
+package org.quartzpowered.engine.object;
 
 import org.quartzpowered.common.factory.FactoryRegistry;
 import org.quartzpowered.common.reflector.Reflector;
 import org.quartzpowered.common.reflector.ReflectorRegistry;
+import org.quartzpowered.engine.object.annotation.MessageHandler;
+import org.quartzpowered.engine.object.component.Transform;
 import org.quartzpowered.engine.observe.Observable;
 import org.quartzpowered.engine.observe.Observer;
+import org.quartzpowered.network.protocol.packet.Packet;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -39,8 +42,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
+import java.util.stream.Collectors;
 
-public class GameObject implements Observable {
+public class GameObject implements Observable, Observer {
     @Inject private Logger logger;
     @Inject private FactoryRegistry factoryRegistry;
     @Inject private ReflectorRegistry reflectorRegistry;
@@ -57,15 +61,15 @@ public class GameObject implements Observable {
 
     public <T extends Component> T addComponent(Class<T> type) {
         T component = this.factoryRegistry.get(type).create();
-        component.setGameObject(this);
+        component.setObject(this);
         this.components.add(component);
-        this.observers.forEach(component::startObserving);
+        this.observers.forEach(observer -> sendMessageToComponent(component, "startObserving", observer));
         return component;
     }
 
     public void removeComponent(Component component) {
         if (this.components.remove(component)) {
-            this.observers.forEach(component::endObserving);
+            this.observers.forEach(observer -> sendMessageToComponent(component, "stopObserving", observer));
         }
     }
 
@@ -143,22 +147,26 @@ public class GameObject implements Observable {
 
     public void sendMessage(String name, Object... args) {
         for (Component component : components) {
-            Class<? extends Component> componentType = component.getClass();
+            sendMessageToComponent(component, name, args);
+        }
+    }
 
-            Method[] methods = componentType.getMethods();
-            for (Method method : methods) {
+    private void sendMessageToComponent(Component component, String name, Object... args) {
+        Class<? extends Component> componentType = component.getClass();
 
-                if (method.getName().equals(name) &&
-                        method.getAnnotation(MessageHandler.class) != null) {
+        Method[] methods = componentType.getMethods();
+        for (Method method : methods) {
 
-                    Class<?>[] parameters = method.getParameterTypes();
-                    if (matchParameters(parameters, args)) {
-                        Reflector<Component> reflector = reflectorRegistry.get(componentType);
-                        reflector.invoke(component, name, args);
-                        break;
-                    } else {
-                        logger.warn("@MessageHandler found with invalid signature {} in {}",  method, componentType);
-                    }
+            if (method.getName().equals(name) &&
+                    method.getAnnotation(MessageHandler.class) != null) {
+
+                Class<?>[] parameters = method.getParameterTypes();
+                if (matchParameters(parameters, args)) {
+                    Reflector<Component> reflector = reflectorRegistry.get(componentType);
+                    reflector.invoke(component, name, args);
+                    break;
+                } else {
+                    logger.warn("@MessageHandler found with invalid signature {} in {}", method, componentType);
                 }
             }
         }
@@ -232,12 +240,58 @@ public class GameObject implements Observable {
     @Override
     public void startObserving(Observer observer) {
         this.observers.add(observer);
-        this.components.forEach(component -> component.startObserving(observer));
+        sendMessage("startObserving", observer);
     }
 
     @Override
-    public void endObserving(Observer observer) {
+    public void stopObserving(Observer observer) {
         this.observers.remove(observer);
-        this.components.forEach(component -> component.endObserving(observer));
+        sendMessage("stopObserving", observer);
+    }
+
+    public boolean hasObserver(Observer observer) {
+        return observers.contains(observer);
+    }
+
+    public void observe(Packet packet) {
+        observers.forEach(observer -> observer.observe(packet));
+    }
+
+    public GameObject getParent() {
+        Transform transform = getTransform();
+        if (transform == null) {
+            return null;
+        }
+
+        Transform parent = transform.getParent();
+        if (parent == null) {
+            return null;
+        }
+
+        return parent.getGameObject();
+    }
+
+    public GameObject getRoot() {
+        Transform transform = getTransform();
+        if (transform == null) {
+            return this;
+        }
+
+        return transform.getRoot().getGameObject();
+    }
+
+    public Collection<GameObject> getChildren() {
+        Transform transform = getTransform();
+        if (transform == null) {
+            return null;
+        }
+
+        return transform.getChildren().stream()
+                .map(Transform::getGameObject)
+                .collect(Collectors.toList());
+    }
+
+    public static GameObject none() {
+        return null;
     }
 }
