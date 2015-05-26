@@ -50,7 +50,7 @@ public class ChunkBulkCodec implements Codec<ChunkBulkPacket> {
         }
 
         for (ChunkDataPacket chunk : chunks) {
-            buffer.writeByteArray(chunk.getData());
+            buffer.writeBytes(chunk.getData());
         }
     }
 
@@ -71,7 +71,7 @@ public class ChunkBulkCodec implements Codec<ChunkBulkPacket> {
         }
 
         for (ChunkDataPacket chunk : chunks) {
-            chunk.setData(buffer.readByteArray());
+            chunk.setData(buffer.readRemainingBytes().array());
         }
     }
 }
