@@ -24,28 +24,31 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.common.factory;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
 
-import com.google.inject.Injector;
+import org.quartzpowered.network.buffer.Buffer;
+import org.quartzpowered.network.protocol.codec.Codec;
+import org.quartzpowered.protocol.packet.play.client.ChunkDataPacket;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+public class ChunkDataCodec implements Codec<ChunkDataPacket> {
 
-@Singleton
-public class FactoryRegistry {
+    @Override
+    public void encode(Buffer buffer, ChunkDataPacket packet) {
+        buffer.writeInt(packet.getX());
+        buffer.writeInt(packet.getZ());
 
-    @Inject private Injector injector;
+        buffer.writeBoolean(packet.isContinuous());
+        buffer.writeShort(packet.getMask());
+        buffer.writeByteArray(packet.getData());
+    }
 
-    private final ClassValue<Factory<Object>> factories = new ClassValue<Factory<Object>>() {
-        @Override
-        @SuppressWarnings("unchecked")
-        protected Factory computeValue(Class<?> type) {
-            return new Factory<>(injector, type);
-        }
-    };
+    @Override
+    public void decode(Buffer buffer, ChunkDataPacket packet) {
+        packet.setX(buffer.readInt());
+        packet.setZ(buffer.readInt());
 
-    @SuppressWarnings("unchecked")
-    public <T> Factory<T> get(Class<? extends T> type) {
-        return (Factory<T>) this.factories.get(type);
+        packet.setContinuous(buffer.readBoolean());
+        packet.setMask(buffer.readShort());
+        packet.setData(buffer.readByteArray());
     }
 }

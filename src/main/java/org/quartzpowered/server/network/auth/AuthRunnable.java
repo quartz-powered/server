@@ -65,6 +65,7 @@ public class AuthRunnable implements Runnable {
     }
 
     @Override
+    @SuppressWarnings("unchecked")
     public void run() {
         try {
             String username = session.getVerifyUsername();

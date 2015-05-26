@@ -24,28 +24,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.common.factory;
+package org.quartzpowered.protocol.packet.play.server;
 
-import com.google.inject.Injector;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.quartzpowered.network.protocol.packet.Packet;
 
-@Singleton
-public class FactoryRegistry {
-
-    @Inject private Injector injector;
-
-    private final ClassValue<Factory<Object>> factories = new ClassValue<Factory<Object>>() {
-        @Override
-        @SuppressWarnings("unchecked")
-        protected Factory computeValue(Class<?> type) {
-            return new Factory<>(injector, type);
-        }
-    };
-
-    @SuppressWarnings("unchecked")
-    public <T> Factory<T> get(Class<? extends T> type) {
-        return (Factory<T>) this.factories.get(type);
-    }
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class PlayerPacket extends Packet {
+    private boolean onGround;
 }

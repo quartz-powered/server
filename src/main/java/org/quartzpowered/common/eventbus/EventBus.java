@@ -37,11 +37,12 @@ import javax.inject.Singleton;
 @Singleton
 public class EventBus {
 
-    private MBassador bus = new MBassador(new BusConfiguration()
+    private MBassador<Object> bus = new MBassador<>(new BusConfiguration()
             .addFeature(Feature.SyncPubSub.Default())
             .addFeature(Feature.AsynchronousHandlerInvocation.Default())
             .addFeature(Feature.AsynchronousMessageDispatch.Default())
-            .setProperty(Properties.Handler.PublicationError, (IPublicationErrorHandler) error -> error.getCause().printStackTrace())
+            .setProperty(Properties.Handler.PublicationError,
+                    (IPublicationErrorHandler) error -> error.getCause().printStackTrace())
     );
 
     public void subscribe(Object handler) {

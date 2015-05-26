@@ -24,28 +24,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.common.factory;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
 
-import com.google.inject.Injector;
+import org.quartzpowered.network.buffer.Buffer;
+import org.quartzpowered.network.protocol.codec.Codec;
+import org.quartzpowered.protocol.packet.play.client.PlayerTeleportPacket;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+public class PlayerTeleportCodec implements Codec<PlayerTeleportPacket> {
+    @Override
+    public void encode(Buffer buffer, PlayerTeleportPacket packet) {
+        buffer.writeDouble(packet.getX());
+        buffer.writeDouble(packet.getY());
+        buffer.writeDouble(packet.getZ());
+        buffer.writeFloat(packet.getYaw());
+        buffer.writeFloat(packet.getPitch());
+        buffer.writeByte(packet.getFlags());
+    }
 
-@Singleton
-public class FactoryRegistry {
-
-    @Inject private Injector injector;
-
-    private final ClassValue<Factory<Object>> factories = new ClassValue<Factory<Object>>() {
-        @Override
-        @SuppressWarnings("unchecked")
-        protected Factory computeValue(Class<?> type) {
-            return new Factory<>(injector, type);
-        }
-    };
-
-    @SuppressWarnings("unchecked")
-    public <T> Factory<T> get(Class<? extends T> type) {
-        return (Factory<T>) this.factories.get(type);
+    @Override
+    public void decode(Buffer buffer, PlayerTeleportPacket packet) {
+        packet.setX(buffer.readDouble());
+        packet.setY(buffer.readDouble());
+        packet.setZ(buffer.readDouble());
+        packet.setYaw(buffer.readFloat());
+        packet.setPitch(buffer.readFloat());
+        packet.setFlags(buffer.readByte());
     }
 }

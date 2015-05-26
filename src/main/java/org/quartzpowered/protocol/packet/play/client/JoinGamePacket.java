@@ -24,28 +24,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.common.factory;
+package org.quartzpowered.protocol.packet.play.client;
 
-import com.google.inject.Injector;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.quartzpowered.network.protocol.packet.Packet;
+import org.quartzpowered.protocol.data.Difficulty;
+import org.quartzpowered.protocol.data.Dimension;
+import org.quartzpowered.protocol.data.Gamemode;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
-
-@Singleton
-public class FactoryRegistry {
-
-    @Inject private Injector injector;
-
-    private final ClassValue<Factory<Object>> factories = new ClassValue<Factory<Object>>() {
-        @Override
-        @SuppressWarnings("unchecked")
-        protected Factory computeValue(Class<?> type) {
-            return new Factory<>(injector, type);
-        }
-    };
-
-    @SuppressWarnings("unchecked")
-    public <T> Factory<T> get(Class<? extends T> type) {
-        return (Factory<T>) this.factories.get(type);
-    }
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class JoinGamePacket extends Packet {
+    private int entityId;
+    private Gamemode gamemode;
+    private boolean hardcore;
+    private Dimension dimension;
+    private Difficulty difficulty;
+    private int maxPlayers;
+    private String levelType;
+    private boolean reducedDebugInfo;
 }

@@ -31,21 +31,21 @@ import net.engio.mbassy.listener.Handler;
 import org.quartzpowered.network.session.Session;
 import org.quartzpowered.protocol.data.ChatPosition;
 import org.quartzpowered.protocol.data.component.TextComponent;
-import org.quartzpowered.protocol.packet.play.client.ChatMessagePacketOut;
-import org.quartzpowered.protocol.packet.play.server.ChatMessagePacketIn;
+import org.quartzpowered.protocol.packet.play.client.ChatMessagePacket;
+import org.quartzpowered.protocol.packet.play.server.PlayerChatMessagePacket;
 import org.quartzpowered.protocol.packet.play.shared.KeepAlivePacket;
 
-import javax.xml.soap.Text;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 public class PlayHandler {
-    @Inject
-    private Logger logger;
+    @Inject private Logger logger;
+
     List<Session> sessionList = new ArrayList<>();
+
     @Handler
-    public void onChat(ChatMessagePacketIn packet){
+    public void onPlayerChatMessage(PlayerChatMessagePacket packet) {
         Session session = packet.getSender();
 
         if(!sessionList.contains(session)) {
@@ -56,9 +56,9 @@ public class PlayHandler {
         keepAlivePacket.setKeepAliveId(10);
         session.send(keepAlivePacket);
 
-        String formatChat = session.getProfile().getName()+": "+packet.getMessage();
+        String formatChat = session.getProfile().getName() + ": " + packet.getMessage();
 
-        ChatMessagePacketOut chatMessagePacketOut = new ChatMessagePacketOut();
+        ChatMessagePacket chatMessagePacketOut = new ChatMessagePacket();
         chatMessagePacketOut.setMessage(new TextComponent(formatChat));
         chatMessagePacketOut.setPosition(ChatPosition.CHAT);
 

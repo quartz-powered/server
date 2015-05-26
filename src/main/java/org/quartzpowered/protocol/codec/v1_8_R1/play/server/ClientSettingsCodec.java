@@ -24,28 +24,29 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.common.factory;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.server;
 
-import com.google.inject.Injector;
+import org.quartzpowered.network.buffer.Buffer;
+import org.quartzpowered.network.protocol.codec.Codec;
+import org.quartzpowered.protocol.data.ChatMode;
+import org.quartzpowered.protocol.packet.play.server.ClientSettingsPacket;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+public class ClientSettingsCodec implements Codec<ClientSettingsPacket> {
+    @Override
+    public void encode(Buffer buffer, ClientSettingsPacket packet) {
+        buffer.writeString(packet.getLocale());
+        buffer.writeByte(packet.getViewDistance());
+        buffer.writeByte(packet.getChatMode().getId());
+        buffer.writeBoolean(packet.isChatColors());
+        buffer.writeByte(packet.getDisplayedSkinParts());
+    }
 
-@Singleton
-public class FactoryRegistry {
-
-    @Inject private Injector injector;
-
-    private final ClassValue<Factory<Object>> factories = new ClassValue<Factory<Object>>() {
-        @Override
-        @SuppressWarnings("unchecked")
-        protected Factory computeValue(Class<?> type) {
-            return new Factory<>(injector, type);
-        }
-    };
-
-    @SuppressWarnings("unchecked")
-    public <T> Factory<T> get(Class<? extends T> type) {
-        return (Factory<T>) this.factories.get(type);
+    @Override
+    public void decode(Buffer buffer, ClientSettingsPacket packet) {
+        packet.setLocale(buffer.readString());
+        packet.setViewDistance(buffer.readByte());
+        packet.setChatMode(ChatMode.fromId(buffer.readByte()));
+        packet.setChatColors(buffer.readBoolean());
+        packet.setDisplayedSkinParts(buffer.readByte());
     }
 }

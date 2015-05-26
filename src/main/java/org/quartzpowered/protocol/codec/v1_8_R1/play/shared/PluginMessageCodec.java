@@ -24,28 +24,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.common.factory;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.shared;
 
-import com.google.inject.Injector;
+import org.quartzpowered.network.buffer.Buffer;
+import org.quartzpowered.network.protocol.codec.Codec;
+import org.quartzpowered.protocol.packet.play.shared.PluginMessagePacket;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+public class PluginMessageCodec implements Codec<PluginMessagePacket> {
+    @Override
+    public void encode(Buffer buffer, PluginMessagePacket packet) {
+        buffer.writeString(packet.getChannel());
+        buffer.writeByteArray(packet.getData());
+    }
 
-@Singleton
-public class FactoryRegistry {
-
-    @Inject private Injector injector;
-
-    private final ClassValue<Factory<Object>> factories = new ClassValue<Factory<Object>>() {
-        @Override
-        @SuppressWarnings("unchecked")
-        protected Factory computeValue(Class<?> type) {
-            return new Factory<>(injector, type);
-        }
-    };
-
-    @SuppressWarnings("unchecked")
-    public <T> Factory<T> get(Class<? extends T> type) {
-        return (Factory<T>) this.factories.get(type);
+    @Override
+    public void decode(Buffer buffer, PluginMessagePacket packet) {
+        packet.setChannel(buffer.readString());
+        packet.setData(buffer.readByteArray());
     }
 }

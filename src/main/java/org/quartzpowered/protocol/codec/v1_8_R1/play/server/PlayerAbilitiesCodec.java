@@ -24,28 +24,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.common.factory;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.server;
 
-import com.google.inject.Injector;
+import org.quartzpowered.network.buffer.Buffer;
+import org.quartzpowered.network.protocol.codec.Codec;
+import org.quartzpowered.protocol.packet.play.server.PlayerAbilitiesPacket;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+public class PlayerAbilitiesCodec implements Codec<PlayerAbilitiesPacket> {
+    @Override
+    public void encode(Buffer buffer, PlayerAbilitiesPacket packet) {
+        buffer.writeByte(packet.getFlags());
+        buffer.writeFloat(packet.getFlyingSpeed());
+        buffer.writeFloat(packet.getWalkingSpeed());
+    }
 
-@Singleton
-public class FactoryRegistry {
-
-    @Inject private Injector injector;
-
-    private final ClassValue<Factory<Object>> factories = new ClassValue<Factory<Object>>() {
-        @Override
-        @SuppressWarnings("unchecked")
-        protected Factory computeValue(Class<?> type) {
-            return new Factory<>(injector, type);
-        }
-    };
-
-    @SuppressWarnings("unchecked")
-    public <T> Factory<T> get(Class<? extends T> type) {
-        return (Factory<T>) this.factories.get(type);
+    @Override
+    public void decode(Buffer buffer, PlayerAbilitiesPacket packet) {
+        packet.setFlags(buffer.readByte());
+        packet.setFlyingSpeed(buffer.readFloat());
+        packet.setWalkingSpeed(buffer.readFloat());
     }
 }

@@ -24,28 +24,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.common.factory;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.server;
 
-import com.google.inject.Injector;
+import org.quartzpowered.network.buffer.Buffer;
+import org.quartzpowered.network.protocol.codec.Codec;
+import org.quartzpowered.protocol.packet.play.server.PlayerLookPacket;
 
-import javax.inject.Inject;
-import javax.inject.Singleton;
+public class PlayerLookCodec implements Codec<PlayerLookPacket> {
+    @Override
+    public void encode(Buffer buffer, PlayerLookPacket packet) {
+        buffer.writeFloat(packet.getYaw());
+        buffer.writeFloat(packet.getPitch());
+        buffer.writeBoolean(packet.isOnGround());
+    }
 
-@Singleton
-public class FactoryRegistry {
-
-    @Inject private Injector injector;
-
-    private final ClassValue<Factory<Object>> factories = new ClassValue<Factory<Object>>() {
-        @Override
-        @SuppressWarnings("unchecked")
-        protected Factory computeValue(Class<?> type) {
-            return new Factory<>(injector, type);
-        }
-    };
-
-    @SuppressWarnings("unchecked")
-    public <T> Factory<T> get(Class<? extends T> type) {
-        return (Factory<T>) this.factories.get(type);
+    @Override
+    public void decode(Buffer buffer, PlayerLookPacket packet) {
+        packet.setYaw(buffer.readFloat());
+        packet.setPitch(buffer.readFloat());
+        packet.setOnGround(buffer.readBoolean());
     }
 }

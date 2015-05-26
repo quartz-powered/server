@@ -39,7 +39,7 @@
             <property name="max" value="125"/>
             <property name="ignorePattern" value="^package.*|^import.*|a href|href|http://|https://|ftp://"/>
         </module>
-        <module name="AvoidStarImport"/>
+        <!-- <module name="AvoidStarImport"/> -->
         <module name="OneTopLevelClass"/>
         <module name="NoLineWrap"/>
         <module name="EmptyBlock">
@@ -86,7 +86,7 @@
             <property name="option" value="EOL"/>
         </module>
         <module name="PackageName">
-            <property name="format" value="^[a-z]+(\.[a-z][a-z0-9]*)*$"/>
+            <property name="format" value="^[a-z]+(\.[a-z][a-z0-9_]*)*$"/>
             <message key="name.invalidPattern"
                      value="Package name ''{0}'' must match pattern ''{1}''."/>
         </module>
@@ -172,13 +172,14 @@
         <module name="JavadocParagraph"/>
         <module name="AtclauseOrder">
             <property name="tagOrder" value="@param, @return, @throws, @deprecated"/>
-            <property name="target" value="CLASS_DEF, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF, VARIABLE_DEF"/>
+            <property name="target" value="CLASS_DEFN, INTERFACE_DEF, ENUM_DEF, METHOD_DEF, CTOR_DEF, VARIABLE_DEF"/>
         </module>
-        <module name="JavadocMethod">
+        <!-- This is only required for the api project -->
+        <!-- <module name="JavadocMethod">
             <property name="scope" value="public"/>
             <property name="allowedAnnotations" value="Override, Test"/>
             <property name="allowThrowsTagsForSubclasses" value="true"/>
-        </module>
+        </module> -->
         <module name="MethodName">
             <property name="format" value="^[a-z][a-zA-Z0-9_]*$"/>
             <message key="name.invalidPattern"
@@ -189,9 +190,9 @@
 
         <module name="RedundantImport"/>
         <module name="RedundantModifier"/>
-        <module name="RequireThis">
+        <!-- <module name="RequireThis">
             <property name="checkMethods" value="false"/>
-        </module>
+        </module> -->
     </module>
 
     <module name="NewlineAtEndOfFile"/>
