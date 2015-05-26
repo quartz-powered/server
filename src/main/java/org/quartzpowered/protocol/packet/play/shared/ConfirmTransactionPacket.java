@@ -33,7 +33,7 @@ import org.quartzpowered.network.protocol.packet.Packet;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ConfirmTransactionPacket extends Packet {
-    private byte windowId;
-    private short actionNumber;
+    private int windowId;
+    private int actionNumber;
     private boolean accepted;
 }
