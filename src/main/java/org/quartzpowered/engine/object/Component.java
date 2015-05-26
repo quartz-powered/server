@@ -24,31 +24,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.engine.component;
+package org.quartzpowered.engine.object;
 
 import lombok.Getter;
-import org.quartzpowered.engine.observe.Observable;
-import org.quartzpowered.engine.observe.Observer;
+import org.quartzpowered.common.util.ReflectionUtil;
+import org.slf4j.Logger;
 
-public abstract class Component implements Observable {
+import javax.inject.Inject;
+import java.lang.reflect.Field;
+
+public abstract class Component {
+    private static final Field objectField = ReflectionUtil.getConstantField(Component.class, "object");
+
+    @Inject private Logger logger;
 
     @Getter
-    private GameObject gameObject;
+    protected final GameObject gameObject = GameObject.none();
 
-    public void setGameObject(GameObject gameObject) {
+    @SuppressWarnings("ConstantConditions")
+    public void setObject(GameObject gameObject) {
         if (this.gameObject != null) {
-            throw new IllegalStateException("gameObject already set");
+            throw new IllegalStateException("object already set");
         }
-        this.gameObject = gameObject;
-    }
 
-    @Override
-    public void startObserving(Observer observer) {
-
-    }
-
-    @Override
-    public void endObserving(Observer observer) {
-
+        try {
+            ReflectionUtil.setFinalField(objectField,  this, gameObject);
+        } catch (ReflectiveOperationException ex) {
+            logger.error("Cannot set object", ex);
+        }
     }
 }

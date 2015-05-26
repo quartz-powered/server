@@ -24,21 +24,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.engine.component;
+package org.quartzpowered.engine.object.component;
 
+import lombok.Getter;
+import lombok.Setter;
+import org.quartzpowered.engine.object.annotation.MessageHandler;
+import org.quartzpowered.engine.object.annotation.Property;
+import org.quartzpowered.engine.object.Component;
+import org.quartzpowered.engine.object.GameObject;
 import org.quartzpowered.engine.observe.Observer;
+import org.quartzpowered.network.protocol.packet.Packet;
 import org.quartzpowered.network.session.attribute.AttributeKey;
 import org.quartzpowered.network.session.attribute.AttributeRegistry;
 import org.quartzpowered.network.session.attribute.AttributeStorage;
+import org.quartzpowered.protocol.packet.play.client.PlayerTeleportPacket;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Camera extends Component {
+public class Camera extends Component implements Observer {
     public static final AttributeKey<Camera> CAMERA_ATTRIBUTE = AttributeKey.create();
 
     @Inject private AttributeRegistry attributeRegistry;
+
+    @Getter @Setter
+    @Property
+    private double range = 10;
 
     private final List<Observer> observers = new ArrayList<>();
 
@@ -58,10 +70,40 @@ public class Camera extends Component {
 
         this.observers.add(observer);
         attributes.set(CAMERA_ATTRIBUTE, this);
+
+        PlayerTeleportPacket teleportPacket = new PlayerTeleportPacket();
+
+        Transform transform = gameObject.getTransform();
+        teleportPacket.setPosition(transform.getPosition());
+        teleportPacket.setRotation(transform.getRotation());
+
+        observer.observe(teleportPacket);
     }
 
     @MessageHandler
     public void update() {
+        GameObject root = gameObject.getRoot();
+        updateObject(root);
+    }
 
+    private void updateObject(GameObject object) {
+        double distance = object.getTransform().distanceSquared(object.getTransform());
+
+        boolean isObserved = object.hasObserver(this);
+
+        if (isObserved && distance > range * range) {
+            object.startObserving(this);
+        } else if (!isObserved && distance <= range * range) {
+            object.stopObserving(this);
+        }
+
+        for (GameObject child : object.getChildren()) {
+            updateObject(child);
+        }
+    }
+
+    @Override
+    public void observe(Packet packet) {
+        observers.forEach(observer -> observer.observe(packet));
     }
 }

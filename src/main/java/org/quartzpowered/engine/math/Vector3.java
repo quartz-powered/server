@@ -63,7 +63,11 @@ public class Vector3 {
     }
 
     public static double length(double x, double y, double z) {
-        return Math.sqrt(x * x + y * y + z * z);
+        return Math.sqrt(lengthSquared(x, y, z));
+    }
+
+    public static double lengthSquared(double x, double y, double z) {
+        return x * x + y * y + z * z;
     }
 
     protected double x, y, z;
@@ -80,5 +84,19 @@ public class Vector3 {
         this.x = x;
         this.y = y;
         this.z = z;
+    }
+
+    public double distance(Vector3 other) {
+        final double dx = this.x - other.x;
+        final double dy = this.y - other.y;
+        final double dz = this.z - other.z;
+        return length(dx, dy, dz);
+    }
+
+    public double distanceSquared(Vector3 other) {
+        final double dx = this.x - other.x;
+        final double dy = this.y - other.y;
+        final double dz = this.z - other.z;
+        return lengthSquared(dx, dy, dz);
     }
 }

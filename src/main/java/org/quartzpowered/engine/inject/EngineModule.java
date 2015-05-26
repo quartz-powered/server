@@ -29,7 +29,7 @@ package org.quartzpowered.engine.inject;
 import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import com.google.inject.name.Names;
-import org.quartzpowered.engine.component.GameObjectFactory;
+import org.quartzpowered.engine.object.GameObjectFactory;
 import org.quartzpowered.engine.level.LevelFactory;
 import org.quartzpowered.engine.observe.Observer;
 import org.quartzpowered.engine.observe.ObserverFactory;

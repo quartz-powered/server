@@ -27,13 +27,11 @@
 package org.quartzpowered.engine.level;
 
 import lombok.Getter;
-import org.quartzpowered.engine.component.GameObject;
-import org.quartzpowered.engine.component.GameObjectFactory;
+import org.quartzpowered.engine.object.GameObject;
+import org.quartzpowered.engine.object.GameObjectFactory;
 
 import javax.inject.Inject;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
-import java.util.concurrent.TimeUnit;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
