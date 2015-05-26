@@ -28,11 +28,12 @@ package org.quartzpowered.protocol.packet.play.shared;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.packet.Packet;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class PluginMessagePacket extends Packet {
     private String channel;
-    private byte[] data;
+    private Buffer data;
 }

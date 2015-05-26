@@ -33,6 +33,7 @@ import org.quartzpowered.common.eventbus.EventBus;
 import org.quartzpowered.network.protocol.packet.Packet;
 import org.quartzpowered.network.session.Session;
 import org.quartzpowered.network.session.SessionManager;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -40,6 +41,7 @@ import javax.inject.Singleton;
 @Singleton
 @ChannelHandler.Sharable
 public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
+    @Inject private Logger logger;
     @Inject private SessionManager sessionManager;
     @Inject private EventBus eventBus;
 
@@ -54,6 +56,6 @@ public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
 
     @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
-        cause.printStackTrace();
+        logger.error("Error in pipeline", cause);
     }
 }

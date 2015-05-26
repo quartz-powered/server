@@ -28,21 +28,27 @@ package org.quartzpowered.server.network;
 
 import com.google.inject.Inject;
 import net.engio.mbassy.listener.Handler;
+import org.quartzpowered.network.protocol.packet.Packet;
 import org.quartzpowered.network.session.Session;
 import org.quartzpowered.protocol.data.ChatPosition;
 import org.quartzpowered.protocol.data.component.TextComponent;
 import org.quartzpowered.protocol.packet.play.client.ChatMessagePacket;
 import org.quartzpowered.protocol.packet.play.server.PlayerChatMessagePacket;
 import org.quartzpowered.protocol.packet.play.shared.KeepAlivePacket;
+import org.slf4j.Logger;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
 public class PlayHandler {
     @Inject private Logger logger;
 
     List<Session> sessionList = new ArrayList<>();
+
+    @Handler
+    public void onPacket(Packet packet) {
+        logger.info("IN  {}", packet);
+    }
 
     @Handler
     public void onPlayerChatMessage(PlayerChatMessagePacket packet) {

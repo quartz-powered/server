@@ -89,4 +89,8 @@ public class Buffer extends ByteBuf {
     public void writeString(String value) {
         writeByteArray(value.getBytes(UTF_8));
     }
+
+    public Buffer readRemainingBytes() {
+        return new Buffer(readBytes(readableBytes()));
+    }
 }

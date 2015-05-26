@@ -55,9 +55,11 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
     protected void encode(ChannelHandlerContext ctx, Packet packet, ByteBuf out) throws Exception {
         Session session = sessionManager.get(ctx);
 
+        ProtocolState state = session.getState();
+
         Protocol protocol = session.getProtocol();
-        PacketRegistry packets = protocol.getClientBoundPackets(session.getState());
-        CodecRegistry codecs = protocol.getClientBoundCodecs(session.getState());
+        PacketRegistry packets = protocol.getClientBoundPackets(state);
+        CodecRegistry codecs = protocol.getClientBoundCodecs(state);
 
         int id = packets.getId(packet.getClass());
         Codec codec = codecs.lookup(id);
@@ -65,7 +67,12 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
         Buffer buffer = new Buffer(out);
 
         buffer.writeVarInt(id);
-        codec.encode(buffer, packet);
+
+        try {
+            codec.encode(buffer, packet);
+        } catch (Exception ex) {
+            logger.error(String.format("Exception while encoding packet for %s - %s - %s", protocol, state, codec.getClass()), ex);
+        }
     }
 
     @Override
@@ -105,10 +112,14 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
         Factory<Packet> packetFactory = factoryRegistry.get(type);
         Packet packet = packetFactory.create();
 
-        codec.decode(buffer, packet);
+        try {
+            codec.decode(buffer, packet);
+        } catch (Exception ex) {
+            logger.warn(String.format("Exception while decoding packet for %s - %s - %s", protocol, state, codec.getClass()), ex);
+        }
 
         if (buffer.readableBytes() > 0) {
-            logger.warn("Not all bytes read for {} - {} - {}", protocol, state, codec);
+            logger.warn("Not all bytes read for {} - {} - {}", protocol, state, codec.getClass());
             buffer.skipBytes(buffer.readableBytes());
         }
 

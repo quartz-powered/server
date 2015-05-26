@@ -34,12 +34,12 @@ public class PluginMessageCodec implements Codec<PluginMessagePacket> {
     @Override
     public void encode(Buffer buffer, PluginMessagePacket packet) {
         buffer.writeString(packet.getChannel());
-        buffer.writeByteArray(packet.getData());
+        buffer.writeBytes(packet.getData());
     }
 
     @Override
     public void decode(Buffer buffer, PluginMessagePacket packet) {
         packet.setChannel(buffer.readString());
-        packet.setData(buffer.readByteArray());
+        packet.setData(buffer.readRemainingBytes());
     }
 }
