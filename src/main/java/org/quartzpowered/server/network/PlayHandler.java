@@ -26,6 +26,7 @@
  */
 package org.quartzpowered.server.network;
 
+import com.google.inject.Inject;
 import net.engio.mbassy.listener.Handler;
 import org.quartzpowered.network.session.Session;
 import org.quartzpowered.protocol.data.ChatPosition;
@@ -37,8 +38,11 @@ import org.quartzpowered.protocol.packet.play.shared.KeepAlivePacket;
 import javax.xml.soap.Text;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class PlayHandler {
+    @Inject
+    private Logger logger;
     List<Session> sessionList = new ArrayList<>();
     @Handler
     public void onChat(ChatMessagePacketIn packet){
@@ -61,7 +65,6 @@ public class PlayHandler {
         for(Session listSession : sessionList){
             listSession.send(chatMessagePacketOut);
         }
-
-        System.out.println(formatChat);
+        logger.info(formatChat);
     }
 }
