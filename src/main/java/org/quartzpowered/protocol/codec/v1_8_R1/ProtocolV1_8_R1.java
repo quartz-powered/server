@@ -61,7 +61,7 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(PLAY, 0x01, JoinGamePacket.class, new JoinGameCodec());
         clientBoundPacket(PLAY, 0x02, ChatMessagePacket.class, new ChatMessageCodec());
         clientBoundPacket(PLAY, 0x06, UpdateHealthPacket.class, new UpdateHealthCodec());
-        clientBoundPacket(PLAY, 0x08, PlayerPositionAndLookPacket.class, new PlayerPositionAndLookCodec());
+        clientBoundPacket(PLAY, 0x08, PlayerTeleportPacket.class, new PlayerTeleportCodec());
         clientBoundPacket(PLAY, 0x21, ChunkDataPacket.class, new ChunkDataCodec());
         clientBoundPacket(PLAY, 0x26, ChunkBulkPacket.class, new ChunkBulkCodec());
         clientBoundPacket(PLAY, 0x40, KickPacket.class, new KickCodec());
