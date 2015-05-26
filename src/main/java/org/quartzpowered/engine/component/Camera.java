@@ -59,4 +59,9 @@ public class Camera extends Component {
         this.observers.add(observer);
         attributes.set(CAMERA_ATTRIBUTE, this);
     }
+
+    @MessageHandler
+    public void update() {
+
+    }
 }
