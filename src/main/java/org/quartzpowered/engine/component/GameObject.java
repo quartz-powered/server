@@ -16,7 +16,9 @@ public class GameObject implements Observable {
     private final List<Observer> observers = new ArrayList<>();
 
     @Inject
-    private GameObject() {
+    private GameObject(FactoryRegistry factoryRegistry) {
+        this.factoryRegistry = factoryRegistry;
+
         addComponent(Transform.class);
     }
 
