@@ -65,12 +65,14 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
         Class<? extends Packet> type = packets.lookup(id);
 
         if (type == null) {
-            logger.warn("Unknown packet id: " + id);
+            logger.warn("Unknown packet id: 0x{}", Integer.toHexString(id));
+            buffer.skipBytes(buffer.readableBytes());
             return;
         }
 
         if (codec == null) {
             logger.error("Unregistered codec for " + type);
+            buffer.skipBytes(buffer.readableBytes());
             return;
         }
 
@@ -81,6 +83,7 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
 
         if (buffer.readableBytes() > 0) {
             logger.warn("Not all bytes read for {} - {} - {}", protocol, state, codec);
+            buffer.skipBytes(buffer.readableBytes());
         }
 
         out.add(packet);
