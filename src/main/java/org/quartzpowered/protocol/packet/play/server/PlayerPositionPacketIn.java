@@ -24,20 +24,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.codec.v1_8_R1.play.server;
+package org.quartzpowered.protocol.packet.play.server;
 
-import org.quartzpowered.network.buffer.Buffer;
-import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.packet.play.server.PlayerPacket;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.quartzpowered.network.protocol.packet.Packet;
 
-public class PlayerCodec implements Codec<PlayerPacket> {
-    @Override
-    public void encode(Buffer buffer, PlayerPacket packet) {
-        buffer.writeBoolean(packet.isOnGround());
-    }
-
-    @Override
-    public void decode(Buffer buffer, PlayerPacket packet) {
-        packet.setOnGround(buffer.readBoolean());
-    }
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class PlayerPositionPacketIn extends Packet {
+    private double x;
+    private double feetY;
+    private double z;
+    private boolean onGround;
 }

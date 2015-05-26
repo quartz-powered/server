@@ -28,36 +28,32 @@ package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
 
 import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.data.Difficulty;
-import org.quartzpowered.protocol.data.Dimension;
-import org.quartzpowered.protocol.data.Gamemode;
-import org.quartzpowered.protocol.packet.play.client.JoinGamePacket;
+import org.quartzpowered.protocol.packet.play.client.ChunkBulkPacketOut;
+import org.quartzpowered.protocol.packet.play.client.ChunkDataPacketOut;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-public class JoinGameCodec implements Codec<JoinGamePacket> {
+import java.util.List;
+
+public class ChunkBulkCodecOut implements Codec<ChunkBulkPacketOut> {
+
     @Override
-    public void encode(Buffer buffer, JoinGamePacket packet) {
-        buffer.writeInt(packet.getEntityId());
-        buffer.writeByte(packet.getGamemode().getId() | (packet.isHardcore() ? 0x8 : 0));
-        buffer.writeByte(packet.getDimension().getId());
-        buffer.writeByte(packet.getDifficulty().getId());
-        buffer.writeByte(packet.getMaxPlayers());
-        buffer.writeString(packet.getLevelType());
-        buffer.writeBoolean(packet.isReducedDebugInfo());
+    public void encode(Buffer buffer, ChunkBulkPacketOut packet) {
+        final List<ChunkDataPacketOut> chunks = packet.getChunks();
+
+        buffer.writeBoolean(packet.isSkylight());
+        buffer.writeVarInt(chunks.size());
+        for (ChunkDataPacketOut chunk : chunks) {
+            buffer.writeInt(chunk.getX());
+            buffer.writeInt(chunk.getZ());
+            buffer.writeShort(chunk.getMask());
+        }
+        for (ChunkDataPacketOut chunk : chunks) {
+            buffer.writeBytes(chunk.getData());
+        }
     }
 
     @Override
-    public void decode(Buffer buffer, JoinGamePacket packet) {
-        packet.setEntityId(buffer.readInt());
-
-        int gamemode = buffer.readByte();
-
-        packet.setGamemode(Gamemode.fromId(gamemode & 0x7));
-        packet.setHardcore((gamemode & 0x8) != 0);
-
-        packet.setDimension(Dimension.fromId(buffer.readByte()));
-        packet.setDifficulty(Difficulty.fromId(buffer.readByte()));
-        packet.setMaxPlayers(buffer.readByte());
-        packet.setLevelType(buffer.readString());
-        packet.setReducedDebugInfo(buffer.readBoolean());
+    public void decode(Buffer buffer, ChunkBulkPacketOut packet) {
+        throw new NotImplementedException();
     }
 }

@@ -24,26 +24,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.codec.v1_8_R1.play.server;
+package org.quartzpowered.protocol.packet.play.server;
 
-import org.quartzpowered.network.buffer.Buffer;
-import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.packet.play.server.PlayerPositionPacket;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.quartzpowered.network.protocol.packet.Packet;
 
-public class PlayerPositionCodec implements Codec<PlayerPositionPacket> {
-    @Override
-    public void encode(Buffer buffer, PlayerPositionPacket packet) {
-        buffer.writeDouble(packet.getX());
-        buffer.writeDouble(packet.getFeetY());
-        buffer.writeDouble(packet.getZ());
-        buffer.writeBoolean(packet.isOnGround());
-    }
-
-    @Override
-    public void decode(Buffer buffer, PlayerPositionPacket packet) {
-        packet.setX(buffer.readDouble());
-        packet.setFeetY(buffer.readDouble());
-        packet.setZ(buffer.readDouble());
-        packet.setOnGround(buffer.readBoolean());
-    }
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class PlayerPositionLookPacketIn extends Packet {
+    private double x;
+    private double feetY;
+    private double z;
+    private float yaw;
+    private float pitch;
+    private boolean onGround;
 }

@@ -24,17 +24,30 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.packet.play.client;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.quartzpowered.network.protocol.packet.Packet;
+import org.quartzpowered.network.buffer.Buffer;
+import org.quartzpowered.network.protocol.codec.Codec;
+import org.quartzpowered.protocol.packet.play.client.PlayerPositionLookPacketOut;
 
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class ChunkDataPacket extends Packet {
-    private int x, z;
-    private boolean continuous;
-    private int mask;
-    private byte[] data;
+public class PlayerPositionLookCodecOut implements Codec<PlayerPositionLookPacketOut> {
+    @Override
+    public void encode(Buffer buffer, PlayerPositionLookPacketOut packet) {
+        buffer.writeDouble(packet.getX());
+        buffer.writeDouble(packet.getY());
+        buffer.writeDouble(packet.getZ());
+        buffer.writeFloat(packet.getYaw());
+        buffer.writeFloat(packet.getPitch());
+        buffer.writeByte(packet.getFlags());
+    }
+
+    @Override
+    public void decode(Buffer buffer, PlayerPositionLookPacketOut packet) {
+        packet.setX(buffer.readDouble());
+        packet.setY(buffer.readDouble());
+        packet.setZ(buffer.readDouble());
+        packet.setYaw(buffer.readFloat());
+        packet.setPitch(buffer.readFloat());
+        packet.setFlags(buffer.readByte());
+    }
 }

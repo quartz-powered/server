@@ -24,17 +24,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.packet.play.client;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.quartzpowered.network.protocol.packet.Packet;
-import org.quartzpowered.protocol.data.ChatPosition;
-import org.quartzpowered.protocol.data.component.TextComponent;
+import org.quartzpowered.network.buffer.Buffer;
+import org.quartzpowered.network.protocol.codec.Codec;
+import org.quartzpowered.protocol.packet.play.client.UpdateHealthPacketOut;
 
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class ChatMessagePacket extends Packet {
-    private TextComponent message;
-    private ChatPosition position;
+public class UpdateHealthCodecOut implements Codec<UpdateHealthPacketOut> {
+
+    @Override
+    public void encode(Buffer buffer, UpdateHealthPacketOut packet) {
+        buffer.writeFloat(packet.getHealth());
+        buffer.writeVarInt(packet.getFoodLevel());
+        buffer.writeFloat(packet.getSaturation());
+    }
+
+    @Override
+    public void decode(Buffer buffer, UpdateHealthPacketOut packet) {
+        packet.setHealth(buffer.readFloat());
+        packet.setFoodLevel(buffer.readVarInt());
+        packet.setSaturation(buffer.readFloat());
+    }
 }

@@ -24,17 +24,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.packet.play.client;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.server;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.quartzpowered.network.protocol.packet.Packet;
+import org.quartzpowered.network.buffer.Buffer;
+import org.quartzpowered.network.protocol.codec.Codec;
+import org.quartzpowered.protocol.packet.play.server.PlayerPacketIn;
 
-import java.util.List;
+public class PlayerCodecIn implements Codec<PlayerPacketIn> {
+    @Override
+    public void encode(Buffer buffer, PlayerPacketIn packet) {
+        buffer.writeBoolean(packet.isOnGround());
+    }
 
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class ChunkBulkPacket extends Packet {
-    private boolean skylight;
-    private List<ChunkDataPacket> chunks;
+    @Override
+    public void decode(Buffer buffer, PlayerPacketIn packet) {
+        packet.setOnGround(buffer.readBoolean());
+    }
 }

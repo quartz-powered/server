@@ -28,27 +28,36 @@ package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
 
 import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.packet.play.client.ChunkDataPacket;
+import org.quartzpowered.protocol.data.Difficulty;
+import org.quartzpowered.protocol.data.Dimension;
+import org.quartzpowered.protocol.data.Gamemode;
+import org.quartzpowered.protocol.packet.play.client.JoinGamePacketOut;
 
-public class ChunkDataCodec implements Codec<ChunkDataPacket> {
-
+public class JoinGameCodecOut implements Codec<JoinGamePacketOut> {
     @Override
-    public void encode(Buffer buffer, ChunkDataPacket packet) {
-        buffer.writeInt(packet.getX());
-        buffer.writeInt(packet.getZ());
-
-        buffer.writeBoolean(packet.isContinuous());
-        buffer.writeShort(packet.getMask());
-        buffer.writeByteArray(packet.getData());
+    public void encode(Buffer buffer, JoinGamePacketOut packet) {
+        buffer.writeInt(packet.getEntityId());
+        buffer.writeByte(packet.getGamemode().getId() | (packet.isHardcore() ? 0x8 : 0));
+        buffer.writeByte(packet.getDimension().getId());
+        buffer.writeByte(packet.getDifficulty().getId());
+        buffer.writeByte(packet.getMaxPlayers());
+        buffer.writeString(packet.getLevelType());
+        buffer.writeBoolean(packet.isReducedDebugInfo());
     }
 
     @Override
-    public void decode(Buffer buffer, ChunkDataPacket packet) {
-        packet.setX(buffer.readInt());
-        packet.setZ(buffer.readInt());
+    public void decode(Buffer buffer, JoinGamePacketOut packet) {
+        packet.setEntityId(buffer.readInt());
 
-        packet.setContinuous(buffer.readBoolean());
-        packet.setMask(buffer.readShort());
-        packet.setData(buffer.readByteArray());
+        int gamemode = buffer.readByte();
+
+        packet.setGamemode(Gamemode.fromId(gamemode & 0x7));
+        packet.setHardcore((gamemode & 0x8) != 0);
+
+        packet.setDimension(Dimension.fromId(buffer.readByte()));
+        packet.setDifficulty(Difficulty.fromId(buffer.readByte()));
+        packet.setMaxPlayers(buffer.readByte());
+        packet.setLevelType(buffer.readString());
+        packet.setReducedDebugInfo(buffer.readBoolean());
     }
 }

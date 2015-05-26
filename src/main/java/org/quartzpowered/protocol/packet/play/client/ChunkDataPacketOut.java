@@ -32,8 +32,9 @@ import org.quartzpowered.network.protocol.packet.Packet;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class UpdateHealthPacket extends Packet {
-    private float health;
-    private int foodLevel;
-    private float saturation;
+public class ChunkDataPacketOut extends Packet {
+    private int x, z;
+    private boolean continuous;
+    private int mask;
+    private byte[] data;
 }

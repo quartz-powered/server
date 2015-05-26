@@ -34,6 +34,7 @@ import org.quartzpowered.protocol.codec.v1_8_R1.login.client.LoginResponseCodec;
 import org.quartzpowered.protocol.codec.v1_8_R1.login.server.EncryptionResponseCodec;
 import org.quartzpowered.protocol.codec.v1_8_R1.login.server.LoginRequestCodec;
 import org.quartzpowered.protocol.codec.v1_8_R1.play.client.*;
+import org.quartzpowered.protocol.codec.v1_8_R1.play.server.*;
 import org.quartzpowered.protocol.codec.v1_8_R1.play.shared.KeepAliveCodec;
 import org.quartzpowered.protocol.codec.v1_8_R1.status.client.PongCodec;
 import org.quartzpowered.protocol.codec.v1_8_R1.status.client.StatusResponseCodec;
@@ -46,6 +47,7 @@ import org.quartzpowered.protocol.packet.login.client.LoginResponsePacket;
 import org.quartzpowered.protocol.packet.login.server.EncryptionResponsePacket;
 import org.quartzpowered.protocol.packet.login.server.LoginRequestPacket;
 import org.quartzpowered.protocol.packet.play.client.*;
+import org.quartzpowered.protocol.packet.play.server.*;
 import org.quartzpowered.protocol.packet.play.shared.KeepAlivePacket;
 import org.quartzpowered.protocol.packet.status.client.PongPacket;
 import org.quartzpowered.protocol.packet.status.client.StatusResponsePacket;
@@ -82,14 +84,27 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(LOGIN, 0x02, LoginResponsePacket.class, new LoginResponseCodec());
 
         serverBoundPacket(PLAY, 0x00, KeepAlivePacket.class, new KeepAliveCodec());
+        serverBoundPacket(PLAY, 0x01, ChatMessagePacketIn.class, new ChatMessageCodecIn());
+        serverBoundPacket(PLAY, 0x03, PlayerPacketIn.class, new PlayerCodecIn());
+        serverBoundPacket(PLAY, 0x04, PlayerPositionPacketIn.class, new PlayerPositionCodecIn());
+        serverBoundPacket(PLAY, 0x05, PlayerLookPacketIn.class, new PlayerLookCodecIn());
+        serverBoundPacket(PLAY, 0x06, PlayerPositionLookPacketIn.class, new PlayerPositionLookCodecIn());
+        serverBoundPacket(PLAY, 0x09, HeldItemChangePacketIn.class, new HeldItemChangeCodecIn());
+        serverBoundPacket(PLAY, 0x0D, CloseWindowPacketIn.class, new CloseWindowCodecIn());
+        serverBoundPacket(PLAY, 0x13, PlayerAbilitiesPacketIn.class, new PlayerAbilitiesCodecIn());
+        serverBoundPacket(PLAY, 0x15, ClientSettingsPacketIn.class, new ClientSettingsCodecIn());
+        serverBoundPacket(PLAY, 0x16, ClientStatusPacketIn.class, new ClientStatusCodecIn());
+        serverBoundPacket(PLAY, 0x17, PluginMessagePacketIn.class, new PluginMessageCodecIn());
+
 
         clientBoundPacket(PLAY, 0x00, KeepAlivePacket.class, new KeepAliveCodec());
-        clientBoundPacket(PLAY, 0x01, JoinGamePacket.class, new JoinGameCodec());
-        clientBoundPacket(PLAY, 0x02, ChatMessagePacket.class, new ChatMessageCodec());
-        clientBoundPacket(PLAY, 0x06, UpdateHealthPacket.class, new UpdateHealthCodec());
-        clientBoundPacket(PLAY, 0x08, PlayerTeleportPacket.class, new PlayerTeleportCodec());
-        clientBoundPacket(PLAY, 0x21, ChunkDataPacket.class, new ChunkDataCodec());
-        clientBoundPacket(PLAY, 0x26, ChunkBulkPacket.class, new ChunkBulkCodec());
+        clientBoundPacket(PLAY, 0x01, JoinGamePacketOut.class, new JoinGameCodecOut());
+        clientBoundPacket(PLAY, 0x02, ChatMessagePacketOut.class, new ChatMessageCodecOut());
+        clientBoundPacket(PLAY, 0x06, UpdateHealthPacketOut.class, new UpdateHealthCodecOut());
+        clientBoundPacket(PLAY, 0x08, PlayerPositionLookPacketOut.class, new PlayerPositionLookCodecOut());
+        serverBoundPacket(PLAY, 0x09, HeldItemChangePacketOut.class, new HeldItemChangeCodecOut());
+        clientBoundPacket(PLAY, 0x21, ChunkDataPacketOut.class, new ChunkDataCodecOut());
+        clientBoundPacket(PLAY, 0x26, ChunkBulkPacketOut.class, new ChunkBulkCodecOut());
         clientBoundPacket(PLAY, 0x40, KickPacket.class, new KickCodec());
         clientBoundPacket(PLAY, 0x46, CompressionPacket.class, new CompressionCodec());
 

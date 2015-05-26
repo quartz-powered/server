@@ -24,16 +24,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.packet.play.server;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.server;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.quartzpowered.network.protocol.packet.Packet;
+import org.quartzpowered.network.buffer.Buffer;
+import org.quartzpowered.network.protocol.codec.Codec;
+import org.quartzpowered.protocol.packet.play.server.PlayerLookPacketIn;
 
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class PlayerLookPacket extends Packet {
-    private float yaw;
-    private float pitch;
-    private boolean onGround;
+public class PlayerLookCodecIn implements Codec<PlayerLookPacketIn> {
+    @Override
+    public void encode(Buffer buffer, PlayerLookPacketIn packet) {
+        buffer.writeFloat(packet.getYaw());
+        buffer.writeFloat(packet.getPitch());
+        buffer.writeBoolean(packet.isOnGround());
+    }
+
+    @Override
+    public void decode(Buffer buffer, PlayerLookPacketIn packet) {
+        packet.setYaw(buffer.readFloat());
+        packet.setPitch(buffer.readFloat());
+        packet.setOnGround(buffer.readBoolean());
+    }
 }
