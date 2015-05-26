@@ -1,6 +1,6 @@
 package org.quartzpowered.protocol.data;
 
-public enum DiggingStatus {
+public enum PlayerAction {
     START_DIGGING,
     CANCEL_DIGGING,
     FINISH_DIGGING,
@@ -12,7 +12,7 @@ public enum DiggingStatus {
         return ordinal();
     }
 
-    public static DiggingStatus fromId(int id) {
+    public static PlayerAction fromId(int id) {
         return values()[id];
     }
 }
