@@ -24,31 +24,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.engine.component;
+package org.quartzpowered.protocol.packet.play.shared;
 
-import lombok.Getter;
-import org.quartzpowered.engine.observe.Observable;
-import org.quartzpowered.engine.observe.Observer;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.quartzpowered.network.protocol.packet.Packet;
 
-public abstract class Component implements Observable {
-
-    @Getter
-    private GameObject gameObject;
-
-    public void setGameObject(GameObject gameObject) {
-        if (this.gameObject != null) {
-            throw new IllegalStateException("gameObject already set");
-        }
-        this.gameObject = gameObject;
-    }
-
-    @Override
-    public void startObserving(Observer observer) {
-
-    }
-
-    @Override
-    public void endObserving(Observer observer) {
-
-    }
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class ConfirmTransactionPacket extends Packet {
+    private int windowId;
+    private int actionNumber;
+    private boolean accepted;
 }

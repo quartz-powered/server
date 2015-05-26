@@ -24,39 +24,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.engine.component;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.shared;
 
-import org.quartzpowered.engine.observe.Observer;
-import org.quartzpowered.network.session.attribute.AttributeKey;
-import org.quartzpowered.network.session.attribute.AttributeRegistry;
-import org.quartzpowered.network.session.attribute.AttributeStorage;
+import org.quartzpowered.network.buffer.Buffer;
+import org.quartzpowered.network.protocol.codec.Codec;
+import org.quartzpowered.protocol.packet.play.shared.ConfirmTransactionPacket;
 
-import javax.inject.Inject;
-import java.util.ArrayList;
-import java.util.List;
-
-public class Camera extends Component {
-    public static final AttributeKey<Camera> CAMERA_ATTRIBUTE = AttributeKey.create();
-
-    @Inject private AttributeRegistry attributeRegistry;
-
-    private final List<Observer> observers = new ArrayList<>();
-
-    public void removeViewer(Observer observer) {
-        if (this.observers.remove(observer)) {
-            this.attributeRegistry.get(observer).set(CAMERA_ATTRIBUTE, null);
-        }
+public class ConfirmTransactionCodec implements Codec<ConfirmTransactionPacket> {
+    @Override
+    public void encode(Buffer buffer, ConfirmTransactionPacket packet) {
+        buffer.writeByte(packet.getWindowId());
+        buffer.writeShort(packet.getActionNumber());
+        buffer.writeBoolean(packet.isAccepted());
     }
 
-    public void addViewer(Observer observer) {
-        AttributeStorage attributes = this.attributeRegistry.get(observer);
-
-        Camera previousCamera = attributes.get(CAMERA_ATTRIBUTE);
-        if (previousCamera != null) {
-            previousCamera.removeViewer(observer);
-        }
-
-        this.observers.add(observer);
-        attributes.set(CAMERA_ATTRIBUTE, this);
+    @Override
+    public void decode(Buffer buffer, ConfirmTransactionPacket packet) {
+        packet.setWindowId(buffer.readByte());
+        packet.setActionNumber(buffer.readShort());
+        packet.setAccepted(buffer.readBoolean());
     }
 }

@@ -44,8 +44,8 @@ public abstract class ObservableGroup implements Observable, Observer {
     }
 
     @Override
-    public void endObserving(Observer observer) {
-        forEachChild(child -> child.endObserving(observer));
+    public void stopObserving(Observer observer) {
+        forEachChild(child -> child.stopObserving(observer));
     }
 
     @Override

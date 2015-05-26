@@ -24,21 +24,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.engine.math;
+package org.quartzpowered.engine.object;
 
-public class MathUtil {
-    static public final double DOUBLE_ROUNDING_ERROR = 0.00000000001;
-    static public final float FLOAT_PI = 3.1415927f;
+import lombok.Getter;
+import org.quartzpowered.common.util.ReflectionUtil;
+import org.slf4j.Logger;
 
-    static public final float radiansToDegrees = 180f / FLOAT_PI;
+import javax.inject.Inject;
+import java.lang.reflect.Field;
 
-    static public boolean isZero (double value) {
-        return Math.abs(value) <= DOUBLE_ROUNDING_ERROR;
-    }
+public abstract class Component {
+    private static final Field objectField = ReflectionUtil.getConstantField(Component.class, "object");
 
-    public static float clamp(float value, float min, float max) {
-        if (value < min) return min;
-        if (value > max) return max;
-        return value;
+    @Inject private Logger logger;
+
+    @Getter
+    protected final GameObject gameObject = GameObject.none();
+
+    @SuppressWarnings("ConstantConditions")
+    public void setObject(GameObject gameObject) {
+        if (this.gameObject != null) {
+            throw new IllegalStateException("object already set");
+        }
+
+        try {
+            ReflectionUtil.setFinalField(objectField,  this, gameObject);
+        } catch (ReflectiveOperationException ex) {
+            logger.error("Cannot set object", ex);
+        }
     }
 }

@@ -33,6 +33,8 @@ import net.engio.mbassy.listener.Handler;
 import org.quartzpowered.common.eventbus.EventBus;
 import org.quartzpowered.common.util.CryptoUtil;
 import org.quartzpowered.network.buffer.Buffer;
+import org.quartzpowered.engine.level.Level;
+import org.quartzpowered.engine.level.LevelFactory;
 import org.quartzpowered.network.server.NetworkServer;
 import org.quartzpowered.network.session.Session;
 import org.quartzpowered.protocol.data.ChatPosition;
@@ -72,9 +74,12 @@ public class Server {
     @Getter
     private KeyPair keyPair;
 
+    private final Level level;
+
     @Inject
-    private Server(CryptoUtil cryptoUtil) {
+    private Server(CryptoUtil cryptoUtil, LevelFactory levelFactory) {
         keyPair = cryptoUtil.generateRSAKeyPair();
+        level = levelFactory.create();
     }
 
     public void main(String args[]) {

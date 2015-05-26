@@ -24,12 +24,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.engine.component;
+package org.quartzpowered.engine.object.component;
 
 import lombok.Getter;
 import org.quartzpowered.engine.math.Matrix4;
 import org.quartzpowered.engine.math.Quaternion;
 import org.quartzpowered.engine.math.Vector3;
+import org.quartzpowered.engine.object.Component;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -109,6 +110,21 @@ public class Transform extends Component {
         return Collections.unmodifiableCollection(this.children);
     }
 
+    public Transform getRoot() {
+        Transform root = this;
+
+        while (true) {
+            Transform parent = root.getParent();
+            if (parent == null) {
+                break;
+            }
+
+            root = parent;
+        }
+
+        return root;
+    }
+
     public void setParent(Transform parent) {
         if (this.parent != null) {
             this.parent.children.remove(this);
@@ -118,4 +134,11 @@ public class Transform extends Component {
         this.parent.children.add(this);
     }
 
+    public double distanceSquared(Transform transform) {
+        return getPosition().distanceSquared(transform.getPosition());
+    }
+
+    public double distance(Transform transform) {
+        return getPosition().distance(transform.getPosition());
+    }
 }

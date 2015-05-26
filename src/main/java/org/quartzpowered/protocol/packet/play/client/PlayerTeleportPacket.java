@@ -28,6 +28,8 @@ package org.quartzpowered.protocol.packet.play.client;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.quartzpowered.engine.math.Quaternion;
+import org.quartzpowered.engine.math.Vector3;
 import org.quartzpowered.network.protocol.packet.Packet;
 
 @Data
@@ -39,4 +41,27 @@ public class PlayerTeleportPacket extends Packet {
     private float yaw;
     private float pitch;
     private int flags;
+
+    public void setPosition(double x, double y, double z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+    }
+
+    public void setPosition(Vector3 position) {
+        setPosition(position.getX(), position.getY(), position.getZ());
+    }
+
+    public Vector3 getPosition() {
+        return new Vector3(x, y, z);
+    }
+
+    public void setRotation(float yaw, float pitch) {
+        this.yaw = yaw;
+        this.pitch = pitch;
+    }
+
+    public void setRotation(Quaternion rotation) {
+        setRotation(rotation.getYaw(), rotation.getPitch());
+    }
 }
