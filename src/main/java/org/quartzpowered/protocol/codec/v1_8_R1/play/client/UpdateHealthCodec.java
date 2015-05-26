@@ -4,11 +4,6 @@ import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.codec.Codec;
 import org.quartzpowered.protocol.packet.play.client.UpdateHealthPacket;
 
-/**
- * Created by Ryan on 5/25/2015
- * <p>
- * Project: server
- */
 public class UpdateHealthCodec implements Codec<UpdateHealthPacket> {
 
     @Override
