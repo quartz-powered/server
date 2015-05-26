@@ -32,11 +32,9 @@ import org.quartzpowered.network.protocol.packet.Packet;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class PlayerTeleportPacket extends Packet {
-    private double x;
-    private double y;
-    private double z;
-    private float yaw;
-    private float pitch;
-    private int flags;
+public class ChunkDataPacketOut extends Packet {
+    private int x, z;
+    private boolean continuous;
+    private int mask;
+    private byte[] data;
 }

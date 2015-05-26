@@ -24,30 +24,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
+package org.quartzpowered.protocol.packet.play.server;
 
-import org.quartzpowered.network.buffer.Buffer;
-import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.packet.play.client.PlayerTeleportPacket;
 
-public class PlayerTeleportCodec implements Codec<PlayerTeleportPacket> {
-    @Override
-    public void encode(Buffer buffer, PlayerTeleportPacket packet) {
-        buffer.writeDouble(packet.getX());
-        buffer.writeDouble(packet.getY());
-        buffer.writeDouble(packet.getZ());
-        buffer.writeFloat(packet.getYaw());
-        buffer.writeFloat(packet.getPitch());
-        buffer.writeByte(packet.getFlags());
-    }
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.quartzpowered.network.protocol.packet.Packet;
 
-    @Override
-    public void decode(Buffer buffer, PlayerTeleportPacket packet) {
-        packet.setX(buffer.readDouble());
-        packet.setY(buffer.readDouble());
-        packet.setZ(buffer.readDouble());
-        packet.setYaw(buffer.readFloat());
-        packet.setPitch(buffer.readFloat());
-        packet.setFlags(buffer.readByte());
-    }
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class PlayerPacketIn extends Packet {
+    private boolean onGround;
 }

@@ -24,26 +24,25 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.codec.v1_8_R1.play.server;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
 
 import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.packet.play.server.PlayerPositionPacket;
+import org.quartzpowered.protocol.packet.play.client.UpdateHealthPacketOut;
 
-public class PlayerPositionCodec implements Codec<PlayerPositionPacket> {
+public class UpdateHealthCodecOut implements Codec<UpdateHealthPacketOut> {
+
     @Override
-    public void encode(Buffer buffer, PlayerPositionPacket packet) {
-        buffer.writeDouble(packet.getX());
-        buffer.writeDouble(packet.getFeetY());
-        buffer.writeDouble(packet.getZ());
-        buffer.writeBoolean(packet.isOnGround());
+    public void encode(Buffer buffer, UpdateHealthPacketOut packet) {
+        buffer.writeFloat(packet.getHealth());
+        buffer.writeVarInt(packet.getFoodLevel());
+        buffer.writeFloat(packet.getSaturation());
     }
 
     @Override
-    public void decode(Buffer buffer, PlayerPositionPacket packet) {
-        packet.setX(buffer.readDouble());
-        packet.setFeetY(buffer.readDouble());
-        packet.setZ(buffer.readDouble());
-        packet.setOnGround(buffer.readBoolean());
+    public void decode(Buffer buffer, UpdateHealthPacketOut packet) {
+        packet.setHealth(buffer.readFloat());
+        packet.setFoodLevel(buffer.readVarInt());
+        packet.setSaturation(buffer.readFloat());
     }
 }

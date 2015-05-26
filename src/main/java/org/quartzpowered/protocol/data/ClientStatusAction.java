@@ -24,17 +24,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.packet.play.client;
+package org.quartzpowered.protocol.data;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.quartzpowered.network.protocol.packet.Packet;
+public enum ClientStatusAction {
+    PERFORM_RESPAWN,
+    REQUEST_STATS,
+    TAKING_INVENTORY;
 
-import java.util.List;
+    public int getId() {
+        return ordinal();
+    }
 
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class ChunkBulkPacket extends Packet {
-    private boolean skylight;
-    private List<ChunkDataPacket> chunks;
+    public static ClientStatusAction fromId(int id) {
+        return values()[id];
+    }
 }

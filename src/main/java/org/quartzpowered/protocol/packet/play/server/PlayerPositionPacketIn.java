@@ -24,36 +24,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
+package org.quartzpowered.protocol.packet.play.server;
 
-import org.quartzpowered.network.buffer.Buffer;
-import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.packet.play.client.ChunkBulkPacket;
-import org.quartzpowered.protocol.packet.play.client.ChunkDataPacket;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.quartzpowered.network.protocol.packet.Packet;
 
-import java.util.List;
-
-public class ChunkBulkCodec implements Codec<ChunkBulkPacket> {
-
-    @Override
-    public void encode(Buffer buffer, ChunkBulkPacket packet) {
-        final List<ChunkDataPacket> chunks = packet.getChunks();
-
-        buffer.writeBoolean(packet.isSkylight());
-        buffer.writeVarInt(chunks.size());
-        for (ChunkDataPacket chunk : chunks) {
-            buffer.writeInt(chunk.getX());
-            buffer.writeInt(chunk.getZ());
-            buffer.writeShort(chunk.getMask());
-        }
-        for (ChunkDataPacket chunk : chunks) {
-            buffer.writeBytes(chunk.getData());
-        }
-    }
-
-    @Override
-    public void decode(Buffer buffer, ChunkBulkPacket packet) {
-        throw new NotImplementedException();
-    }
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class PlayerPositionPacketIn extends Packet {
+    private double x;
+    private double feetY;
+    private double z;
+    private boolean onGround;
 }

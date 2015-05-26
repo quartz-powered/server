@@ -24,19 +24,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.packet.play.server;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.server;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.quartzpowered.network.protocol.packet.Packet;
+import org.quartzpowered.network.buffer.Buffer;
+import org.quartzpowered.network.protocol.codec.Codec;
+import org.quartzpowered.protocol.packet.play.server.ChatMessagePacketIn;
 
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class PlayerPositionAndLookPacket extends Packet {
-    private double x;
-    private double feetY;
-    private double z;
-    private float yaw;
-    private float pitch;
-    private boolean onGround;
+public class ChatMessageCodecIn implements Codec<ChatMessagePacketIn> {
+    @Override
+    public void encode(Buffer buffer, ChatMessagePacketIn packet) {
+        buffer.writeString(packet.getMessage());
+    }
+
+    @Override
+    public void decode(Buffer buffer, ChatMessagePacketIn packet) {
+        packet.setMessage(buffer.readString());
+    }
 }

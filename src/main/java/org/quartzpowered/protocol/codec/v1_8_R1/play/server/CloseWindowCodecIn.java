@@ -24,24 +24,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.packet.play.client;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.server;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.quartzpowered.network.protocol.packet.Packet;
-import org.quartzpowered.protocol.data.Difficulty;
-import org.quartzpowered.protocol.data.Dimension;
-import org.quartzpowered.protocol.data.Gamemode;
+import org.quartzpowered.network.buffer.Buffer;
+import org.quartzpowered.network.protocol.codec.Codec;
+import org.quartzpowered.protocol.packet.play.server.CloseWindowPacketIn;
 
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class JoinGamePacket extends Packet {
-    private int entityId;
-    private Gamemode gamemode;
-    private boolean hardcore;
-    private Dimension dimension;
-    private Difficulty difficulty;
-    private int maxPlayers;
-    private String levelType;
-    private boolean reducedDebugInfo;
+public class CloseWindowCodecIn implements Codec<CloseWindowPacketIn> {
+    @Override
+    public void encode(Buffer buffer, CloseWindowPacketIn packet) {
+        buffer.writeByte(packet.getWindowId());
+    }
+
+    @Override
+    public void decode(Buffer buffer, CloseWindowPacketIn packet) {
+        packet.setWindowId(buffer.readByte());
+    }
 }

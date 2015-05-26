@@ -38,10 +38,10 @@ import org.quartzpowered.protocol.data.Dimension;
 import org.quartzpowered.protocol.data.Gamemode;
 import org.quartzpowered.protocol.data.component.TextComponent;
 import org.quartzpowered.protocol.packet.login.client.LoginResponsePacket;
-import org.quartzpowered.protocol.packet.play.client.ChatMessagePacket;
-import org.quartzpowered.protocol.packet.play.client.JoinGamePacket;
-import org.quartzpowered.protocol.packet.play.client.PlayerPositionAndLookPacket;
-import org.quartzpowered.protocol.packet.play.client.UpdateHealthPacket;
+import org.quartzpowered.protocol.packet.play.client.ChatMessagePacketOut;
+import org.quartzpowered.protocol.packet.play.client.JoinGamePacketOut;
+import org.quartzpowered.protocol.packet.play.client.PlayerPositionLookPacketOut;
+import org.quartzpowered.protocol.packet.play.client.UpdateHealthPacketOut;
 import org.quartzpowered.server.event.player.PlayerLoginEvent;
 import org.quartzpowered.server.network.HandshakeHandler;
 import org.quartzpowered.server.network.LoginHandler;
@@ -102,26 +102,26 @@ public class Server {
 
 
 
-            JoinGamePacket joinGamePacket = new JoinGamePacket();
-            joinGamePacket.setGamemode(Gamemode.CREATIVE);
-            joinGamePacket.setDimension(Dimension.NETHER);
-            joinGamePacket.setDifficulty(Difficulty.NORMAL);
-            joinGamePacket.setLevelType("default");
-            session.send(joinGamePacket);
+            JoinGamePacketOut joinGamePacketOut = new JoinGamePacketOut();
+            joinGamePacketOut.setGamemode(Gamemode.CREATIVE);
+            joinGamePacketOut.setDimension(Dimension.NETHER);
+            joinGamePacketOut.setDifficulty(Difficulty.NORMAL);
+            joinGamePacketOut.setLevelType("default");
+            session.send(joinGamePacketOut);
 
-            PlayerPositionAndLookPacket playerPositionAndLookPacket = new PlayerPositionAndLookPacket();
-            session.send(playerPositionAndLookPacket);
+            PlayerPositionLookPacketOut playerPositionLookPacketOut = new PlayerPositionLookPacketOut();
+            session.send(playerPositionLookPacketOut);
 
-            ChatMessagePacket chatMessagePacket =  new ChatMessagePacket();
-            chatMessagePacket.setMessage(new TextComponent("Welcome to QuartzPowered!"));
-            chatMessagePacket.setPosition(ChatPosition.CHAT);
-            session.send(chatMessagePacket);
+            ChatMessagePacketOut chatMessagePacketOut =  new ChatMessagePacketOut();
+            chatMessagePacketOut.setMessage(new TextComponent("Welcome to QuartzPowered!"));
+            chatMessagePacketOut.setPosition(ChatPosition.CHAT);
+            session.send(chatMessagePacketOut);
 
-            UpdateHealthPacket updateHealthPacket = new UpdateHealthPacket();
-            updateHealthPacket.setHealth(10);
-            updateHealthPacket.setFoodLevel(4);
-            updateHealthPacket.setSaturation(5.0f);
-            session.send(updateHealthPacket);
+            UpdateHealthPacketOut updateHealthPacketOut = new UpdateHealthPacketOut();
+            updateHealthPacketOut.setHealth(10);
+            updateHealthPacketOut.setFoodLevel(4);
+            updateHealthPacketOut.setSaturation(5.0f);
+            session.send(updateHealthPacketOut);
 
 
 

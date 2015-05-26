@@ -31,11 +31,11 @@ import org.quartzpowered.network.protocol.codec.Codec;
 import org.quartzpowered.protocol.data.Difficulty;
 import org.quartzpowered.protocol.data.Dimension;
 import org.quartzpowered.protocol.data.Gamemode;
-import org.quartzpowered.protocol.packet.play.client.JoinGamePacket;
+import org.quartzpowered.protocol.packet.play.client.JoinGamePacketOut;
 
-public class JoinGameCodec implements Codec<JoinGamePacket> {
+public class JoinGameCodecOut implements Codec<JoinGamePacketOut> {
     @Override
-    public void encode(Buffer buffer, JoinGamePacket packet) {
+    public void encode(Buffer buffer, JoinGamePacketOut packet) {
         buffer.writeInt(packet.getEntityId());
         buffer.writeByte(packet.getGamemode().getId() | (packet.isHardcore() ? 0x8 : 0));
         buffer.writeByte(packet.getDimension().getId());
@@ -46,7 +46,7 @@ public class JoinGameCodec implements Codec<JoinGamePacket> {
     }
 
     @Override
-    public void decode(Buffer buffer, JoinGamePacket packet) {
+    public void decode(Buffer buffer, JoinGamePacketOut packet) {
         packet.setEntityId(buffer.readInt());
 
         int gamemode = buffer.readByte();

@@ -24,15 +24,36 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.packet.play.server;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
 
+import org.quartzpowered.network.buffer.Buffer;
+import org.quartzpowered.network.protocol.codec.Codec;
+import org.quartzpowered.protocol.packet.play.client.ChunkBulkPacketOut;
+import org.quartzpowered.protocol.packet.play.client.ChunkDataPacketOut;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.quartzpowered.network.protocol.packet.Packet;
+import java.util.List;
 
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class PlayerPacket extends Packet {
-    private boolean onGround;
+public class ChunkBulkCodecOut implements Codec<ChunkBulkPacketOut> {
+
+    @Override
+    public void encode(Buffer buffer, ChunkBulkPacketOut packet) {
+        final List<ChunkDataPacketOut> chunks = packet.getChunks();
+
+        buffer.writeBoolean(packet.isSkylight());
+        buffer.writeVarInt(chunks.size());
+        for (ChunkDataPacketOut chunk : chunks) {
+            buffer.writeInt(chunk.getX());
+            buffer.writeInt(chunk.getZ());
+            buffer.writeShort(chunk.getMask());
+        }
+        for (ChunkDataPacketOut chunk : chunks) {
+            buffer.writeBytes(chunk.getData());
+        }
+    }
+
+    @Override
+    public void decode(Buffer buffer, ChunkBulkPacketOut packet) {
+        throw new NotImplementedException();
+    }
 }

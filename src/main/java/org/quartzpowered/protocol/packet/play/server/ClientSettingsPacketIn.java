@@ -24,31 +24,19 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
+package org.quartzpowered.protocol.packet.play.server;
 
-import org.quartzpowered.network.buffer.Buffer;
-import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.packet.play.client.ChunkDataPacket;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.quartzpowered.network.protocol.packet.Packet;
+import org.quartzpowered.protocol.data.ChatMode;
 
-public class ChunkDataCodec implements Codec<ChunkDataPacket> {
-
-    @Override
-    public void encode(Buffer buffer, ChunkDataPacket packet) {
-        buffer.writeInt(packet.getX());
-        buffer.writeInt(packet.getZ());
-
-        buffer.writeBoolean(packet.isContinuous());
-        buffer.writeShort(packet.getMask());
-        buffer.writeByteArray(packet.getData());
-    }
-
-    @Override
-    public void decode(Buffer buffer, ChunkDataPacket packet) {
-        packet.setX(buffer.readInt());
-        packet.setZ(buffer.readInt());
-
-        packet.setContinuous(buffer.readBoolean());
-        packet.setMask(buffer.readShort());
-        packet.setData(buffer.readByteArray());
-    }
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class ClientSettingsPacketIn extends Packet {
+    private String locale;
+    private int viewDistance;
+    private ChatMode chatMode;
+    private boolean chatColors;
+    private int displayedSkinParts;
 }

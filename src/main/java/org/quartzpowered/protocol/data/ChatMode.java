@@ -24,17 +24,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.packet.play.client;
+package org.quartzpowered.protocol.data;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import org.quartzpowered.network.protocol.packet.Packet;
-import org.quartzpowered.protocol.data.ChatPosition;
-import org.quartzpowered.protocol.data.component.TextComponent;
+public enum ChatMode {
+    ENABLED,
+    COMMANDS,
+    HIDDEN;
+    public int getId() {
+        return ordinal();
+    }
 
-@Data
-@EqualsAndHashCode(callSuper = true)
-public class ChatMessagePacket extends Packet {
-    private TextComponent message;
-    private ChatPosition position;
+    public static ChatMode fromId(int id) {
+        return values()[id];
+    }
 }

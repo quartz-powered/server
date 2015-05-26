@@ -24,7 +24,7 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.packet.play.client;
+package org.quartzpowered.protocol.packet.play.server;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -32,9 +32,6 @@ import org.quartzpowered.network.protocol.packet.Packet;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ChunkDataPacket extends Packet {
-    private int x, z;
-    private boolean continuous;
-    private int mask;
-    private byte[] data;
+public class HeldItemChangePacketIn extends Packet {
+    private int slot;
 }

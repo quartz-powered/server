@@ -24,25 +24,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
+package org.quartzpowered.protocol.packet.play.client;
 
-import org.quartzpowered.network.buffer.Buffer;
-import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.packet.play.client.UpdateHealthPacket;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.quartzpowered.network.protocol.packet.Packet;
 
-public class UpdateHealthCodec implements Codec<UpdateHealthPacket> {
-
-    @Override
-    public void encode(Buffer buffer, UpdateHealthPacket packet) {
-        buffer.writeFloat(packet.getHealth());
-        buffer.writeVarInt(packet.getFoodLevel());
-        buffer.writeFloat(packet.getSaturation());
-    }
-
-    @Override
-    public void decode(Buffer buffer, UpdateHealthPacket packet) {
-        packet.setHealth(buffer.readFloat());
-        packet.setFoodLevel(buffer.readVarInt());
-        packet.setSaturation(buffer.readFloat());
-    }
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class HeldItemChangePacketOut extends Packet {
+    private short slot;
 }
