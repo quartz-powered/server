@@ -33,6 +33,7 @@ import javax.inject.Singleton;
 
 @Singleton
 public class FactoryRegistry {
+
     @Inject private Injector injector;
 
     private final ClassValue<Factory> factories = new ClassValue<Factory>() {
@@ -45,6 +46,6 @@ public class FactoryRegistry {
 
     @SuppressWarnings("unchecked")
     public <T> Factory<T> get(Class<? extends T> type) {
-        return (Factory<T>) factories.get(type);
+        return (Factory<T>) this.factories.get(type);
     }
 }

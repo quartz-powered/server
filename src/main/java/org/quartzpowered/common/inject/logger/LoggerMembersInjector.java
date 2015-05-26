@@ -33,19 +33,20 @@ import org.slf4j.LoggerFactory;
 import java.lang.reflect.Field;
 
 public class LoggerMembersInjector<T> implements MembersInjector<T> {
+
     private final Field field;
     private final Logger logger;
 
     public LoggerMembersInjector(Field field) {
         this.field = field;
         this.logger = LoggerFactory.getLogger(field.getDeclaringClass());
-        field.setAccessible(true);
+        this.field.setAccessible(true);
     }
 
     @Override
     public void injectMembers(T instance) {
         try {
-            field.set(instance, logger);
+            this.field.set(instance, this.logger);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

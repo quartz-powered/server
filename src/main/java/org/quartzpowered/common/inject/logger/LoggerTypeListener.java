@@ -34,6 +34,7 @@ import org.slf4j.Logger;
 import java.lang.reflect.Field;
 
 public class LoggerTypeListener implements TypeListener {
+
     @Override
     public <I> void hear(TypeLiteral<I> typeLiteral, TypeEncounter<I> encounter) {
         Class<?> type = typeLiteral.getRawType();

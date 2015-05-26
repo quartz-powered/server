@@ -36,6 +36,7 @@ import java.util.Collection;
 import java.util.List;
 
 public class GameObject implements Observable {
+
     @Inject private FactoryRegistry factoryRegistry;
 
     private final List<Component> components = new ArrayList<>();
@@ -49,21 +50,21 @@ public class GameObject implements Observable {
     }
 
     public <T extends Component> T addComponent(Class<T> type) {
-        T component = factoryRegistry.get(type).create();
+        T component = this.factoryRegistry.get(type).create();
         component.setGameObject(this);
-        components.add(component);
-        observers.forEach(component::startObserving);
+        this.components.add(component);
+        this.observers.forEach(component::startObserving);
         return component;
     }
 
     public void removeComponent(Component component) {
-        if (components.remove(component)) {
-            observers.forEach(component::endObserving);
+        if (this.components.remove(component)) {
+            this.observers.forEach(component::endObserving);
         }
     }
 
     public <T extends Component> T getComponent(Class<T> type) {
-        for (Component component : components) {
+        for (Component component : this.components) {
             if (type.isInstance(component)) {
                 return type.cast(component);
             }
@@ -139,7 +140,7 @@ public class GameObject implements Observable {
     }
 
     private <T extends Component> void getComponents(Class<T> type, Collection<T> result) {
-        for (Component component : components) {
+        for (Component component : this.components) {
             if (type.isInstance(component)) {
                 result.add(type.cast(component));
             }
@@ -174,13 +175,13 @@ public class GameObject implements Observable {
 
     @Override
     public void startObserving(Observer observer) {
-        observers.add(observer);
-        components.forEach(component -> component.startObserving(observer));
+        this.observers.add(observer);
+        this.components.forEach(component -> component.startObserving(observer));
     }
 
     @Override
     public void endObserving(Observer observer) {
-        observers.remove(observer);
-        components.forEach(component -> component.endObserving(observer));
+        this.observers.remove(observer);
+        this.components.forEach(component -> component.endObserving(observer));
     }
 }

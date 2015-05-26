@@ -36,6 +36,7 @@ import javax.inject.Singleton;
 
 @Singleton
 public class EventBus {
+
     private MBassador bus = new MBassador(new BusConfiguration()
             .addFeature(Feature.SyncPubSub.Default())
             .addFeature(Feature.AsynchronousHandlerInvocation.Default())
@@ -44,11 +45,11 @@ public class EventBus {
     );
 
     public void subscribe(Object handler) {
-        bus.subscribe(handler);
+        this.bus.subscribe(handler);
     }
 
     @SuppressWarnings("unchecked")
     public void publish(Object message) {
-        bus.publish(message);
+        this.bus.publish(message);
     }
 }

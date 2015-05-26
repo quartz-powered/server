@@ -37,6 +37,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class Transform extends Component {
+
     private final List<Transform> children = new ArrayList<>();
 
     @Getter
@@ -45,55 +46,55 @@ public class Transform extends Component {
     private final Matrix4 matrix = Matrix4.identity();
 
     public Vector3 getLocalPosition() {
-        return matrix.getTranslation();
+        return this.matrix.getTranslation();
     }
 
     public void setLocalPosition(Vector3 position) {
-        matrix.setTranslation(position);
+        this.matrix.setTranslation(position);
     }
 
     public Quaternion getLocalRotation() {
-        return matrix.getRotation();
+        return this.matrix.getRotation();
     }
 
     public void setLocalRotation(Quaternion rotation) {
-        matrix.setRotation(rotation);
+        this.matrix.setRotation(rotation);
     }
 
     public Vector3 getLocalScale() {
-        return matrix.getScale();
+        return this.matrix.getScale();
     }
 
     public void setLocalScale(Vector3 scale) {
-        matrix.setScale(scale);
+        this.matrix.setScale(scale);
     }
 
     public Vector3 getPosition() {
-        return getLocalToWorldMatrix().getTranslation();
+        return this.getLocalToWorldMatrix().getTranslation();
     }
 
     public void setPosition(Vector3 position) {
-        setLocalPosition(getWorldToLocalMatrix().multiply(position));
+        this.setLocalPosition(this.getWorldToLocalMatrix().multiply(position));
     }
 
     public Quaternion getRotation() {
-        return getLocalToWorldMatrix().getRotation();
+        return this.getLocalToWorldMatrix().getRotation();
     }
 
     public void setRotation(Quaternion rotation) {
-        setLocalRotation(getWorldToLocalMatrix().multiply(rotation));
+        this.setLocalRotation(this.getWorldToLocalMatrix().multiply(rotation));
     }
 
     public Vector3 getScale() {
-        return getLocalToWorldMatrix().getScale();
+        return this.getLocalToWorldMatrix().getScale();
     }
 
     public Matrix4 getLocalToWorldMatrix() {
-        if (parent == null) {
-            return new Matrix4(matrix);
+        if (this.parent == null) {
+            return new Matrix4(this.matrix);
         } else {
-            Matrix4 localToWorldMatrix = parent.getLocalToWorldMatrix();
-            localToWorldMatrix.multiply(matrix);
+            Matrix4 localToWorldMatrix = this.parent.getLocalToWorldMatrix();
+            localToWorldMatrix.multiply(this.matrix);
             return localToWorldMatrix;
         }
     }
@@ -105,7 +106,7 @@ public class Transform extends Component {
     }
 
     public Collection<Transform> getChildren() {
-        return Collections.unmodifiableCollection(children);
+        return Collections.unmodifiableCollection(this.children);
     }
 
     public void setParent(Transform parent) {

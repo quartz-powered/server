@@ -35,6 +35,7 @@ import org.quartzpowered.engine.observe.ObserverFactory;
 import org.quartzpowered.engine.observe.SessionObserver;
 
 public class EngineModule extends AbstractModule {
+
     @Override
     protected void configure() {
         install(new FactoryModuleBuilder().build(GameObjectFactory.class));

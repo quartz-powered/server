@@ -33,6 +33,7 @@ import org.quartzpowered.engine.component.GameObjectFactory;
 import javax.inject.Inject;
 
 public class Level {
+
     @Getter
     private final GameObject root;
 

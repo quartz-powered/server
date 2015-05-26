@@ -31,6 +31,7 @@ import org.quartzpowered.engine.observe.Observable;
 import org.quartzpowered.engine.observe.Observer;
 
 public abstract class Component implements Observable {
+
     @Getter
     private GameObject gameObject;
 

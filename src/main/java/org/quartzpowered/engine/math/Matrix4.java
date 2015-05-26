@@ -31,6 +31,7 @@ import lombok.Getter;
 import java.util.Arrays;
 
 public class Matrix4 implements Cloneable {
+
     public static final int M00 = 0;
     public static final int M01 = 4;
     public static final int M02 = 8;
@@ -88,44 +89,44 @@ public class Matrix4 implements Cloneable {
         final double xx = rotationX * xs, xy = rotationX * ys, xz = rotationX * zs;
         final double yy = rotationZ * xs, yz = rotationZ * ys, zz = rotationZ * zs;
 
-        values[M00] = scaleX * (1.0f - (yy + zz));
-        values[M01] = scaleY * (xy - wz);
-        values[M02] = scaleZ * (xz + wy);
-        values[M03] = translationX;
+        this.values[this.M00] = scaleX * (1.0f - (yy + zz));
+        this.values[this.M01] = scaleY * (xy - wz);
+        this.values[this.M02] = scaleZ * (xz + wy);
+        this.values[this.M03] = translationX;
 
-        values[M10] = scaleX * (xy + wz);
-        values[M11] = scaleY * (1.0f - (xx + zz));
-        values[M12] = scaleZ * (yz - wx);
-        values[M13] = translationY;
+        this.values[this.M10] = scaleX * (xy + wz);
+        this.values[this.M11] = scaleY * (1.0f - (xx + zz));
+        this.values[this.M12] = scaleZ * (yz - wx);
+        this.values[this.M13] = translationY;
 
-        values[M20] = scaleX * (xz - wy);
-        values[M21] = scaleY * (yz + wx);
-        values[M22] = scaleZ * (1.0f - (xx + yy));
-        values[M23] = translationZ;
+        this.values[this.M20] = scaleX * (xz - wy);
+        this.values[this.M21] = scaleY * (yz + wx);
+        this.values[this.M22] = scaleZ * (1.0f - (xx + yy));
+        this.values[this.M23] = translationZ;
 
-        values[M30] = 0.f;
-        values[M31] = 0.f;
-        values[M32] = 0.f;
-        values[M33] = 1.0f;
+        this.values[this.M30] = 0.f;
+        this.values[this.M31] = 0.f;
+        this.values[this.M32] = 0.f;
+        this.values[this.M33] = 1.0f;
     }
 
     public void setTranslation(Vector3 vector) {
-        values[M03] = vector.getX();
-        values[M13] = vector.getY();
-        values[M23] = vector.getZ();
+        this.values[this.M03] = vector.getX();
+        this.values[this.M13] = vector.getY();
+        this.values[this.M23] = vector.getZ();
     }
 
     public void setTranslation(float x, float y, float z) {
-        values[M03] = x;
-        values[M13] = y;
-        values[M23] = z;
+        this.values[this.M03] = x;
+        this.values[this.M13] = y;
+        this.values[this.M23] = z;
     }
 
     public Vector3 getTranslation() {
         return new Vector3(
-                values[M03],
-                values[M13],
-                values[M23]
+                this.values[this.M03],
+                this.values[this.M13],
+                this.values[this.M23]
         );
     }
 
@@ -134,15 +135,15 @@ public class Matrix4 implements Cloneable {
     }
 
     public Quaternion getRotation() {
-        double xx = values[M00];
-        double xy = values[M01];
-        double xz = values[M02];
-        double yx = values[M10];
-        double yy = values[M11];
-        double yz = values[M12];
-        double zx = values[M20];
-        double zy = values[M21];
-        double zz = values[M22];
+        double xx = this.values[this.M00];
+        double xy = this.values[this.M01];
+        double xz = this.values[this.M02];
+        double yx = this.values[this.M10];
+        double yy = this.values[this.M11];
+        double yz = this.values[this.M12];
+        double zx = this.values[this.M20];
+        double zy = this.values[this.M21];
+        double zz = this.values[this.M22];
 
         final double lx = 1f / Vector3.length(xx, xy, xz);
         final double ly = 1f / Vector3.length(yx, yy, yz);
@@ -198,15 +199,15 @@ public class Matrix4 implements Cloneable {
 
     public Vector3 getScale() {
         return new Vector3(
-                (MathUtil.isZero(values[M01]) && MathUtil.isZero(values[M02])) ?
-                        Math.abs(values[M00]) :
-                        Math.sqrt(values[M00] * values[M00] + values[M01] * values[M01] + values[M02] * values[M02]),
-                (MathUtil.isZero(values[M10]) && MathUtil.isZero(values[M12])) ?
-                        Math.abs(values[M11]) :
-                        Math.sqrt(values[M10] * values[M10] + values[M11] * values[M11] + values[M12] * values[M12]),
-                (MathUtil.isZero(values[M20]) && MathUtil.isZero(values[M21])) ?
-                        Math.abs(values[M22]) :
-                        Math.sqrt(values[M20] * values[M20] + values[M21] * values[M21] + values[M22] * values[M22])
+                (MathUtil.isZero(this.values[this.M01]) && MathUtil.isZero(this.values[this.M02])) ?
+                        Math.abs(this.values[this.M00]) :
+                        Math.sqrt(this.values[this.M00] * this.values[this.M00] + this.values[this.M01] * this.values[this.M01] + this.values[this.M02] * this.values[this.M02]),
+                (MathUtil.isZero(this.values[this.M10]) && MathUtil.isZero(this.values[this.M12])) ?
+                        Math.abs(this.values[this.M11]) :
+                        Math.sqrt(this.values[this.M10] * this.values[this.M10] + this.values[this.M11] * this.values[this.M11] + this.values[this.M12] * this.values[this.M12]),
+                (MathUtil.isZero(this.values[this.M20]) && MathUtil.isZero(this.values[this.M21])) ?
+                        Math.abs(this.values[this.M22]) :
+                        Math.sqrt(this.values[this.M20] * this.values[this.M20] + this.values[this.M21] * this.values[this.M21] + values[this.M22] * this.values[this.M22])
         );
     }
 
@@ -215,7 +216,7 @@ public class Matrix4 implements Cloneable {
     }
 
     public void multiply(Matrix4 other) {
-        double tmpM00 = this.values[M00] * other.values[M00] + this.values[M01] * other.values[M10] + this.values[M02] * other.values[M20] + this.values[M03] * other.values[M30];
+        double tmpM00 = this.values[this.M00] * other.values[this.M00] + this.values[this.M01] * other.values[this.M10] + this.values[this.M02] * other.values[this.M20] + this.values[this.M03] * other.values[this.M30];
         double tmpM01 = this.values[M00] * other.values[M01] + this.values[M01] * other.values[M11] + this.values[M02] * other.values[M21] + this.values[M03] * other.values[M31];
         double tmpM02 = this.values[M00] * other.values[M02] + this.values[M01] * other.values[M12] + this.values[M02] * other.values[M22] + this.values[M03] * other.values[M32];
         double tmpM03 = this.values[M00] * other.values[M03] + this.values[M01] * other.values[M13] + this.values[M02] * other.values[M23] + this.values[M03] * other.values[M33];
