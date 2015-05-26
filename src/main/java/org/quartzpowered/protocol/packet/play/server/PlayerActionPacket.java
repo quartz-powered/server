@@ -4,11 +4,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.quartzpowered.network.protocol.packet.Packet;
 import org.quartzpowered.protocol.data.BlockPosition;
+import org.quartzpowered.protocol.data.PlayerAction;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class PlayerDiggingPacket extends Packet {
-    private int status;
+public class PlayerActionPacket extends Packet {
+    private PlayerAction action;
     private BlockPosition location;
     private int face;
 }
