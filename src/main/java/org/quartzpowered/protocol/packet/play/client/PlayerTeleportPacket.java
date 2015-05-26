@@ -6,11 +6,11 @@ import org.quartzpowered.network.protocol.packet.Packet;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class PlayerPositionAndLookPacket extends Packet {
-    double x;
-    double y;
-    double z;
-    float yaw;
-    float pitch;
-    int flags;
+public class PlayerTeleportPacket extends Packet {
+    private double x;
+    private double y;
+    private double z;
+    private float yaw;
+    private float pitch;
+    private int flags;
 }
