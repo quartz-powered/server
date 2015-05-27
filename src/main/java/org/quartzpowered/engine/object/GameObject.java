@@ -61,9 +61,13 @@ public class GameObject implements Observable, Observer {
 
     public <T extends Component> T addComponent(Class<T> type) {
         T component = this.factoryRegistry.get(type).create();
+
         component.setObject(this);
-        this.components.add(component);
-        this.observers.forEach(observer -> sendMessageToComponent(component, "startObserving", observer));
+        sendMessageToComponent(component, "init");
+
+        components.add(component);
+        observers.forEach(observer -> sendMessageToComponent(component, "startObserving", observer));
+
         return component;
     }
 
@@ -239,13 +243,13 @@ public class GameObject implements Observable, Observer {
 
     @Override
     public void startObserving(Observer observer) {
-        this.observers.add(observer);
+        observers.add(observer);
         sendMessage("startObserving", observer);
     }
 
     @Override
     public void stopObserving(Observer observer) {
-        this.observers.remove(observer);
+        observers.remove(observer);
         sendMessage("stopObserving", observer);
     }
 
