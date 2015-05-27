@@ -33,4 +33,8 @@ public final class PlayerProperty {
     private final String name;
     private final String value;
     private final String signature;
+
+    public boolean isSigned() {
+        return signature != null;
+    }
 }

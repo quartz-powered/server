@@ -110,9 +110,11 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(PLAY, 0x06, UpdateHealthPacket.class, new UpdateHealthCodec());
         clientBoundPacket(PLAY, 0x08, PlayerTeleportPacket.class, new PlayerTeleportCodec());
         clientBoundPacket(PLAY, 0x09, HeldItemChangePacket.class, new PlayerHeldItemChangeCodec());
+        clientBoundPacket(PLAY, 0x0C, SpawnPlayerPacket.class, new SpawnPlayerCodec());
         clientBoundPacket(PLAY, 0x21, ChunkDataPacket.class, new ChunkDataCodec());
         clientBoundPacket(PLAY, 0x26, ChunkBulkPacket.class, new ChunkBulkCodec());
         clientBoundPacket(PLAY, 0x32, ConfirmTransactionPacket.class, new ConfirmTransactionCodec());
+        clientBoundPacket(PLAY, 0x38, PlayerInfoPacket.class, new PlayerInfoCodec());
         clientBoundPacket(PLAY, 0x40, KickPacket.class, new KickCodec());
         clientBoundPacket(PLAY, 0x46, CompressionPacket.class, new CompressionCodec());
 

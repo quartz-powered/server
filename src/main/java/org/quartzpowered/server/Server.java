@@ -32,6 +32,11 @@ import org.quartzpowered.common.eventbus.EventBus;
 import org.quartzpowered.common.util.CryptoUtil;
 import org.quartzpowered.engine.level.Level;
 import org.quartzpowered.engine.level.LevelFactory;
+import org.quartzpowered.engine.math.Vector3;
+import org.quartzpowered.engine.object.GameObject;
+import org.quartzpowered.engine.object.GameObjectFactory;
+import org.quartzpowered.engine.object.component.Camera;
+import org.quartzpowered.engine.object.component.Player;
 import org.quartzpowered.network.server.NetworkServer;
 import org.quartzpowered.network.session.Session;
 import org.quartzpowered.protocol.data.ChatPosition;
@@ -67,6 +72,7 @@ public class Server {
     @Inject private PlayHandler playHandler;
 
     @Inject private NetworkServer networkServer;
+    @Inject private GameObjectFactory gameObjectFactory;
 
     @Getter
     private KeyPair keyPair;
@@ -109,6 +115,7 @@ public class Server {
             joinGamePacket.setDimension(Dimension.OVERWORLD);
             joinGamePacket.setDifficulty(Difficulty.NORMAL);
             joinGamePacket.setLevelType("default");
+            joinGamePacket.setEntityId(0xCAFEBABE);
             session.send(joinGamePacket);
 
             ChunkBulkPacket chunkBulkPacket = new ChunkBulkPacket();
@@ -165,22 +172,20 @@ public class Server {
             chunkBulkPacket.setChunks(chunkPackets);
             session.send(chunkBulkPacket);
 
-            PlayerTeleportPacket playerPositionLookPacket = new PlayerTeleportPacket();
-            playerPositionLookPacket.setY(16);
-            session.send(playerPositionLookPacket);
+            GameObject cameraObject = gameObjectFactory.create();
+            cameraObject.getTransform().setPosition(new Vector3(0, 11, 0));
+            cameraObject.setParent(level.getRoot());
 
-            ChatMessagePacket chatMessagePacket = new ChatMessagePacket();
-            chatMessagePacket.setMessage(new TextComponent("Welcome to QuartzPowered!"));
-            chatMessagePacket.setPosition(ChatPosition.CHAT);
-            session.send(chatMessagePacket);
+            Camera camera = cameraObject.addComponent(Camera.class);
 
-            UpdateHealthPacket updateHealthPacket = new UpdateHealthPacket();
-            updateHealthPacket.setHealth(10);
-            updateHealthPacket.setFoodLevel(4);
-            updateHealthPacket.setSaturation(5.0f);
-            session.send(updateHealthPacket);
+            camera.addViewer(session.getObserver());
 
+            GameObject playerObject = gameObjectFactory.create();
+            playerObject.getTransform().setPosition(new Vector3(10, 11, 10));
+            playerObject.setParent(level.getRoot());
 
+            Player player = playerObject.addComponent(Player.class);
+            player.setProfile(session.getProfile());
         });
 
     }

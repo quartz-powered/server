@@ -33,6 +33,8 @@ import lombok.NonNull;
 import lombok.experimental.Delegate;
 import org.quartzpowered.protocol.data.BlockPosition;
 
+import java.util.UUID;
+
 import static java.nio.charset.StandardCharsets.UTF_8;
 
 @Data
@@ -109,5 +111,36 @@ public class Buffer extends ByteBuf {
         writeLong(((position.getX() & 0x3FFFFFF) << 6) |
                 ((position.getY() & 0xFFF) << 26) |
                 (position.getZ() & 0x3FFFFFF));
+    }
+
+    public double readFixedPoint() {
+        return (double) readInt() / 32;
+    }
+
+    public void writeFixedPoint(double value) {
+        writeInt((int) (value * 32));
+    }
+
+    public void writeAngle(float angle) {
+        writeByte((int) (angle * 256f / 360f));
+    }
+
+    public float readAngle() {
+        return readByte() * 360f / 256f;
+    }
+
+    public void writeUuid(UUID uuid) {
+        writeLong(uuid.getMostSignificantBits());
+        writeLong(uuid.getLeastSignificantBits());
+    }
+
+    public UUID readUuid() {
+        long mostSignificantBits = readLong();
+        long leastSignificantBits = readLong();
+
+        return new UUID(
+                mostSignificantBits,
+                leastSignificantBits
+        );
     }
 }

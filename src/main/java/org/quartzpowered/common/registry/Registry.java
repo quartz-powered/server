@@ -49,6 +49,11 @@ public class Registry<T> {
     }
 
     public int getId(T value) {
-        return this.valueToIdMap.get(value);
+        Integer id = this.valueToIdMap.get(value);
+        if (id == null) {
+            return -1;
+        }
+
+        return id;
     }
 }

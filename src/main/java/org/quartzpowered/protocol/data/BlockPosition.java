@@ -1,18 +1,14 @@
 package org.quartzpowered.protocol.data;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 public class BlockPosition {
     private int x, y, z;
-
-    public BlockPosition() {
-        set(0, 0, 0);
-    }
-
-    public BlockPosition(int x, int y, int z) {
-        set(x, y, z);
-    }
 
     private void set(int x, int y, int z) {
         this.x = x;

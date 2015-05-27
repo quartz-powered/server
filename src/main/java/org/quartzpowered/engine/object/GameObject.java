@@ -295,6 +295,17 @@ public class GameObject implements Observable, Observer {
                 .collect(Collectors.toList());
     }
 
+    public void setParent(GameObject parent) {
+        Transform transform = getTransform();
+        Transform parentTransform = parent.getTransform();
+
+        if (transform == null || parentTransform == null) {
+            throw new NullPointerException();
+        }
+
+        transform.setParent(parentTransform);
+    }
+
     public static GameObject none() {
         return null;
     }

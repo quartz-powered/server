@@ -91,9 +91,9 @@ public class Camera extends Component implements Observer {
 
         boolean isObserved = object.hasObserver(this);
 
-        if (isObserved && distance > range * range) {
+        if (!isObserved && distance <= range * range) {
             object.startObserving(this);
-        } else if (!isObserved && distance <= range * range) {
+        } else if (isObserved && distance >= range * range) {
             object.stopObserving(this);
         }
 

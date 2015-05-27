@@ -61,8 +61,20 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
         PacketRegistry packets = protocol.getClientBoundPackets(state);
         CodecRegistry codecs = protocol.getClientBoundCodecs(state);
 
-        int id = packets.getId(packet.getClass());
+        if (packets == null || codecs == null) {
+            logger.error("No client bound packets/codecs registered for {} - {}", protocol, state);
+            return;
+        }
+
+        Class<? extends Packet> type = packet.getClass();
+
+        int id = packets.getId(type);
         Codec codec = codecs.lookup(id);
+
+        if (codec == null) {
+            logger.error("Unregistered client bound codec for {} - {} - {}", protocol, state, type);
+            return;
+        }
 
         Buffer buffer = new Buffer(out);
 
@@ -104,7 +116,7 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
         }
 
         if (codec == null) {
-            logger.error("Unregistered codec for " + type);
+            logger.error("Unregistered server bound codec for {} - {} - {}", protocol, state, type);
             buffer.skipBytes(buffer.readableBytes());
             return;
         }
