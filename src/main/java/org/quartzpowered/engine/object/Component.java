@@ -34,7 +34,7 @@ import javax.inject.Inject;
 import java.lang.reflect.Field;
 
 public abstract class Component {
-    private static final Field objectField = ReflectionUtil.getConstantField(Component.class, "object");
+    private static final Field objectField = ReflectionUtil.getConstantField(Component.class, "gameObject");
 
     @Inject private Logger logger;
 
