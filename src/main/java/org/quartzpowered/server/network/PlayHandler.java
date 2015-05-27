@@ -34,6 +34,7 @@ import org.quartzpowered.protocol.data.ChatPosition;
 import org.quartzpowered.protocol.data.component.TextComponent;
 import org.quartzpowered.protocol.packet.play.client.ChatMessagePacket;
 import org.quartzpowered.protocol.packet.play.server.PlayerChatMessagePacket;
+import org.quartzpowered.protocol.packet.play.shared.HeldItemChangePacket;
 import org.quartzpowered.protocol.packet.play.shared.KeepAlivePacket;
 import org.slf4j.Logger;
 
@@ -45,10 +46,10 @@ public class PlayHandler {
 
     List<Session> sessionList = new ArrayList<>();
 
-    @Handler
+    /*@Handler
     public void onPacket(Packet packet) {
         logger.info("IN  {}", packet);
-    }
+    }*/
 
     @Handler
     public void onPlayerChatMessage(PlayerChatMessagePacket packet) {
