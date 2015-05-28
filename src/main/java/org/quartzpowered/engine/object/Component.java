@@ -36,7 +36,8 @@ import java.lang.reflect.Field;
 public abstract class Component {
     private static final Field objectField = ReflectionUtil.getConstantField(Component.class, "gameObject");
 
-    @Inject private Logger logger;
+    @Inject
+    private Logger logger;
 
     @Getter
     protected final GameObject gameObject = GameObject.none();
@@ -48,7 +49,7 @@ public abstract class Component {
         }
 
         try {
-            ReflectionUtil.setFinalField(objectField,  this, gameObject);
+            ReflectionUtil.setFinalField(objectField, this, gameObject);
         } catch (ReflectiveOperationException ex) {
             logger.error("Cannot set object", ex);
         }

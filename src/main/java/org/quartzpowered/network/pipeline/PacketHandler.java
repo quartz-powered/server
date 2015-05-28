@@ -41,9 +41,12 @@ import javax.inject.Singleton;
 @Singleton
 @ChannelHandler.Sharable
 public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
-    @Inject private Logger logger;
-    @Inject private SessionManager sessionManager;
-    @Inject private EventBus eventBus;
+    @Inject
+    private Logger logger;
+    @Inject
+    private SessionManager sessionManager;
+    @Inject
+    private EventBus eventBus;
 
     @Override
     protected void messageReceived(ChannelHandlerContext ctx, Packet packet) throws Exception {

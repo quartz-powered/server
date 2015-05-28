@@ -33,7 +33,8 @@ import javax.inject.Singleton;
 
 @Singleton
 public class FactoryRegistry {
-    @Inject private Injector injector;
+    @Inject
+    private Injector injector;
 
     private final ClassValue<Factory<Object>> factories = new ClassValue<Factory<Object>>() {
         @Override

@@ -50,10 +50,14 @@ import java.util.UUID;
 public class AuthRunnable implements Runnable {
     private static final String BASE_URL = "https://sessionserver.mojang.com/session/minecraft/hasJoined";
 
-    @Inject private Logger logger;
-    @Inject private ObjectMapper objectMapper;
-    @Inject private UuidUtil uuidUtil;
-    @Inject private EventBus eventBus;
+    @Inject
+    private Logger logger;
+    @Inject
+    private ObjectMapper objectMapper;
+    @Inject
+    private UuidUtil uuidUtil;
+    @Inject
+    private EventBus eventBus;
 
     private final Session session;
     private final String hash;

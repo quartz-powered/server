@@ -44,7 +44,8 @@ import static org.quartzpowered.network.protocol.ProtocolState.STATUS;
 public class HandshakeHandler {
     private static final EnumSet<ProtocolState> ALLOWED_STATES = EnumSet.of(STATUS, LOGIN);
 
-    @Inject private ProtocolRegistry protocolRegistry;
+    @Inject
+    private ProtocolRegistry protocolRegistry;
 
     @Handler
     public void onHandshake(HandshakePacket packet) {

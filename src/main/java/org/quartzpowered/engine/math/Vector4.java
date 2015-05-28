@@ -36,7 +36,7 @@ public class Vector4 {
 
     }
 
-    public  Vector4(double x, double y, double z, double w) {
+    public Vector4(double x, double y, double z, double w) {
         set(x, y, z, w);
     }
 

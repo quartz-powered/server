@@ -50,7 +50,8 @@ public class ProtocolModule extends AbstractModule {
         });
     }
 
-    @Provides @Named("identifier")
+    @Provides
+    @Named("identifier")
     public Protocol provideIdentifierProtocol() {
         return identifierProtocol;
     }

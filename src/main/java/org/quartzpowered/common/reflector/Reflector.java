@@ -17,7 +17,7 @@ public class Reflector<T> {
         this.methodAccess = MethodAccess.get(type);
     }
 
-    public Object invoke (Object object, String name, Object... args) {
+    public Object invoke(Object object, String name, Object... args) {
         return methodAccess.invoke(object, name, args);
     }
 }

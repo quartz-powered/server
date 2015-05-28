@@ -44,6 +44,7 @@ public enum Dimension {
     }
 
     private static final Map<Integer, Dimension> idMap = new HashMap<>();
+
     static {
         for (Dimension dimension : values()) {
             idMap.put(dimension.id, dimension);

@@ -8,6 +8,7 @@ public enum EntityAction {
     STOP_SPRINTING,
     JUMP_WITH_HORSE,
     OPEN_INVENTORY;
+
     public int getId() {
         return ordinal();
     }

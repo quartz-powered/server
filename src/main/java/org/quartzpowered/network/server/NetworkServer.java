@@ -42,7 +42,8 @@ import static io.netty.channel.ChannelOption.SO_KEEPALIVE;
 import static io.netty.channel.ChannelOption.TCP_NODELAY;
 
 public class NetworkServer {
-    @Inject private Logger logger;
+    @Inject
+    private Logger logger;
 
     private final ServerBootstrap bootstrap = new ServerBootstrap();
     private final EventLoopGroup parentGroup = new NioEventLoopGroup();

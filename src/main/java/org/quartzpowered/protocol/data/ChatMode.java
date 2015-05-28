@@ -30,6 +30,7 @@ public enum ChatMode {
     ENABLED,
     COMMANDS,
     HIDDEN;
+
     public int getId() {
         return ordinal();
     }
