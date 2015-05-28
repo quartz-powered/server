@@ -47,14 +47,10 @@ import java.security.*;
 import java.util.Arrays;
 
 public class LoginHandler {
-    @Inject
-    private Logger logger;
-    @Inject
-    private Server server;
-    @Inject
-    private CryptoUtil cryptoUtil;
-    @Inject
-    private AuthRunnableFactory authRunnableFactory;
+    @Inject private Logger logger;
+    @Inject private Server server;
+    @Inject private CryptoUtil cryptoUtil;
+    @Inject private AuthRunnableFactory authRunnableFactory;
 
     private final byte[] publicKey;
     private final PrivateKey privateKey;

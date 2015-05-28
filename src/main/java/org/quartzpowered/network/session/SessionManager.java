@@ -38,8 +38,7 @@ import javax.inject.Singleton;
 public class SessionManager {
     private static final AttributeKey<Session> ATTRIBUTE_KEY = AttributeKey.newInstance("session");
 
-    @Inject
-    private SessionFactory factory;
+    @Inject private SessionFactory factory;
 
     public Session get(Channel channel) {
         Attribute<Session> attribute = channel.attr(ATTRIBUTE_KEY);
