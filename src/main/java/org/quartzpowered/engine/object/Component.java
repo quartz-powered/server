@@ -38,7 +38,8 @@ public abstract class Component {
 
     @Inject private Logger logger;
 
-    @Getter protected final GameObject gameObject = GameObject.none();
+    @Getter
+    protected final GameObject gameObject = GameObject.none();
 
     @SuppressWarnings("ConstantConditions")
     public void setObject(GameObject gameObject) {
