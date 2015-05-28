@@ -39,11 +39,9 @@ import org.quartzpowered.network.session.attribute.AttributeKey;
 import org.quartzpowered.protocol.data.ChatPosition;
 import org.quartzpowered.protocol.data.component.PlayerComponent;
 import org.quartzpowered.protocol.data.component.TextComponent;
+import org.quartzpowered.protocol.packet.play.client.AnimationPacket;
 import org.quartzpowered.protocol.packet.play.client.ChatMessagePacket;
-import org.quartzpowered.protocol.packet.play.server.PlayerChatMessagePacket;
-import org.quartzpowered.protocol.packet.play.server.PlayerLookPacket;
-import org.quartzpowered.protocol.packet.play.server.PlayerPositionLookPacket;
-import org.quartzpowered.protocol.packet.play.server.PlayerPositionPacket;
+import org.quartzpowered.protocol.packet.play.server.*;
 import org.quartzpowered.protocol.packet.play.shared.HeldItemChangePacket;
 import org.quartzpowered.protocol.packet.play.shared.KeepAlivePacket;
 import org.slf4j.Logger;
@@ -85,6 +83,21 @@ public class PlayHandler {
             listSession.send(chatMessagePacketOut);
         }
         logger.info(formatChat);
+    }
+
+    @Handler
+    public void onPlayerAnimation(PlayerAnimationPacket packet) {
+        Session session = packet.getSender();
+
+        if(!sessionList.contains(session)) {
+            sessionList.add(session);
+        }
+
+        ChatMessagePacket chatMessagePacket = new ChatMessagePacket();
+        chatMessagePacket.setPosition(ChatPosition.ACTION_BAR);
+        chatMessagePacket.setMessage(new TextComponent("You Punched!"));
+
+        session.send(chatMessagePacket);
     }
 
     @Handler

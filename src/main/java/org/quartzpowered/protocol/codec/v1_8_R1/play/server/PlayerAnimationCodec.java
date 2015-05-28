@@ -28,16 +28,16 @@ package org.quartzpowered.protocol.codec.v1_8_R1.play.server;
 
 import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.packet.play.server.AnimationPacket;
+import org.quartzpowered.protocol.packet.play.server.PlayerAnimationPacket;
 
-public class AnimationCodec implements Codec<AnimationPacket> {
+public class PlayerAnimationCodec implements Codec<PlayerAnimationPacket> {
     @Override
-    public void encode(Buffer buffer, AnimationPacket packet) {
+    public void encode(Buffer buffer, PlayerAnimationPacket packet) {
 
     }
 
     @Override
-    public void decode(Buffer buffer, AnimationPacket packet) {
+    public void decode(Buffer buffer, PlayerAnimationPacket packet) {
 
     }
 }
