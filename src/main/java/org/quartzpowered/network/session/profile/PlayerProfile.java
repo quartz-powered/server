@@ -39,5 +39,5 @@ public class PlayerProfile {
     private final UUID uniqueId;
     private final List<PlayerProperty> properties;
 
-    
+
 }

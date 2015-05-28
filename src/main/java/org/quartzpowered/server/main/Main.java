@@ -32,6 +32,7 @@ import org.quartzpowered.server.Server;
 import org.quartzpowered.server.inject.ServerModule;
 
 public class Main {
+
     public static void main(String[] args) throws Exception {
         Injector injector = Guice.createInjector(new ServerModule());
         injector.getInstance(Server.class).main(args);

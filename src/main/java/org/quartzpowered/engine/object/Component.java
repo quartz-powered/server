@@ -48,7 +48,7 @@ public abstract class Component {
         }
 
         try {
-            ReflectionUtil.setFinalField(objectField,  this, gameObject);
+            ReflectionUtil.setFinalField(objectField, this, gameObject);
         } catch (ReflectiveOperationException ex) {
             logger.error("Cannot set object", ex);
         }

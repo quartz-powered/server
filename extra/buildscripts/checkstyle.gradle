@@ -40,9 +40,9 @@ processResources {
 checkstyle {
     configFile = project.file('extra/checkstyle/checkstyle.xml')
     configProperties = [
-            'basedir': project.projectDir,
+            'basedir'     : project.projectDir,
             'suppressions': project.file('extra/checkstyle/checkstyle-suppressions.xml'),
-            'severity': 'warning'
+            'severity'    : 'warning'
     ]
 }
 

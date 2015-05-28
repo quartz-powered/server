@@ -1,12 +1,12 @@
 // Build Script
 
 buildscript {
-  repositories {
-    jcenter()
-  }
-  dependencies {
-    classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
-  }
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'nl.javadude.gradle.plugins:license-gradle-plugin:0.11.0'
+    }
 }
 
 // Version

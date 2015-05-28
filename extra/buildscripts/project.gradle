@@ -16,11 +16,11 @@ archivesBaseName = project.name.toLowerCase()
 // Maven Repository
 
 repositories {
-  mavenCentral()
-  maven {
-    name = 'rails'
-    url = 'http://repo.quartzpowered.org/maven'
-  }
+    mavenCentral()
+    maven {
+        name = 'rails'
+        url = 'http://repo.quartzpowered.org/maven'
+    }
 }
 
 // Java Compatibility
@@ -39,15 +39,15 @@ configure([compileJava, compileTestJava]) {
 // Manifest Attributes
 
 jar {
-  manifest {
-    attributes(
+    manifest {
+        attributes(
                 'Built-By': System.properties['user.name'],
                 'Created-By': "${System.properties['java.vm.version']} (${System.properties['java.vm.vendor']})",
                 'Implementation-Description': project.name,
                 'Implementation-Version': project.version,
                 'Implementation-Vendor': project.url
-    )
-  }
+        )
+    }
 }
 
 // Java 8 Compatibility

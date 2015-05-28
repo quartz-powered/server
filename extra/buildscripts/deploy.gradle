@@ -20,7 +20,7 @@ uploadArchives {
     repositories {
         mavenDeployer {
             configuration = configurations.deployerJars
-            if(project.hasProperty('repo')) {
+            if (project.hasProperty('repo')) {
                 repository(url: project.repo) {
                     authentication(userName: project.repoUsername, password: project.repoPassword)
                 }

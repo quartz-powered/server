@@ -56,6 +56,7 @@ public abstract class Protocol {
     }
 
     public abstract String getName();
+
     public abstract int getVersion();
 
     protected abstract void registerPackets();
