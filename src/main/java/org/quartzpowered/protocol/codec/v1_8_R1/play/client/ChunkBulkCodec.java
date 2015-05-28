@@ -29,7 +29,7 @@ package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
 import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.codec.Codec;
 import org.quartzpowered.protocol.packet.play.client.ChunkBulkPacket;
-import org.quartzpowered.protocol.packet.play.client.ChunkDataPacket;
+import org.quartzpowered.protocol.packet.play.client.ChunkPacket;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,18 +38,18 @@ public class ChunkBulkCodec implements Codec<ChunkBulkPacket> {
 
     @Override
     public void encode(Buffer buffer, ChunkBulkPacket packet) {
-        final List<ChunkDataPacket> chunks = packet.getChunks();
+        final List<ChunkPacket> chunks = packet.getChunks();
 
         buffer.writeBoolean(packet.isSkylight());
         buffer.writeVarInt(chunks.size());
 
-        for (ChunkDataPacket chunk : chunks) {
+        for (ChunkPacket chunk : chunks) {
             buffer.writeInt(chunk.getX());
             buffer.writeInt(chunk.getZ());
             buffer.writeShort(chunk.getMask());
         }
 
-        for (ChunkDataPacket chunk : chunks) {
+        for (ChunkPacket chunk : chunks) {
             buffer.writeBytes(chunk.getData());
         }
     }
@@ -58,10 +58,10 @@ public class ChunkBulkCodec implements Codec<ChunkBulkPacket> {
     public void decode(Buffer buffer, ChunkBulkPacket packet) {
         packet.setSkylight(buffer.readBoolean());
 
-        final List<ChunkDataPacket> chunks = new ArrayList<>(buffer.readVarInt());
+        final List<ChunkPacket> chunks = new ArrayList<>(buffer.readVarInt());
 
         for (int i = 0; i < chunks.size(); i++) {
-            ChunkDataPacket chunk = new ChunkDataPacket();
+            ChunkPacket chunk = new ChunkPacket();
 
             chunk.setX(buffer.readInt());
             chunk.setZ(buffer.readInt());
@@ -70,8 +70,33 @@ public class ChunkBulkCodec implements Codec<ChunkBulkPacket> {
             chunks.set(i, chunk);
         }
 
-        for (ChunkDataPacket chunk : chunks) {
-            chunk.setData(buffer.readRemainingBytes().array());
+        for (ChunkPacket chunk : chunks) {
+
+            int bitmask = chunk.getMask();
+
+            int sectionCount = 0;
+            for (int i = 0; i < 16; i++) {
+                if ((bitmask & (1 << i)) > 0) {
+                    sectionCount++;
+                }
+            }
+
+            int byteCount = 0;
+
+            byteCount += 8192 * sectionCount;
+            byteCount += 2048 * sectionCount;
+
+            if (packet.isSkylight()) {
+                byteCount += 2048 * sectionCount;
+            }
+
+            byteCount += 256;
+
+            byte[] bytes = new byte[byteCount];
+
+            buffer.readBytes(bytes);
+
+            chunk.setData(bytes);
         }
     }
 }
