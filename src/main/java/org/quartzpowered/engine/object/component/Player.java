@@ -31,7 +31,7 @@ import org.quartzpowered.engine.entity.EntityManager;
 import org.quartzpowered.engine.math.Quaternion;
 import org.quartzpowered.engine.math.Vector3;
 import org.quartzpowered.engine.object.Component;
-import org.quartzpowered.engine.object.annotation.MessageHandler;
+import org.quartzpowered.engine.object.message.MessageHandler;
 import org.quartzpowered.engine.object.annotation.Property;
 import org.quartzpowered.engine.observe.Observer;
 import org.quartzpowered.network.session.profile.PlayerProfile;

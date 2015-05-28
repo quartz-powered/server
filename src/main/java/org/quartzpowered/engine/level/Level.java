@@ -29,6 +29,8 @@ package org.quartzpowered.engine.level;
 import lombok.Getter;
 import org.quartzpowered.engine.object.GameObject;
 import org.quartzpowered.engine.object.GameObjectFactory;
+import org.quartzpowered.engine.terrain.TerrainCache;
+import org.quartzpowered.engine.terrain.TerrainFactory;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -42,10 +44,18 @@ public class Level {
     @Getter
     private final GameObject root;
 
+    @Getter
+    private final TerrainCache terrainCache;
+
     @Inject
-    private Level(GameObjectFactory gameObjectFactory, ScheduledExecutorService scheduler) {
+    private Level(GameObjectFactory gameObjectFactory,
+                  TerrainFactory terrainFactory,
+                  ScheduledExecutorService scheduler) {
         root = gameObjectFactory.create();
         root.setName("root");
+
+        terrainCache = terrainFactory.createCache();
+
         scheduler.scheduleAtFixedRate(this::update, 50, 50, MILLISECONDS);
     }
 

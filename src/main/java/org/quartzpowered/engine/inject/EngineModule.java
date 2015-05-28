@@ -30,6 +30,7 @@ import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
 import org.quartzpowered.engine.level.LevelFactory;
 import org.quartzpowered.engine.object.GameObjectFactory;
+import org.quartzpowered.engine.terrain.TerrainFactory;
 
 public class EngineModule extends AbstractModule {
 
@@ -37,5 +38,6 @@ public class EngineModule extends AbstractModule {
     protected void configure() {
         install(new FactoryModuleBuilder().build(GameObjectFactory.class));
         install(new FactoryModuleBuilder().build(LevelFactory.class));
+        install(new FactoryModuleBuilder().build(TerrainFactory.class));
     }
 }

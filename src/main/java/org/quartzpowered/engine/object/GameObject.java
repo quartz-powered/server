@@ -31,10 +31,11 @@ import lombok.Setter;
 import lombok.ToString;
 import org.quartzpowered.common.factory.FactoryRegistry;
 import org.quartzpowered.common.reflector.Reflector;
-import org.quartzpowered.common.reflector.ReflectorRegistry;
-import org.quartzpowered.engine.object.annotation.MessageHandler;
+import org.quartzpowered.engine.object.message.MessageHandler;
 import org.quartzpowered.engine.object.annotation.Property;
 import org.quartzpowered.engine.object.component.Transform;
+import org.quartzpowered.engine.object.message.MessageHandlerCache;
+import org.quartzpowered.engine.object.message.MessageHandlerCacheRegistry;
 import org.quartzpowered.engine.observe.Observable;
 import org.quartzpowered.engine.observe.Observer;
 import org.quartzpowered.network.protocol.packet.Packet;
@@ -53,7 +54,7 @@ import java.util.stream.Collectors;
 public class GameObject implements Observable, Observer {
     @Inject private Logger logger;
     @Inject private FactoryRegistry factoryRegistry;
-    @Inject private ReflectorRegistry reflectorRegistry;
+    @Inject private MessageHandlerCacheRegistry messageHandlerCacheRegistry;
 
     @Property
     @Getter @Setter
@@ -166,28 +167,10 @@ public class GameObject implements Observable, Observer {
     }
 
     private void sendMessageToComponent(Component component, String name, Object... args) {
-        Class<? extends Component> componentType = component.getClass();
+        MessageHandlerCache<Component> listenerCache = messageHandlerCacheRegistry.get(component.getClass());
 
-        // TODO cache this
-        Method[] methods = componentType.getMethods();
-        for (Method method : methods) {
-
-            if (method.getName().equals(name) &&
-                    method.getAnnotation(MessageHandler.class) != null) {
-
-                Class<?>[] parameters = method.getParameterTypes();
-                if (matchParameters(parameters, args)) {
-                    Reflector<Component> reflector = reflectorRegistry.get(componentType);
-                    try {
-                        reflector.invoke(component, name, args);
-                    } catch (Throwable throwable) {
-                        logger.error(String.format("Error while invoking %s with %s on %s", name, Arrays.toString(args), component), throwable);
-                    }
-                    break;
-                } else {
-                    logger.warn("@MessageHandler found with invalid signature {} in {}", method, componentType);
-                }
-            }
+        if (listenerCache.hasListener(name)) {
+            listenerCache.sendMessage(component, name, args);
         }
     }
 

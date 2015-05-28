@@ -107,7 +107,6 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(PLAY, 0x00, KeepAlivePacket.class, new KeepAliveCodec());
         clientBoundPacket(PLAY, 0x01, JoinGamePacket.class, new JoinGameCodec());
         clientBoundPacket(PLAY, 0x02, ChatMessagePacket.class, new ChatMessageCodec());
-        clientBoundPacket(PLAY, 0x2D, OpenWindowPacket.class, new OpenWindowCodec());
         clientBoundPacket(PLAY, 0x06, UpdateHealthPacket.class, new UpdateHealthCodec());
         clientBoundPacket(PLAY, 0x08, PlayerTeleportPacket.class, new PlayerTeleportCodec());
         clientBoundPacket(PLAY, 0x09, HeldItemChangePacket.class, new PlayerHeldItemChangeCodec());
