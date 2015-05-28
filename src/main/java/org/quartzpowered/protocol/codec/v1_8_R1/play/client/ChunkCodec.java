@@ -28,12 +28,12 @@ package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
 
 import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.packet.play.client.ChunkDataPacket;
+import org.quartzpowered.protocol.packet.play.client.ChunkPacket;
 
-public class ChunkDataCodec implements Codec<ChunkDataPacket> {
+public class ChunkCodec implements Codec<ChunkPacket> {
 
     @Override
-    public void encode(Buffer buffer, ChunkDataPacket packet) {
+    public void encode(Buffer buffer, ChunkPacket packet) {
         buffer.writeInt(packet.getX());
         buffer.writeInt(packet.getZ());
 
@@ -43,12 +43,36 @@ public class ChunkDataCodec implements Codec<ChunkDataPacket> {
     }
 
     @Override
-    public void decode(Buffer buffer, ChunkDataPacket packet) {
+    public void decode(Buffer buffer, ChunkPacket packet) {
         packet.setX(buffer.readInt());
         packet.setZ(buffer.readInt());
 
-        packet.setContinuous(buffer.readBoolean());
-        packet.setMask(buffer.readShort());
-        packet.setData(buffer.readByteArray());
+        boolean continuous = buffer.readBoolean();
+        packet.setContinuous(continuous);
+
+        int bitmask = buffer.readShort();
+        packet.setMask(bitmask);
+
+        int sectionCount = 0;
+        for (int i = 0; i < 16; i++) {
+            if ((bitmask & (1 << i)) > 0) {
+                sectionCount++;
+            }
+        }
+
+        int byteCount = 0;
+
+        byteCount += 8192 * sectionCount;
+        byteCount += 2048 * sectionCount;
+
+        if (continuous) {
+            byteCount += 256;
+        }
+
+        byte[] bytes = new byte[byteCount];
+
+        buffer.readBytes(bytes);
+
+        packet.setData(bytes);
     }
 }

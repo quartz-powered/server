@@ -32,7 +32,7 @@ import org.quartzpowered.network.protocol.packet.Packet;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class ChunkDataPacket extends Packet {
+public class ChunkPacket extends Packet {
     private int x, z;
     private boolean continuous;
     private int mask;

@@ -36,5 +36,5 @@ import java.util.List;
 @EqualsAndHashCode(callSuper = true)
 public class ChunkBulkPacket extends Packet {
     private boolean skylight;
-    private List<ChunkDataPacket> chunks;
+    private List<ChunkPacket> chunks;
 }
