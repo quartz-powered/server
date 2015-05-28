@@ -29,25 +29,38 @@ package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
 import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.codec.Codec;
 import org.quartzpowered.protocol.data.ChatPosition;
+import org.quartzpowered.protocol.data.WindowType;
 import org.quartzpowered.protocol.data.component.TextComponent;
 import org.quartzpowered.protocol.packet.play.client.OpenWindowPacket;
 
 public class OpenWindowCodec implements Codec<OpenWindowPacket> {
     @Override
     public void encode(Buffer buffer, OpenWindowPacket packet) {
-        buffer.writeByte(packet.getId());
-        buffer.writeString(packet.getType());
+        buffer.writeByte(1 /*TODO*/);
+        buffer.writeString(packet.getType().getTitle());
+
+        System.out.println(packet.getType().getTitle());
+
         buffer.writeString(packet.getTitle().toJson());
-        buffer.writeByte(packet.getSlots());
-        buffer.writeInt(packet.getEntityId());
+        if(packet.getType().equals(WindowType.CHEST))
+            buffer.writeByte(packet.getSlots());
+        else
+            buffer.writeByte(packet.getType().getSize());
+        if(packet.getEntityId() != 0)
+            buffer.writeInt(packet.getEntityId());
+
+        System.out.println(packet.getType());
     }
 
     @Override
     public void decode(Buffer buffer, OpenWindowPacket packet) {
-        packet.setId(buffer.readByte());
-        packet.setType(buffer.readString());
+        packet.setType(WindowType.fromString(buffer.readString()));
         packet.setTitle(new TextComponent(buffer.readString()));
         packet.setSlots(buffer.readByte());
-        packet.setEntityId(buffer.readInt());
+
+        int entId = buffer.readInt();
+
+        if(entId != 0)
+            packet.setEntityId(buffer.readInt());
     }
 }

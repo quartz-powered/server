@@ -30,13 +30,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.quartzpowered.network.protocol.packet.Packet;
 import org.quartzpowered.protocol.data.ChatPosition;
+import org.quartzpowered.protocol.data.WindowType;
 import org.quartzpowered.protocol.data.component.TextComponent;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class OpenWindowPacket extends Packet {
-    private byte id;
-    private String type;
+    private WindowType type;
     private TextComponent title;
     private byte slots;
     private int entityId;

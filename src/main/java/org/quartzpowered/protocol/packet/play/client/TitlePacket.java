@@ -30,12 +30,13 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.quartzpowered.network.protocol.packet.Packet;
 import org.quartzpowered.protocol.data.ChatPosition;
+import org.quartzpowered.protocol.data.TitleAction;
 import org.quartzpowered.protocol.data.component.TextComponent;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class TitlePacket extends Packet {
-    private int action;
+    private TitleAction action;
     private TextComponent text;
     private int fadeIn;
     private int stay;

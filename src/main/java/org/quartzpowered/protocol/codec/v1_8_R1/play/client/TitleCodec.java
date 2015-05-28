@@ -29,6 +29,7 @@ package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
 import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.codec.Codec;
 import org.quartzpowered.network.protocol.codec.Codec;
+import org.quartzpowered.protocol.data.TitleAction;
 import org.quartzpowered.protocol.data.component.TextComponent;
 import org.quartzpowered.protocol.packet.play.client.TitlePacket;
 
@@ -36,7 +37,7 @@ public class TitleCodec implements Codec<TitlePacket> {
     @Override
     public void encode(Buffer buffer, TitlePacket packet) {
 
-        int action = packet.getAction();
+        int action = packet.getAction().getId();
 
         buffer.writeVarInt(action);
 
@@ -65,7 +66,7 @@ public class TitleCodec implements Codec<TitlePacket> {
 
         int action = buffer.readVarInt();
 
-        packet.setAction(action);
+        packet.setAction(TitleAction.fromId(action));
         
         if(action == 0) {
 
