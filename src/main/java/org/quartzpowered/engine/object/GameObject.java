@@ -51,7 +51,7 @@ import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
 @ToString(of = "name")
-public class GameObject implements Observable, Observer {
+public final class GameObject implements Observable, Observer {
     @Inject private Logger logger;
     @Inject private FactoryRegistry factoryRegistry;
     @Inject private MessageHandlerCacheRegistry messageHandlerCacheRegistry;
@@ -66,7 +66,9 @@ public class GameObject implements Observable, Observer {
     @Inject
     private GameObject(FactoryRegistry factoryRegistry) {
         this.factoryRegistry = factoryRegistry;
+    }
 
+    protected void init() {
         addComponent(Transform.class);
     }
 

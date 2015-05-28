@@ -36,7 +36,6 @@ public class EngineModule extends AbstractModule {
 
     @Override
     protected void configure() {
-        install(new FactoryModuleBuilder().build(GameObjectFactory.class));
         install(new FactoryModuleBuilder().build(LevelFactory.class));
         install(new FactoryModuleBuilder().build(TerrainFactory.class));
     }

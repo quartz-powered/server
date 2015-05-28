@@ -51,7 +51,6 @@ import static java.lang.Math.min;
 public class Player extends Component {
     private static final int KEY_FRAME_INTERVAL = 20;
 
-    @Inject private Logger logger;
     @Inject private EntityManager entityManager;
 
     @Getter

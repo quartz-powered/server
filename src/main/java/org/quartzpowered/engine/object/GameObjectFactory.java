@@ -26,10 +26,17 @@
  */
 package org.quartzpowered.engine.object;
 
-import org.quartzpowered.engine.object.GameObject;
+import javax.inject.Inject;
+import javax.inject.Provider;
+import javax.inject.Singleton;
 
-public interface GameObjectFactory {
+@Singleton
+public class GameObjectFactory {
+    @Inject private Provider<GameObject> gameObjectProvider;
 
-    public GameObject create();
-
+    public GameObject create() {
+        GameObject gameObject = gameObjectProvider.get();
+        gameObject.init();
+        return gameObject;
+    }
 }

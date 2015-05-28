@@ -50,7 +50,6 @@ public class Camera extends Component implements Observer {
     public static final AttributeKey<Camera> CAMERA_ATTRIBUTE = AttributeKey.create();
 
     @Inject private AttributeRegistry attributeRegistry;
-    @Inject private Logger logger;
 
     @Getter @Setter
     @Property
