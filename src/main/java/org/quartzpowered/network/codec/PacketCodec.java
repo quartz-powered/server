@@ -46,12 +46,9 @@ import javax.inject.Inject;
 import java.util.List;
 
 public class PacketCodec extends ByteToMessageCodec<Packet> {
-    @Inject
-    private Logger logger;
-    @Inject
-    private SessionManager sessionManager;
-    @Inject
-    private FactoryRegistry factoryRegistry;
+    @Inject private Logger logger;
+    @Inject private SessionManager sessionManager;
+    @Inject private FactoryRegistry factoryRegistry;
 
     @Override
     @SuppressWarnings("unchecked")

@@ -35,12 +35,9 @@ import javax.inject.Singleton;
 
 @Singleton
 public class MinecraftChannelInitializer extends ChannelInitializer<SocketChannel> {
-    @Inject
-    private CodecFactory codecFactory;
-    @Inject
-    private PacketHandler handler;
-    @Inject
-    private NoopHandler noop;
+    @Inject private CodecFactory codecFactory;
+    @Inject private PacketHandler handler;
+    @Inject private NoopHandler noop;
 
     @Override
     protected void initChannel(SocketChannel ch) throws Exception {

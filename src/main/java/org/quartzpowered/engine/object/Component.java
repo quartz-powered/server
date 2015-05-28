@@ -36,11 +36,9 @@ import java.lang.reflect.Field;
 public abstract class Component {
     private static final Field objectField = ReflectionUtil.getConstantField(Component.class, "gameObject");
 
-    @Inject
-    private Logger logger;
+    @Inject private Logger logger;
 
-    @Getter
-    protected final GameObject gameObject = GameObject.none();
+    @Getter protected final GameObject gameObject = GameObject.none();
 
     @SuppressWarnings("ConstantConditions")
     public void setObject(GameObject gameObject) {

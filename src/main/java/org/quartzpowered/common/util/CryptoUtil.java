@@ -41,8 +41,7 @@ import java.security.spec.X509EncodedKeySpec;
 @Singleton
 public class CryptoUtil {
 
-    @Inject
-    private Logger logger;
+    @Inject private Logger logger;
 
     private final SecureRandom random = new SecureRandom();
 
