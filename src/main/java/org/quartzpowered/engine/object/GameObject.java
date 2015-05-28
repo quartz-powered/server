@@ -26,10 +26,14 @@
  */
 package org.quartzpowered.engine.object;
 
+import lombok.Getter;
+import lombok.Setter;
+import lombok.ToString;
 import org.quartzpowered.common.factory.FactoryRegistry;
 import org.quartzpowered.common.reflector.Reflector;
 import org.quartzpowered.common.reflector.ReflectorRegistry;
 import org.quartzpowered.engine.object.annotation.MessageHandler;
+import org.quartzpowered.engine.object.annotation.Property;
 import org.quartzpowered.engine.object.component.Transform;
 import org.quartzpowered.engine.observe.Observable;
 import org.quartzpowered.engine.observe.Observer;
@@ -39,15 +43,21 @@ import org.slf4j.Logger;
 import javax.inject.Inject;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
+@ToString(of = "name")
 public class GameObject implements Observable, Observer {
     @Inject private Logger logger;
     @Inject private FactoryRegistry factoryRegistry;
     @Inject private ReflectorRegistry reflectorRegistry;
+
+    @Property
+    @Getter @Setter
+    private String name;
 
     private final List<Component> components = new ArrayList<>();
     private final List<Observer> observers = new ArrayList<>();
@@ -167,7 +177,11 @@ public class GameObject implements Observable, Observer {
                 Class<?>[] parameters = method.getParameterTypes();
                 if (matchParameters(parameters, args)) {
                     Reflector<Component> reflector = reflectorRegistry.get(componentType);
-                    reflector.invoke(component, name, args);
+                    try {
+                        reflector.invoke(component, name, args);
+                    } catch (Throwable throwable) {
+                        logger.error(String.format("Error while invoking %s with %s on %s", name, Arrays.toString(args), component), throwable);
+                    }
                     break;
                 } else {
                     logger.warn("@MessageHandler found with invalid signature {} in {}", method, componentType);

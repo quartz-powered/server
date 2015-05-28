@@ -35,13 +35,14 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 import org.quartzpowered.engine.observe.Observer;
-import org.quartzpowered.engine.observe.ObserverFactory;
 import org.quartzpowered.network.pipeline.CompressionHandler;
 import org.quartzpowered.network.pipeline.HandlerFactory;
 import org.quartzpowered.network.pipeline.NoopHandler;
 import org.quartzpowered.network.protocol.Protocol;
 import org.quartzpowered.network.protocol.ProtocolState;
 import org.quartzpowered.network.protocol.packet.Packet;
+import org.quartzpowered.network.session.attribute.AttributeRegistry;
+import org.quartzpowered.network.session.attribute.AttributeStorage;
 import org.quartzpowered.network.session.profile.PlayerProfile;
 
 import javax.crypto.SecretKey;
@@ -51,7 +52,7 @@ import java.util.Random;
 import static org.quartzpowered.network.protocol.ProtocolState.HANDSHAKE;
 
 @ToString(of = {"channel", "profile"})
-public class Session {
+public class Session implements Observer {
     @Inject private HandlerFactory handlerFactory;
     @Inject private NoopHandler noopHandler;
 
@@ -81,11 +82,11 @@ public class Session {
     private PlayerProfile profile;
 
     @Getter
-    private final Observer observer;
+    private final AttributeStorage attributes;
 
     @Inject
-    public Session(ObserverFactory observerFactory) {
-        this.observer = observerFactory.create(this);
+    public Session(AttributeRegistry attributeRegistry) {
+        this.attributes = attributeRegistry.get(this);
     }
 
     public ChannelFuture send(Packet packet) {
@@ -119,5 +120,10 @@ public class Session {
 
     public void setState(ProtocolState state) {
         this.state = state;
+    }
+
+    @Override
+    public void observe(Packet packet) {
+        send(packet);
     }
 }

@@ -2,6 +2,8 @@ package org.quartzpowered.engine.object.component;
 
 import lombok.Getter;
 import org.quartzpowered.engine.entity.EntityManager;
+import org.quartzpowered.engine.math.Quaternion;
+import org.quartzpowered.engine.math.Vector3;
 import org.quartzpowered.engine.object.Component;
 import org.quartzpowered.engine.object.annotation.MessageHandler;
 import org.quartzpowered.engine.object.annotation.Property;
@@ -11,13 +13,19 @@ import org.quartzpowered.protocol.data.Gamemode;
 import org.quartzpowered.protocol.data.info.PlayerInfo;
 import org.quartzpowered.protocol.data.info.PlayerInfoAction;
 import org.quartzpowered.protocol.data.metadata.Metadata;
-import org.quartzpowered.protocol.packet.play.client.PlayerInfoPacket;
-import org.quartzpowered.protocol.packet.play.client.SpawnPlayerPacket;
+import org.quartzpowered.protocol.packet.play.client.*;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.Arrays;
 
+import static java.lang.Math.max;
+import static java.lang.Math.min;
+
 public class Player extends Component {
+    private static final int KEY_FRAME_INTERVAL = 20;
+
+    @Inject private Logger logger;
     @Inject private EntityManager entityManager;
 
     @Getter
@@ -25,6 +33,11 @@ public class Player extends Component {
     private PlayerProfile profile;
 
     private int entityId;
+
+    private final Vector3 previousPosition = new Vector3();
+    private double previousPitch, previousYaw, previousHeadYaw;
+
+    private int nextKeyFrame = KEY_FRAME_INTERVAL;
 
     @Getter
     private final Metadata metadata = new Metadata();
@@ -39,6 +52,83 @@ public class Player extends Component {
     public void init() {
         entityId = entityManager.nextEntityId();
         metadata.setByte(10, 0xff);
+    }
+
+    @MessageHandler
+    public void update() {
+        Transform transform = gameObject.getTransform();
+        Vector3 position = transform.getPosition();
+
+        Vector3 delta = position.subtract(previousPosition);
+
+        double deltaX = delta.getX();
+        double deltaY = delta.getY();
+        double deltaZ = delta.getZ();
+
+        Quaternion rotation = transform.getRotation();
+        Vector3 euler = rotation.getEuler();
+        double pitch = euler.getX();
+        double yaw = euler.getY();
+        double headYaw = yaw;
+
+        boolean relative = min(min(deltaX, deltaY), deltaZ) >= -4 &&
+                max(max(deltaX, deltaY), deltaY) <= 4;
+
+        boolean look = previousPitch != pitch || previousYaw != yaw;
+
+        boolean headLook = previousHeadYaw != headYaw;
+
+        boolean idle = (deltaX == 0 && deltaY == 0 && deltaZ == 0 && !look);
+
+        boolean onGround = true;
+
+        if (nextKeyFrame-- == 0) {
+            nextKeyFrame = KEY_FRAME_INTERVAL;
+
+            look = true;
+            idle = false;
+            relative = false;
+        }
+
+        if (idle) {
+            EntityPacket entityPacket = new EntityPacket();
+            entityPacket.setEntityId(entityId);
+            gameObject.observe(entityPacket);
+        } else if (relative) {
+            if (look) {
+                EntityLookMovePacket lookMovePacket = new EntityLookMovePacket();
+                lookMovePacket.setEntityId(entityId);
+                lookMovePacket.setDelta(deltaX, deltaY, deltaZ);
+                lookMovePacket.setRotation(yaw, pitch);
+                lookMovePacket.setOnGround(onGround);
+                gameObject.observe(lookMovePacket);
+            } else {
+                EntityMovePacket movePacket = new EntityMovePacket();
+                movePacket.setEntityId(entityId);
+                movePacket.setDelta(deltaX, deltaY, deltaZ);
+                movePacket.setOnGround(onGround);
+                gameObject.observe(movePacket);
+            }
+        } else {
+            EntityTeleportPacket teleportPacket = new EntityTeleportPacket();
+            teleportPacket.setEntityId(entityId);
+            teleportPacket.setPosition(position);
+            teleportPacket.setRotation(yaw, pitch);
+            teleportPacket.setOnGround(onGround);
+            gameObject.observe(teleportPacket);
+        }
+
+        if (headLook) {
+            EntityHeadLookPacket headLookPacket = new EntityHeadLookPacket();
+            headLookPacket.setEntityId(entityId);
+            headLookPacket.setHeadYaw(headYaw);
+            gameObject.observe(headLookPacket);
+        }
+
+        previousPosition.set(position);
+        previousPitch = pitch;
+        previousYaw = yaw;
+        previousHeadYaw = headYaw;
     }
 
     @MessageHandler
@@ -61,12 +151,23 @@ public class Player extends Component {
         spawnPacket.setHeldItem(0);
         spawnPacket.setMetadata(metadata);
 
-        gameObject.observe(infoPacket);
-        gameObject.observe(spawnPacket);
+        observer.observe(infoPacket);
+        observer.observe(spawnPacket);
     }
 
     @MessageHandler
     public void stopObserving(Observer observer) {
+        PlayerInfo info = new PlayerInfo();
+        info.setProfile(profile);
 
+        PlayerInfoPacket infoPacket = new PlayerInfoPacket();
+        infoPacket.setAction(PlayerInfoAction.REMOVE);
+        infoPacket.setInfo(Arrays.asList(info));
+
+        EntityDestroyPacket destroyPacket = new EntityDestroyPacket();
+        destroyPacket.setEntityIds(Arrays.asList(entityId));
+
+        observer.observe(destroyPacket);
+        observer.observe(infoPacket);
     }
 }

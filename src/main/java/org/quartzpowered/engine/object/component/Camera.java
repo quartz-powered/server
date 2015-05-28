@@ -38,6 +38,7 @@ import org.quartzpowered.network.session.attribute.AttributeKey;
 import org.quartzpowered.network.session.attribute.AttributeRegistry;
 import org.quartzpowered.network.session.attribute.AttributeStorage;
 import org.quartzpowered.protocol.packet.play.client.PlayerTeleportPacket;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -47,10 +48,11 @@ public class Camera extends Component implements Observer {
     public static final AttributeKey<Camera> CAMERA_ATTRIBUTE = AttributeKey.create();
 
     @Inject private AttributeRegistry attributeRegistry;
+    @Inject private Logger logger;
 
     @Getter @Setter
     @Property
-    private double range = 10;
+    private double range = 16;
 
     private final List<Observer> observers = new ArrayList<>();
 
@@ -86,20 +88,27 @@ public class Camera extends Component implements Observer {
         updateObject(root);
     }
 
-    private void updateObject(GameObject object) {
-        double distance = object.getTransform().distanceSquared(object.getTransform());
-
-        boolean isObserved = object.hasObserver(this);
-
-        if (!isObserved && distance <= range * range) {
-            object.startObserving(this);
-        } else if (isObserved && distance >= range * range) {
-            object.stopObserving(this);
+    private void updateObject(GameObject otherObject) {
+        // TODO change this to mask system
+        if (otherObject == gameObject) {
+            return;
         }
 
-        for (GameObject child : object.getChildren()) {
-            updateObject(child);
+        double distanceSquared = gameObject.getTransform().distanceSquared(otherObject.getTransform());
+
+        boolean isObserved = otherObject.hasObserver(this);
+
+        final double rangeSquared = range * range;
+
+        if (!isObserved && distanceSquared <= rangeSquared) {
+            logger.info("{} started observing {}", gameObject, otherObject);
+            otherObject.startObserving(this);
+        } else if (isObserved && distanceSquared >= rangeSquared) {
+            logger.info("{} stopped observing {}", gameObject, otherObject);
+            otherObject.stopObserving(this);
         }
+
+        otherObject.getChildren().forEach(this::updateObject);
     }
 
     @Override

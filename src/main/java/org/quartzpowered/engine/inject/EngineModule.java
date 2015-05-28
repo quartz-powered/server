@@ -28,12 +28,8 @@ package org.quartzpowered.engine.inject;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.assistedinject.FactoryModuleBuilder;
-import com.google.inject.name.Names;
-import org.quartzpowered.engine.object.GameObjectFactory;
 import org.quartzpowered.engine.level.LevelFactory;
-import org.quartzpowered.engine.observe.Observer;
-import org.quartzpowered.engine.observe.ObserverFactory;
-import org.quartzpowered.engine.observe.SessionObserver;
+import org.quartzpowered.engine.object.GameObjectFactory;
 
 public class EngineModule extends AbstractModule {
 
@@ -41,8 +37,5 @@ public class EngineModule extends AbstractModule {
     protected void configure() {
         install(new FactoryModuleBuilder().build(GameObjectFactory.class));
         install(new FactoryModuleBuilder().build(LevelFactory.class));
-        install(new FactoryModuleBuilder()
-                .implement(Observer.class, Names.named("session"), SessionObserver.class)
-                .build(ObserverFactory.class));
     }
 }

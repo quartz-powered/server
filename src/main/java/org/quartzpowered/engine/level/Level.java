@@ -29,6 +29,7 @@ package org.quartzpowered.engine.level;
 import lombok.Getter;
 import org.quartzpowered.engine.object.GameObject;
 import org.quartzpowered.engine.object.GameObjectFactory;
+import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.concurrent.ScheduledExecutorService;
@@ -36,16 +37,23 @@ import java.util.concurrent.ScheduledExecutorService;
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 public class Level {
+    @Inject private Logger logger;
+
     @Getter
     private final GameObject root;
 
     @Inject
     private Level(GameObjectFactory gameObjectFactory, ScheduledExecutorService scheduler) {
         root = gameObjectFactory.create();
+        root.setName("root");
         scheduler.scheduleAtFixedRate(this::update, 50, 50, MILLISECONDS);
     }
 
     public void update() {
-        root.broadcastMessage("update");
+        try {
+            root.broadcastMessage("update");
+        } catch (Throwable throwable) {
+            logger.error("Error when updating root object", throwable);
+        }
     }
 }

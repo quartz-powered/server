@@ -46,28 +46,35 @@ public class Transform extends Component {
 
     private final Matrix4 matrix = Matrix4.identity();
 
+    private final Vector3 position = Vector3.zero();
+    private final Quaternion rotation = Quaternion.identity();
+    private final Vector3 scale = Vector3.one();
+
     public Vector3 getLocalPosition() {
-        return this.matrix.getTranslation();
+        return new Vector3(position);
     }
 
     public void setLocalPosition(Vector3 position) {
+        this.position.set(position);
         this.matrix.setTranslation(position);
     }
 
     public Quaternion getLocalRotation() {
-        return this.matrix.getRotation();
+        return new Quaternion(rotation);
     }
 
     public void setLocalRotation(Quaternion rotation) {
-        this.matrix.setRotation(rotation);
+        this.rotation.set(rotation);
+        this.matrix.set(position, rotation, scale);
     }
 
     public Vector3 getLocalScale() {
-        return this.matrix.getScale();
+        return new Vector3(scale);
     }
 
     public void setLocalScale(Vector3 scale) {
-        this.matrix.setScale(scale);
+        this.scale.set(scale);
+        this.matrix.set(position, rotation, scale);
     }
 
     public Vector3 getPosition() {
@@ -75,7 +82,8 @@ public class Transform extends Component {
     }
 
     public void setPosition(Vector3 position) {
-        this.setLocalPosition(this.getWorldToLocalMatrix().multiply(position));
+        Matrix4 parentWorldToLocalMatrix = parent != null ? parent.getWorldToLocalMatrix() : Matrix4.identity();
+        this.setLocalPosition(parentWorldToLocalMatrix.multiply(position));
     }
 
     public Quaternion getRotation() {
@@ -83,7 +91,8 @@ public class Transform extends Component {
     }
 
     public void setRotation(Quaternion rotation) {
-        this.setLocalRotation(this.getWorldToLocalMatrix().multiply(rotation));
+        Matrix4 parentWorldToLocalMatrix = parent != null ? parent.getWorldToLocalMatrix() : Matrix4.identity();
+        this.setLocalRotation(parentWorldToLocalMatrix.multiply(rotation));
     }
 
     public Vector3 getScale() {
@@ -92,7 +101,7 @@ public class Transform extends Component {
 
     public Matrix4 getLocalToWorldMatrix() {
         if (this.parent == null) {
-            return new Matrix4(this.matrix);
+            return Matrix4.identity();
         } else {
             Matrix4 localToWorldMatrix = this.parent.getLocalToWorldMatrix();
             localToWorldMatrix.multiply(this.matrix);

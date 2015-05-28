@@ -34,17 +34,17 @@ public class PlayerPositionLookCodec implements Codec<PlayerPositionLookPacket> 
     @Override
     public void encode(Buffer buffer, PlayerPositionLookPacket packet) {
         buffer.writeDouble(packet.getX());
-        buffer.writeDouble(packet.getFeetY());
+        buffer.writeDouble(packet.getY());
         buffer.writeDouble(packet.getZ());
-        buffer.writeFloat(packet.getYaw());
-        buffer.writeFloat(packet.getPitch());
+        buffer.writeFloat((float) packet.getYaw());
+        buffer.writeFloat((float) packet.getPitch());
         buffer.writeBoolean(packet.isOnGround());
     }
 
     @Override
     public void decode(Buffer buffer, PlayerPositionLookPacket packet) {
         packet.setX(buffer.readDouble());
-        packet.setFeetY(buffer.readDouble());
+        packet.setY(buffer.readDouble());
         packet.setZ(buffer.readDouble());
         packet.setYaw(buffer.readFloat());
         packet.setPitch(buffer.readFloat());

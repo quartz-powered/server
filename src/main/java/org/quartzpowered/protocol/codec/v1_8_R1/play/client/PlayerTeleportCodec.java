@@ -36,8 +36,8 @@ public class PlayerTeleportCodec implements Codec<PlayerTeleportPacket> {
         buffer.writeDouble(packet.getX());
         buffer.writeDouble(packet.getY());
         buffer.writeDouble(packet.getZ());
-        buffer.writeFloat(packet.getYaw());
-        buffer.writeFloat(packet.getPitch());
+        buffer.writeFloat((float) packet.getYaw());
+        buffer.writeFloat((float) packet.getPitch());
         buffer.writeByte(packet.getFlags());
     }
 

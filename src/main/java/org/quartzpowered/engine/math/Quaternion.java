@@ -26,25 +26,80 @@
  */
 package org.quartzpowered.engine.math;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
+
+import static java.lang.Math.*;
+import static org.quartzpowered.engine.math.MathUtil.degreesToRadians;
+import static org.quartzpowered.engine.math.MathUtil.radiansToDegrees;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Quaternion {
     private double x, y, z, w;
 
-    public Quaternion() {
-
+    public Quaternion(Quaternion other) {
+        set(other);
     }
 
-    public Quaternion(double x, double y, double z, double w) {
-        set(x, y, z, w);
-    }
-
-    private void set(double x, double y, double z, double w) {
+    public void set(double x, double y, double z, double w) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.w = w;
+    }
+
+    public void setAxis(double x, double y, double z, double angle) {
+        angle *= degreesToRadians;
+
+        double length = Vector3.length(x, y, z);
+        if (length < MathUtil.DOUBLE_ROUNDING_ERROR) {
+            this.x = 0.0f;
+            this.y = 0.0f;
+            this.z = 0.0f;
+            this.w = 1.0f;
+        } else {
+            double sin_half_angle = sin(angle / 2.);
+            this.x = sin_half_angle * x / length;
+            this.y = sin_half_angle * y / length;
+            this.z = sin_half_angle * z / length;
+            this.w = cos(angle / 2.);
+        }
+    }
+
+    public void setEuler(double pitch, double yaw, double roll) {
+        Quaternion qx = fromAxis(1, 0, 0, pitch);
+        Quaternion qy = fromAxis(0, 1, 0, yaw);
+        Quaternion qz = fromAxis(0, 0, 1, roll);
+        set(qy);
+        multiply(qz);
+        multiply(qx);
+    }
+
+    public Vector3 getEuler() {
+        double pitch, yaw, roll;
+        double test = x * y + z * w;
+        if (test > 0.499) {
+            yaw = 2 * atan2(x, w);
+            roll = PI / 2;
+            pitch = 0;
+            return new Vector3(pitch * radiansToDegrees, yaw * radiansToDegrees, roll * radiansToDegrees);
+        }
+        if (test < -0.499) {
+            yaw = -2 * atan2(x, w);
+            roll = -PI / 2;
+            pitch = 0;
+            return new Vector3(pitch * radiansToDegrees, yaw * radiansToDegrees, roll * radiansToDegrees);
+        }
+        double sqx = x * x;
+        double sqy = y * y;
+        double sqz = z * z;
+        yaw = atan2(2 * y * w - 2 * x * z, 1 - 2 * sqy - 2 * sqz);
+        roll = asin(2 * test);
+        pitch = atan2(2 * x * w - 2 * y * z, 1 - 2 * sqx - 2 * sqz);
+        return new Vector3(pitch * radiansToDegrees, yaw * radiansToDegrees, roll * radiansToDegrees);
     }
 
     public void multiply(Quaternion other) {
@@ -58,26 +113,48 @@ public class Quaternion {
         this.w = newW;
     }
 
-    public int getGimbalPole() {
-        final float t = (float) (y * x + z * w);
-        return t > 0.499f ? 1 : (t < -0.499f ? -1 : 0);
+    public static Quaternion fromEuler(double pitch, double yaw, double roll) {
+        Quaternion quaternion = new Quaternion();
+        quaternion.setEuler(pitch, yaw, roll);
+        return quaternion;
     }
 
-    public float getPitch() {
-        final int pole = getGimbalPole();
-        final float radians = pole == 0 ? (float) Math.asin(MathUtil.clamp((float) (2f * (w * x - z * y)), -1f, 1f)) : ((float) pole * MathUtil.FLOAT_PI * 0.5f);
-        return radians * MathUtil.radiansToDegrees;
+    public static Quaternion fromAxis(double x, double y, double z, double angle) {
+        Quaternion quaternion = new Quaternion();
+        quaternion.setAxis(x, y, z, angle);
+        return quaternion;
     }
 
-    public float getYaw() {
-        final int pole = getGimbalPole();
-        final float radians = pole == 0 ? (float) Math.atan2(2f * (y * w + x * z), 1f - 2f * (y * y + x * x)) : 0f;
-        return radians * MathUtil.radiansToDegrees;
+    public final double normalize() {
+        double norm = Math.sqrt(this.x * this.x + this.y * this.y + this.z * this.z + this.w * this.w);
+        if (norm > 0.0f) {
+            this.x /= norm;
+            this.y /= norm;
+            this.z /= norm;
+            this.w /= norm;
+        } else {
+            this.x = 0.0;
+            this.y = 0.0;
+            this.z = 0.0;
+            this.w = 1.0;
+        }
+        return norm;
     }
 
-    public float getRoll() {
-        final int pole = getGimbalPole();
-        final float radians = pole == 0 ? (float) Math.atan2(2f * (w * z + y * x), 1f - 2f * (x * x + z * z)) : (float) pole * 2f * (float) Math.atan2(y, w);
-        return radians * MathUtil.radiansToDegrees;
+    @Override
+    public String toString() {
+        Vector3 euler = getEuler();
+        return "Quaternion(pitch=" + euler.getX() + ", yaw=" + euler.getY() + ", roll=" + euler.getZ() + ")";
+    }
+
+    public void set(Quaternion other) {
+        this.x = other.x;
+        this.y = other.y;
+        this.z = other.z;
+        this.w = other.w;
+    }
+
+    public static Quaternion identity() {
+        return new Quaternion(0, 0, 0, 1);
     }
 }

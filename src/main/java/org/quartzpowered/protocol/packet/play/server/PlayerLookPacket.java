@@ -28,6 +28,7 @@ package org.quartzpowered.protocol.packet.play.server;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import org.quartzpowered.engine.math.Quaternion;
 import org.quartzpowered.network.protocol.packet.Packet;
 
 @Data
@@ -36,4 +37,8 @@ public class PlayerLookPacket extends Packet {
     private float yaw;
     private float pitch;
     private boolean onGround;
+
+    public Quaternion getRotation() {
+        return Quaternion.fromEuler(pitch, yaw, 0);
+    }
 }

@@ -113,12 +113,20 @@ public class Buffer extends ByteBuf {
                 (position.getZ() & 0x3FFFFFF));
     }
 
-    public double readFixedPoint() {
+    public double readFixedPointInt() {
         return (double) readInt() / 32;
     }
 
-    public void writeFixedPoint(double value) {
+    public void writeFixedPointInt(double value) {
         writeInt((int) (value * 32));
+    }
+
+    public double readFixedPointByte() {
+        return (double) readByte() / 32;
+    }
+
+    public void writeFixedPointByte(double value) {
+        writeByte((int) (value * 32));
     }
 
     public void writeAngle(float angle) {

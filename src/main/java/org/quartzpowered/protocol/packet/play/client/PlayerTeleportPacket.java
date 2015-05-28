@@ -38,8 +38,8 @@ public class PlayerTeleportPacket extends Packet {
     private double x;
     private double y;
     private double z;
-    private float yaw;
-    private float pitch;
+    private double yaw;
+    private double pitch;
     private int flags;
 
     public void setPosition(double x, double y, double z) {
@@ -56,12 +56,13 @@ public class PlayerTeleportPacket extends Packet {
         return new Vector3(x, y, z);
     }
 
-    public void setRotation(float yaw, float pitch) {
+    public void setRotation(double yaw, double pitch) {
         this.yaw = yaw;
         this.pitch = pitch;
     }
 
     public void setRotation(Quaternion rotation) {
-        setRotation(rotation.getYaw(), rotation.getPitch());
+        Vector3 euler = rotation.getEuler();
+        setRotation(euler.getY(), euler.getX());
     }
 }

@@ -34,7 +34,7 @@ public class PlayerPositionCodec implements Codec<PlayerPositionPacket> {
     @Override
     public void encode(Buffer buffer, PlayerPositionPacket packet) {
         buffer.writeDouble(packet.getX());
-        buffer.writeDouble(packet.getFeetY());
+        buffer.writeDouble(packet.getY());
         buffer.writeDouble(packet.getZ());
         buffer.writeBoolean(packet.isOnGround());
     }
@@ -42,7 +42,7 @@ public class PlayerPositionCodec implements Codec<PlayerPositionPacket> {
     @Override
     public void decode(Buffer buffer, PlayerPositionPacket packet) {
         packet.setX(buffer.readDouble());
-        packet.setFeetY(buffer.readDouble());
+        packet.setY(buffer.readDouble());
         packet.setZ(buffer.readDouble());
         packet.setOnGround(buffer.readBoolean());
     }

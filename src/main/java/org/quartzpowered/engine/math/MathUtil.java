@@ -28,9 +28,9 @@ package org.quartzpowered.engine.math;
 
 public class MathUtil {
     static public final double DOUBLE_ROUNDING_ERROR = 0.00000000001;
-    static public final float FLOAT_PI = 3.1415927f;
 
-    static public final float radiansToDegrees = 180f / FLOAT_PI;
+    static public final double radiansToDegrees = 180. / Math.PI;
+    static public final double degreesToRadians = Math.PI / 180.;
 
     static public boolean isZero (double value) {
         return Math.abs(value) <= DOUBLE_ROUNDING_ERROR;

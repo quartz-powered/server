@@ -26,10 +26,15 @@
  */
 package org.quartzpowered.engine.math;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Vector3 {
+
     public static Vector3 back() {
         return new Vector3(0, 0, -1);
     }
@@ -72,12 +77,8 @@ public class Vector3 {
 
     protected double x, y, z;
 
-    public Vector3() {
-
-    }
-
-    public Vector3(double x, double y, double z) {
-        set(x, y, z);
+    public Vector3(Vector3 other) {
+        set(other.x, other.y, other.z);
     }
 
     public void set(double x, double y, double z) {
@@ -98,5 +99,19 @@ public class Vector3 {
         final double dy = this.y - other.y;
         final double dz = this.z - other.z;
         return lengthSquared(dx, dy, dz);
+    }
+
+    public Vector3 subtract(Vector3 other) {
+        return new Vector3(
+                this.x - other.x,
+                this.y - other.y,
+                this.z - other.z
+        );
+    }
+
+    public void set(Vector3 other) {
+        this.x = other.x;
+        this.y = other.y;
+        this.z = other.z;
     }
 }

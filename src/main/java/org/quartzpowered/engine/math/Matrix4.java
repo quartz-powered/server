@@ -33,6 +33,7 @@ import java.util.Arrays;
 import static org.quartzpowered.engine.math.Matrix4.Constants.*;
 
 public class Matrix4 implements Cloneable {
+
     protected static class Constants {
         public static final int M00 = 0;
         public static final int M01 = 4;
@@ -73,56 +74,53 @@ public class Matrix4 implements Cloneable {
         this(Arrays.copyOf(other.values, other.values.length));
     }
 
-    public void set(Vector3 translation, Quaternion rotation, Vector3 scale) {
-        final double translationX = translation.getX();
-        final double translationY = translation.getY();
-        final double translationZ = translation.getZ();
-
-        final double rotationX = rotation.getX();
-        final double rotationY = rotation.getY();
-        final double rotationZ = rotation.getZ();
-        final double rotationW = rotation.getW();
-
-        final double scaleX = scale.getX();
-        final double scaleY = scale.getY();
-        final double scaleZ = scale.getZ();
-
-        final double xs = rotationX * 2., ys = rotationY * 2., zs = rotationZ * 2.;
-        final double wx = rotationW * xs, wy = rotationW * ys, wz = rotationW * zs;
-        final double xx = rotationX * xs, xy = rotationX * ys, xz = rotationX * zs;
-        final double yy = rotationZ * xs, yz = rotationZ * ys, zz = rotationZ * zs;
-
-        this.values[M00] = scaleX * (1.0f - (yy + zz));
-        this.values[M01] = scaleY * (xy - wz);
-        this.values[M02] = scaleZ * (xz + wy);
-        this.values[M03] = translationX;
-
-        this.values[M10] = scaleX * (xy + wz);
-        this.values[M11] = scaleY * (1.0f - (xx + zz));
-        this.values[M12] = scaleZ * (yz - wx);
-        this.values[M13] = translationY;
-
-        this.values[M20] = scaleX * (xz - wy);
-        this.values[M21] = scaleY * (yz + wx);
-        this.values[M22] = scaleZ * (1.0f - (xx + yy));
-        this.values[M23] = translationZ;
-
-        this.values[M30] = 0.f;
-        this.values[M31] = 0.f;
-        this.values[M32] = 0.f;
-        this.values[M33] = 1.0f;
-    }
-
     public void setTranslation(Vector3 vector) {
         this.values[M03] = vector.getX();
         this.values[M13] = vector.getY();
         this.values[M23] = vector.getZ();
     }
 
-    public void setTranslation(float x, float y, float z) {
-        this.values[M03] = x;
-        this.values[M13] = y;
-        this.values[M23] = z;
+    public void set(Vector3 translation, Quaternion rotation, Vector3 scale) {
+        double q00 = 2.0f * rotation.getX() * rotation.getX();
+        double q11 = 2.0f * rotation.getY() * rotation.getY();
+        double q22 = 2.0f * rotation.getZ() * rotation.getZ();
+
+        double q01 = 2.0f * rotation.getX() * rotation.getY();
+        double q02 = 2.0f * rotation.getX() * rotation.getZ();
+        double q03 = 2.0f * rotation.getX() * rotation.getW();
+
+        double q12 = 2.0f * rotation.getY() * rotation.getZ();
+        double q13 = 2.0f * rotation.getY() * rotation.getW();
+
+        double q23 = 2.0f * rotation.getZ() * rotation.getW();
+
+        double sx = scale.getX();
+        double sy = scale.getY();
+        double sz = scale.getZ();
+
+        double tx = translation.getX();
+        double ty = translation.getY();
+        double tz = translation.getZ();
+
+        values[M00] = sx * (1.0f - q11 - q22);
+        values[M01] = sy * (q01 - q23);
+        values[M02] = sz * (q02 + q13);
+        values[M03] = tx;
+
+        values[M10] = sx * (q01 + q23);
+        values[M11] = sy * (1.0f - q22 - q00);
+        values[M12] = sz * (q12 - q03);
+        values[M13] = ty;
+
+        values[M20] = sx * (q02 - q13);
+        values[M21] = sy * (q12 + q03);
+        values[M22] = sz * (1.0f - q11 - q00);
+        values[M23] = tz;
+
+        values[M30] = 0;
+        values[M31] = 0;
+        values[M32] = 0;
+        values[M33] = 1;
     }
 
     public Vector3 getTranslation() {
@@ -133,71 +131,48 @@ public class Matrix4 implements Cloneable {
         );
     }
 
-    public void setRotation(Quaternion rotation) {
-        set(getTranslation(), rotation, getScale());
-    }
-
     public Quaternion getRotation() {
-        double xx = this.values[M00];
-        double xy = this.values[M01];
-        double xz = this.values[M02];
-        double yx = this.values[M10];
-        double yy = this.values[M11];
-        double yz = this.values[M12];
-        double zx = this.values[M20];
-        double zy = this.values[M21];
-        double zz = this.values[M22];
+        double onePlusTrace = 1. + values[M00] + values[M11] + values[M22];
 
-        final double lx = 1f / Vector3.length(xx, xy, xz);
-        final double ly = 1f / Vector3.length(yx, yy, yz);
-        final double lz = 1f / Vector3.length(zx, zy, zz);
-        xx *= lx;
-        xy *= lx;
-        xz *= lx;
-        yz *= ly;
-        yy *= ly;
-        yz *= ly;
-        zx *= lz;
-        zy *= lz;
-        zz *= lz;
-        // the trace is the sum of the diagonal elements; see
-        // http://mathworld.wolfram.com/MatrixTrace.html
-        final double t = xx + yy + zz;
-
-        double x, y, z, w;
-
-        // we protect the division by s by ensuring that s>=1
-        if (t >= 0) { // |w| >= .5
-            float s = (float) Math.sqrt(t + 1); // |s|>=1 ...
-            w = 0.5f * s;
-            s = 0.5f / s; // so this division isn't bad
-            x = (zy - yz) * s;
-            y = (xz - zx) * s;
-            z = (yx - xy) * s;
-        } else if ((xx > yy) && (xx > zz)) {
-            float s = (float) Math.sqrt(1.0 + xx - yy - zz); // |s|>=1
-            x = s * 0.5f; // |x| >= .5
-            s = 0.5f / s;
-            y = (yx + xy) * s;
-            z = (xz + zx) * s;
-            w = (zy - yz) * s;
-        } else if (yy > zz) {
-            float s = (float) Math.sqrt(1.0 + yy - xx - zz); // |s|>=1
-            y = s * 0.5f; // |y| >= .5
-            s = 0.5f / s;
-            x = (yx + xy) * s;
-            z = (zy + yz) * s;
-            w = (xz - zx) * s;
+        Quaternion rotation;
+        if (onePlusTrace > MathUtil.DOUBLE_ROUNDING_ERROR) {
+            double s = Math.sqrt(onePlusTrace) * 2.0f;
+            rotation = new Quaternion(
+                    (values[M21] - values[M12]) / s,
+                    (values[M02] - values[M20]) / s,
+                    (values[M10] - values[M01]) / s,
+                    0.25f * s
+            );
         } else {
-            float s = (float) Math.sqrt(1.0 + zz - xx - yy); // |s|>=1
-            z = s * 0.5f; // |z| >= .5
-            s = 0.5f / s;
-            x = (xz + zx) * s;
-            y = (zy + yz) * s;
-            w = (yx - xy) * s;
+            if ((values[M00] > values[M11]) & (values[M00] > values[M22])) {
+                double s = Math.sqrt(1.0f + values[M00] - values[M11] - values[M22]) * 2.0f;
+                rotation = new Quaternion(
+                        0.25f * s,
+                        (values[M01] + values[M10]) / s,
+                        (values[M02] + values[M20]) / s,
+                        (values[M12] - values[M21]) / s
+                );
+            } else if (values[M11] > values[M22]) {
+                double s = Math.sqrt(1.0f + values[M11] - values[M00] - values[M22]) * 2.0f;
+                rotation = new Quaternion(
+                        (values[M01] + values[M10]) / s,
+                        0.25f * s,
+                        (values[M12] + values[M21]) / s,
+                        (values[M02] - values[M20]) / s
+                );
+            } else {
+                double s = Math.sqrt(1.0f + values[M22] - values[M00] - values[M11]) * 2.0f;
+                rotation = new Quaternion(
+                        (values[M02] + values[M20]) / s,
+                        (values[M12] + values[M21]) / s,
+                        0.25f * s,
+                        (values[M01] - values[M10]) / s
+                );
+            }
         }
+        rotation.normalize();
 
-        return new Quaternion(x, y, z, w);
+        return rotation;
     }
 
     public Vector3 getScale() {
@@ -212,10 +187,6 @@ public class Matrix4 implements Cloneable {
                         Math.abs(this.values[M22]) :
                         Math.sqrt(this.values[M20] * this.values[M20] + this.values[M21] * this.values[M21] + values[M22] * this.values[M22])
         );
-    }
-
-    public void setScale(Vector3 scale) {
-        set(getTranslation(), getRotation(), scale);
     }
 
     public void multiply(Matrix4 other) {
