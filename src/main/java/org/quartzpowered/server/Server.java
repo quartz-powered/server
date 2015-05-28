@@ -50,6 +50,7 @@ import org.quartzpowered.protocol.data.info.PlayerInfoAction;
 import org.quartzpowered.protocol.packet.login.client.LoginResponsePacket;
 import org.quartzpowered.protocol.packet.play.client.*;
 import org.quartzpowered.server.event.player.PlayerLoginEvent;
+import org.quartzpowered.server.event.player.PlayerQuitEvent;
 import org.quartzpowered.server.network.HandshakeHandler;
 import org.quartzpowered.server.network.LoginHandler;
 import org.quartzpowered.server.network.PingHandler;
@@ -199,6 +200,15 @@ public class Server {
 
             session.getAttributes().set(PlayHandler.PLAYER_OBJECT, playerObject);
         });
+    }
 
+    @Handler
+    public void onPlayerQuit(PlayerQuitEvent event) {
+        Session session = event.getSession();
+
+        GameObject playerObject = session.getAttributes().get(PlayHandler.PLAYER_OBJECT);
+        if (playerObject != null) {
+            playerObject.setParent(null);
+        }
     }
 }

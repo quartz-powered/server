@@ -33,6 +33,7 @@ import org.quartzpowered.common.eventbus.EventBus;
 import org.quartzpowered.network.protocol.packet.Packet;
 import org.quartzpowered.network.session.Session;
 import org.quartzpowered.network.session.SessionManager;
+import org.quartzpowered.server.event.player.PlayerQuitEvent;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -55,7 +56,17 @@ public class PacketHandler extends SimpleChannelInboundHandler<Packet> {
     }
 
     @Override
+    public void channelInactive(ChannelHandlerContext ctx) throws Exception {
+        Session session = sessionManager.get(ctx.channel());
+
+        PlayerQuitEvent quitEvent = new PlayerQuitEvent(session);
+        eventBus.publish(quitEvent);
+    }
+
+    @Override
     public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause) throws Exception {
         logger.error("Error in pipeline", cause);
     }
+
+
 }

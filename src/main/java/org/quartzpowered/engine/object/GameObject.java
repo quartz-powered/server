@@ -47,6 +47,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.function.Consumer;
 import java.util.stream.Collectors;
 
@@ -60,8 +61,8 @@ public final class GameObject implements Observable, Observer {
     @Getter @Setter
     private String name;
 
-    private final List<Component> components = new ArrayList<>();
-    private final List<Observer> observers = new ArrayList<>();
+    private final List<Component> components = new CopyOnWriteArrayList<>();
+    private final List<Observer> observers = new CopyOnWriteArrayList<>();
 
     @Inject
     private GameObject(FactoryRegistry factoryRegistry) {
@@ -85,13 +86,21 @@ public final class GameObject implements Observable, Observer {
     }
 
     public void removeComponent(Component component) {
-        if (this.components.remove(component)) {
-            this.observers.forEach(observer -> sendMessageToComponent(component, "stopObserving", observer));
+        if (components.remove(component)) {
+            observers.forEach(observer -> sendMessageToComponent(component, "stopObserving", observer));
         }
     }
 
+    public void clearComponents() {
+        components.forEach(this::removeComponent);
+    }
+
+    public void clearObservers() {
+        observers.forEach(this::stopObserving);
+    }
+
     public <T extends Component> T getComponent(Class<T> type) {
-        for (Component component : this.components) {
+        for (Component component : components) {
             if (type.isInstance(component)) {
                 return type.cast(component);
             }
@@ -215,7 +224,7 @@ public final class GameObject implements Observable, Observer {
     }
 
     private <T extends Component> void getComponents(Class<T> type, Collection<T> result) {
-        for (Component component : this.components) {
+        for (Component component : components) {
             if (type.isInstance(component)) {
                 result.add(type.cast(component));
             }
@@ -297,14 +306,15 @@ public final class GameObject implements Observable, Observer {
 
     public void setParent(GameObject parent) {
         Transform transform = getTransform();
-        Transform parentTransform = parent.getTransform();
-
-        if (transform == null || parentTransform == null) {
+        if (transform == null) {
             throw new NullPointerException();
         }
 
+        Transform parentTransform = parent == null ? null :  parent.getTransform();
+
         transform.setParent(parentTransform);
     }
+
 
     public static GameObject none() {
         return null;
