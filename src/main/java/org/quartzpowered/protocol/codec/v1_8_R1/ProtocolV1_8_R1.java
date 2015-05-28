@@ -118,7 +118,7 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(PLAY, 0x17, EntityLookMovePacket.class, new EntityLookMoveCodec());
         clientBoundPacket(PLAY, 0x18, EntityTeleportPacket.class, new EntityTeleportCodec());
         clientBoundPacket(PLAY, 0x19, EntityHeadLookPacket.class, new EntityHeadLookCodec());
-        clientBoundPacket(PLAY, 0x21, ChunkDataPacket.class, new ChunkDataCodec());
+        clientBoundPacket(PLAY, 0x21, ChunkPacket.class, new ChunkCodec());
         clientBoundPacket(PLAY, 0x26, ChunkBulkPacket.class, new ChunkBulkCodec());
         clientBoundPacket(PLAY, 0x32, ConfirmTransactionPacket.class, new ConfirmTransactionCodec());
         clientBoundPacket(PLAY, 0x38, PlayerInfoPacket.class, new PlayerInfoCodec());

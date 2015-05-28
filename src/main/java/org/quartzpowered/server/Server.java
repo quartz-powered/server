@@ -39,12 +39,9 @@ import org.quartzpowered.engine.object.component.Camera;
 import org.quartzpowered.engine.object.component.Player;
 import org.quartzpowered.network.server.NetworkServer;
 import org.quartzpowered.network.session.Session;
-import org.quartzpowered.network.session.attribute.AttributeKey;
-import org.quartzpowered.protocol.data.ChatPosition;
 import org.quartzpowered.protocol.data.Difficulty;
 import org.quartzpowered.protocol.data.Dimension;
 import org.quartzpowered.protocol.data.Gamemode;
-import org.quartzpowered.protocol.data.component.TextComponent;
 import org.quartzpowered.protocol.data.info.PlayerInfo;
 import org.quartzpowered.protocol.data.info.PlayerInfoAction;
 import org.quartzpowered.protocol.packet.login.client.LoginResponsePacket;
@@ -127,11 +124,11 @@ public class Server {
             ChunkBulkPacket chunkBulkPacket = new ChunkBulkPacket();
             chunkBulkPacket.setSkylight(true);
 
-            List<ChunkDataPacket> chunkPackets = new ArrayList<>();
+            List<ChunkPacket> chunkPackets = new ArrayList<>();
 
             for (int cx = -1; cx < 6; cx++) {
                 for (int cz = -1; cz < 6; cz++) {
-                    ChunkDataPacket chunkPacket = new ChunkDataPacket();
+                    ChunkPacket chunkPacket = new ChunkPacket();
                     chunkPacket.setX(cx);
                     chunkPacket.setZ(cz);
 
