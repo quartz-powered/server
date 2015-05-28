@@ -110,6 +110,7 @@ public class Server {
         LoginResponsePacket loginResponse = new LoginResponsePacket();
         loginResponse.setUuid(session.getProfile().getUniqueId());
         loginResponse.setUsername(session.getProfile().getName());
+
         session.send(loginResponse).addListener(future -> {
 
             session.setState(PLAY);
