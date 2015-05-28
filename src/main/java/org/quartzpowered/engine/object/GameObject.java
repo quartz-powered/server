@@ -168,6 +168,7 @@ public class GameObject implements Observable, Observer {
     private void sendMessageToComponent(Component component, String name, Object... args) {
         Class<? extends Component> componentType = component.getClass();
 
+        // TODO cache this
         Method[] methods = componentType.getMethods();
         for (Method method : methods) {
 

@@ -34,7 +34,6 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Vector3 {
-
     public static Vector3 back() {
         return new Vector3(0, 0, -1);
     }
@@ -113,5 +112,17 @@ public class Vector3 {
         this.x = other.x;
         this.y = other.y;
         this.z = other.z;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof Vector3) {
+            Vector3 vector = (Vector3) other;
+
+            return (Math.abs(this.x - vector.x) < 0.001 &&
+                    Math.abs(this.y - vector.y) < 0.001 &&
+                    Math.abs(this.z - vector.z) < 0.001);
+        }
+        return false;
     }
 }

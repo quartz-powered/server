@@ -28,6 +28,8 @@ package org.quartzpowered.engine.object.component;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.quartzpowered.engine.math.Quaternion;
+import org.quartzpowered.engine.math.Vector3;
 import org.quartzpowered.engine.object.annotation.MessageHandler;
 import org.quartzpowered.engine.object.annotation.Property;
 import org.quartzpowered.engine.object.Component;
@@ -56,6 +58,19 @@ public class Camera extends Component implements Observer {
 
     private final List<Observer> observers = new ArrayList<>();
 
+    private final Vector3 remotePosition = Vector3.zero();
+    private final Quaternion remoteRotation = Quaternion.identity();
+
+    public void setRemotePosition(Vector3 position) {
+        remotePosition.set(position);
+        gameObject.getTransform().setPosition(position);
+    }
+
+    public void setRemoteRotation(Quaternion rotation) {
+        remoteRotation.set(rotation);
+        gameObject.getTransform().setRotation(rotation);
+    }
+
     public void removeViewer(Observer observer) {
         if (this.observers.remove(observer)) {
             this.attributeRegistry.get(observer).set(CAMERA_ATTRIBUTE, null);
@@ -73,17 +88,30 @@ public class Camera extends Component implements Observer {
         this.observers.add(observer);
         attributes.set(CAMERA_ATTRIBUTE, this);
 
+        observer.observe(getTeleportPacket());
+    }
+
+    private PlayerTeleportPacket getTeleportPacket() {
         PlayerTeleportPacket teleportPacket = new PlayerTeleportPacket();
 
         Transform transform = gameObject.getTransform();
         teleportPacket.setPosition(transform.getPosition());
         teleportPacket.setRotation(transform.getRotation());
-
-        observer.observe(teleportPacket);
+        return teleportPacket;
     }
 
     @MessageHandler
     public void update() {
+        Transform transform = gameObject.getTransform();
+        if(!transform.getPosition().equals(remotePosition) ||
+                !transform.getRotation().equals(remoteRotation)) {
+
+            // TODO should only be observed by observer controlling the camera
+            observe(getTeleportPacket());
+            setRemotePosition(remotePosition);
+            setRemoteRotation(remoteRotation);
+        }
+
         GameObject root = gameObject.getRoot();
         updateObject(root);
     }
@@ -101,10 +129,8 @@ public class Camera extends Component implements Observer {
         final double rangeSquared = range * range;
 
         if (!isObserved && distanceSquared <= rangeSquared) {
-            logger.info("{} started observing {}", gameObject, otherObject);
             otherObject.startObserving(this);
         } else if (isObserved && distanceSquared >= rangeSquared) {
-            logger.info("{} stopped observing {}", gameObject, otherObject);
             otherObject.stopObserving(this);
         }
 

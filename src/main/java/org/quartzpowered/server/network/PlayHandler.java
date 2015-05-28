@@ -30,6 +30,7 @@ import com.google.inject.Inject;
 import net.engio.mbassy.listener.Handler;
 import org.quartzpowered.engine.math.Vector3;
 import org.quartzpowered.engine.object.GameObject;
+import org.quartzpowered.engine.object.component.Camera;
 import org.quartzpowered.engine.object.component.Player;
 import org.quartzpowered.engine.object.component.Transform;
 import org.quartzpowered.network.protocol.packet.Packet;
@@ -89,22 +90,25 @@ public class PlayHandler {
     @Handler
     public void onPlayerPosition(PlayerPositionPacket packet) {
         GameObject playerObject = packet.getSender().getAttributes().get(PLAYER_OBJECT);
-        playerObject.getTransform().setPosition(packet.getPosition());
+        Camera camera = playerObject.getComponent(Camera.class);
+
+        camera.setRemotePosition(packet.getPosition());
     }
 
     @Handler
     public void onPlayerPositionLook(PlayerPositionLookPacket packet) {
         GameObject playerObject = packet.getSender().getAttributes().get(PLAYER_OBJECT);
+        Camera camera = playerObject.getComponent(Camera.class);
 
-        Transform transform = playerObject.getTransform();
-        transform.setPosition(packet.getPosition());
-        transform.setRotation(packet.getRotation());
+        camera.setRemotePosition(packet.getPosition());
+        camera.setRemoteRotation(packet.getRotation());
     }
 
     @Handler
     public void onPlayerLook(PlayerLookPacket packet) {
         GameObject playerObject = packet.getSender().getAttributes().get(PLAYER_OBJECT);
+        Camera camera = playerObject.getComponent(Camera.class);
 
-        playerObject.getTransform().setRotation(packet.getRotation());
+        camera.setRemoteRotation(packet.getRotation());
     }
 }

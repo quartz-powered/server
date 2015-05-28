@@ -157,4 +157,13 @@ public class Quaternion {
     public static Quaternion identity() {
         return new Quaternion(0, 0, 0, 1);
     }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other instanceof Quaternion) {
+            Quaternion quaternion = (Quaternion) other;
+            return this.getEuler().equals(quaternion.getEuler());
+        }
+        return false;
+    }
 }
