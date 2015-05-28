@@ -46,7 +46,8 @@ public class HandshakeHandler {
 
     @Inject private ProtocolRegistry protocolRegistry;
 
-    @Handler public void onHandshake(HandshakePacket packet) {
+    @Handler
+    public void onHandshake(HandshakePacket packet) {
         Session session = packet.getSender();
 
         ProtocolState state = packet.getState();

@@ -107,29 +107,6 @@ public class Server {
     public void onPlayerLogin(PlayerLoginEvent event) {
         Session session = event.getSession();
 
-
-
-
-        new java.util.Timer().schedule(
-                new java.util.TimerTask() {
-                    @Override
-                    public void run() {
-
-                        ChatMessagePacket packet = new ChatMessagePacket();
-
-                        TextComponent comp = new TextComponent("Welcome to Quartz!!!");
-
-                        packet.setMessage(comp);
-                        packet.setPosition(ChatPosition.CHAT);
-
-                        session.send(packet);
-
-                    }
-                },
-                10
-        );
-
-
         LoginResponsePacket loginResponse = new LoginResponsePacket();
         loginResponse.setUuid(session.getProfile().getUniqueId());
         loginResponse.setUsername(session.getProfile().getName());
