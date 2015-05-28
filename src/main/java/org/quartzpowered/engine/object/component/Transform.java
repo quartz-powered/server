@@ -140,7 +140,12 @@ public class Transform extends Component {
         }
 
         this.parent = parent;
-        this.parent.children.add(this);
+        if (parent != null) {
+            parent.children.add(this);
+        }
+
+        gameObject.sendMessage("parentChanged", parent == null ? null : parent.gameObject);
+        gameObject.clearObservers();
     }
 
     public double distanceSquared(Transform transform) {
