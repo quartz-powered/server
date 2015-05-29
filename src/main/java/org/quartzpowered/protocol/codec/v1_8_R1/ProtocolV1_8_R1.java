@@ -96,12 +96,14 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         serverBoundPacket(PLAY, 0x06, PlayerPositionLookPacket.class, new PlayerPositionLookCodec());
         serverBoundPacket(PLAY, 0x07, PlayerActionPacket.class, new PlayerActionCodec());
         serverBoundPacket(PLAY, 0x09, HeldItemChangePacket.class, new HeldItemChangeCodec());
+        serverBoundPacket(PLAY, 0x0B, EntityActionPacket.class, new EntityActionCodec());
         serverBoundPacket(PLAY, 0x0D, CloseWindowPacket.class, new CloseWindowCodec());
         serverBoundPacket(PLAY, 0x0F, ConfirmTransactionPacket.class, new ConfirmTransactionCodec());
         serverBoundPacket(PLAY, 0x13, PlayerAbilitiesPacket.class, new PlayerAbilitiesCodec());
         serverBoundPacket(PLAY, 0x15, ClientSettingsPacket.class, new ClientSettingsCodec());
         serverBoundPacket(PLAY, 0x16, ClientStatusPacket.class, new ClientStatusCodec());
         serverBoundPacket(PLAY, 0x17, PluginMessagePacket.class, new PluginMessageCodec());
+        serverBoundPacket(PLAY, 0x19, ResourcePackStatusPacket.class, new ResourcePackStatusCodec());
 
 
         clientBoundPacket(PLAY, 0x00, KeepAlivePacket.class, new KeepAliveCodec());
