@@ -31,6 +31,7 @@ import com.google.inject.Injector;
 import lombok.Getter;
 
 public class Factory<T> {
+
     private final Injector injector;
 
     @Getter

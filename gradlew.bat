@@ -84,6 +84,6 @@ rem the _cmd.exe /c_ return code!
 pause
 
 :mainEnd
-if "%OS%"=="Windows_NT" endlocal
+pause
 
 :omega

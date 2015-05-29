@@ -27,6 +27,9 @@
 package org.quartzpowered.network.buffer;
 
 public class BufferException extends RuntimeException {
+
+    private static final long serialVersionUID = 457624829348752L;
+
     public BufferException() {
     }
 
