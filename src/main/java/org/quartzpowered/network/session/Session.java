@@ -41,12 +41,12 @@ import org.quartzpowered.network.pipeline.NoopHandler;
 import org.quartzpowered.network.protocol.Protocol;
 import org.quartzpowered.network.protocol.ProtocolState;
 import org.quartzpowered.network.protocol.packet.Packet;
-import org.quartzpowered.network.session.attribute.AttributeRegistry;
 import org.quartzpowered.network.session.attribute.AttributeStorage;
 import org.quartzpowered.network.session.profile.PlayerProfile;
 
 import javax.crypto.SecretKey;
 import javax.inject.Inject;
+import javax.inject.Provider;
 import java.util.Random;
 
 import static org.quartzpowered.network.protocol.ProtocolState.HANDSHAKE;
@@ -85,8 +85,8 @@ public class Session implements Observer {
     private final AttributeStorage attributes;
 
     @Inject
-    public Session(AttributeRegistry attributeRegistry) {
-        this.attributes = attributeRegistry.get(this);
+    public Session(Provider<AttributeStorage> attributeStorageProvider) {
+        this.attributes = attributeStorageProvider.get();
     }
 
     public ChannelFuture send(Packet packet) {
