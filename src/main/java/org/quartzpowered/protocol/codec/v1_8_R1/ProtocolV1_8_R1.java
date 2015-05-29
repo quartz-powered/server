@@ -26,6 +26,7 @@
  */
 package org.quartzpowered.protocol.codec.v1_8_R1;
 
+import org.quartzpowered.network.protocol.codec.NoopCodec;
 import org.quartzpowered.protocol.codec.indentifier.IdentifierProtocol;
 import org.quartzpowered.protocol.codec.indentifier.common.client.KickCodec;
 import org.quartzpowered.protocol.codec.v1_8_R1.common.client.CompressionCodec;
@@ -96,7 +97,7 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         serverBoundPacket(PLAY, 0x06, PlayerPositionLookPacket.class, new PlayerPositionLookCodec());
         serverBoundPacket(PLAY, 0x07, PlayerActionPacket.class, new PlayerActionCodec());
         serverBoundPacket(PLAY, 0x09, HeldItemChangePacket.class, new HeldItemChangeCodec());
-        serverBoundPacket(PLAY, 0x0A, PlayerAnimationPacket.class, new PlayerAnimationCodec());
+        serverBoundPacket(PLAY, 0x0A, PlayerAnimationPacket.class, new NoopCodec<>());
         serverBoundPacket(PLAY, 0x0B, EntityActionPacket.class, new EntityActionCodec());
         serverBoundPacket(PLAY, 0x0D, CloseWindowPacket.class, new CloseWindowCodec());
         serverBoundPacket(PLAY, 0x0F, ConfirmTransactionPacket.class, new ConfirmTransactionCodec());
