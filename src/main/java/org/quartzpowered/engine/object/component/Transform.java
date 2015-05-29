@@ -36,10 +36,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 public class Transform extends Component {
 
-    private final List<Transform> children = new ArrayList<>();
+    private final List<Transform> children = new CopyOnWriteArrayList<>();
 
     @Getter
     private Transform parent;
