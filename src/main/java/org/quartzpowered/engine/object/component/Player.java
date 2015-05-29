@@ -57,6 +57,7 @@ public class Player extends Component {
     @Property
     private PlayerProfile profile;
 
+    @Getter
     private int entityId;
 
     private final Vector3 previousPosition = new Vector3();

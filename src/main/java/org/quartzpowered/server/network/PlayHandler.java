@@ -28,33 +28,32 @@ package org.quartzpowered.server.network;
 
 import com.google.inject.Inject;
 import net.engio.mbassy.listener.Handler;
-import org.quartzpowered.engine.math.Vector3;
 import org.quartzpowered.engine.object.GameObject;
 import org.quartzpowered.engine.object.component.Camera;
 import org.quartzpowered.engine.object.component.Player;
-import org.quartzpowered.engine.object.component.Transform;
-import org.quartzpowered.network.protocol.packet.Packet;
 import org.quartzpowered.network.session.Session;
 import org.quartzpowered.network.session.attribute.AttributeKey;
+import org.quartzpowered.protocol.data.Animation;
 import org.quartzpowered.protocol.data.ChatPosition;
-import org.quartzpowered.protocol.data.component.PlayerComponent;
 import org.quartzpowered.protocol.data.component.TextComponent;
 import org.quartzpowered.protocol.packet.play.client.AnimationPacket;
 import org.quartzpowered.protocol.packet.play.client.ChatMessagePacket;
 import org.quartzpowered.protocol.packet.play.server.*;
-import org.quartzpowered.protocol.packet.play.shared.HeldItemChangePacket;
 import org.quartzpowered.protocol.packet.play.shared.KeepAlivePacket;
+import org.quartzpowered.server.event.player.PlayerLoginEvent;
 import org.slf4j.Logger;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
 
 public class PlayHandler {
     public static final AttributeKey<GameObject> PLAYER_OBJECT = AttributeKey.create();
 
-    @Inject private Logger logger;
+    @Inject
+    private Logger logger;
 
-    List<Session> sessionList = new ArrayList<>();
+    List<WeakReference<Session>> sessionList = new ArrayList<>();
 
     /* @Handler
     public void onPacket(Packet packet) {
@@ -62,12 +61,16 @@ public class PlayHandler {
     }*/
 
     @Handler
+    public void onPlayerLogin(PlayerLoginEvent event) {
+        Session session = event.getSession();
+
+        sessionList.add(new WeakReference<>(session));
+
+    }
+
+    @Handler
     public void onPlayerChatMessage(PlayerChatMessagePacket packet) {
         Session session = packet.getSender();
-
-        if(!sessionList.contains(session)) {
-            sessionList.add(session);
-        }
 
         KeepAlivePacket keepAlivePacket = new KeepAlivePacket();
         keepAlivePacket.setKeepAliveId(10);
@@ -79,8 +82,10 @@ public class PlayHandler {
         chatMessagePacketOut.setMessage(new TextComponent(formatChat));
         chatMessagePacketOut.setPosition(ChatPosition.CHAT);
 
-        for(Session listSession : sessionList){
-            listSession.send(chatMessagePacketOut);
+        for (WeakReference<Session> reference : sessionList) {
+            if(reference.get() != null) {
+                reference.get().send(chatMessagePacketOut);
+            }
         }
         logger.info(formatChat);
     }
@@ -88,16 +93,17 @@ public class PlayHandler {
     @Handler
     public void onPlayerAnimation(PlayerAnimationPacket packet) {
         Session session = packet.getSender();
+        int entityId = session.getAttributes().get(PlayHandler.PLAYER_OBJECT).getComponent(Player.class).getEntityId();
 
-        if(!sessionList.contains(session)) {
-            sessionList.add(session);
+        AnimationPacket animationPacket = new AnimationPacket();
+        animationPacket.setEntityId(entityId);
+        animationPacket.setAnimation(Animation.SWING_ARM);
+
+        for (WeakReference<Session> reference : sessionList) {
+            if(reference.get() != null) {
+                reference.get().send(animationPacket);
+            }
         }
-
-        ChatMessagePacket chatMessagePacket = new ChatMessagePacket();
-        chatMessagePacket.setPosition(ChatPosition.ACTION_BAR);
-        chatMessagePacket.setMessage(new TextComponent("You Punched!"));
-
-        session.send(chatMessagePacket);
     }
 
     @Handler
