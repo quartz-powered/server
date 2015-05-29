@@ -33,7 +33,6 @@ import org.quartzpowered.protocol.packet.play.server.AnimationPacket;
 public class AnimationCodec implements Codec<AnimationPacket> {
     @Override
     public void encode(Buffer buffer, AnimationPacket packet) {
-
     }
 
     @Override
