@@ -35,9 +35,11 @@ import org.quartzpowered.network.session.Session;
 import org.quartzpowered.network.session.attribute.AttributeKey;
 import org.quartzpowered.protocol.data.Animation;
 import org.quartzpowered.protocol.data.ChatPosition;
+import org.quartzpowered.protocol.data.Particle;
 import org.quartzpowered.protocol.data.component.TextComponent;
 import org.quartzpowered.protocol.packet.play.client.AnimationPacket;
 import org.quartzpowered.protocol.packet.play.client.ChatMessagePacket;
+import org.quartzpowered.protocol.packet.play.client.ParticlePacket;
 import org.quartzpowered.protocol.packet.play.server.*;
 import org.quartzpowered.protocol.packet.play.shared.KeepAlivePacket;
 import org.quartzpowered.server.event.player.PlayerLoginEvent;
@@ -72,6 +74,18 @@ public class PlayHandler {
     public void onPlayerChatMessage(PlayerChatMessagePacket packet) {
         Session session = packet.getSender();
 
+        ParticlePacket particlePacket = new ParticlePacket();
+        particlePacket.setParticle(Particle.ANGRY_VILLAGER);
+        particlePacket.setLongDistance(true);
+        particlePacket.setX(10);
+        particlePacket.setY(11);
+        particlePacket.setZ(10);
+        particlePacket.setOffsetX(0);
+        particlePacket.setOffsetY(0);
+        particlePacket.setOffsetZ(0);
+        particlePacket.setParticleData(0);
+        particlePacket.setParticleCount(30);
+
         KeepAlivePacket keepAlivePacket = new KeepAlivePacket();
         keepAlivePacket.setKeepAliveId(10);
         session.send(keepAlivePacket);
@@ -85,6 +99,7 @@ public class PlayHandler {
         for (WeakReference<Session> reference : sessionList) {
             if(reference.get() != null) {
                 reference.get().send(chatMessagePacketOut);
+                reference.get().send(particlePacket);
             }
         }
         logger.info(formatChat);
