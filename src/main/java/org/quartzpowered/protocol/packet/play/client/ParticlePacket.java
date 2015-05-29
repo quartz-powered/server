@@ -3,14 +3,14 @@ package org.quartzpowered.protocol.packet.play.client;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.quartzpowered.network.protocol.packet.Packet;
-import org.quartzpowered.protocol.data.Particle;
+import org.quartzpowered.protocol.data.ParticleType;
 
 import java.util.List;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ParticlePacket extends Packet {
-    private Particle particle;
+    private ParticleType type;
     private boolean longDistance;
     private float x;
     private float y;

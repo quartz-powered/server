@@ -3,7 +3,7 @@ package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
 
 import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.data.Particle;
+import org.quartzpowered.protocol.data.ParticleType;
 import org.quartzpowered.protocol.packet.play.client.ParticlePacket;
 
 import java.util.ArrayList;
@@ -12,7 +12,7 @@ import java.util.List;
 public class ParticleCodec implements Codec<ParticlePacket> {
     @Override
     public void encode(Buffer buffer, ParticlePacket packet) {
-        buffer.writeInt(packet.getParticle().getId());
+        buffer.writeInt(packet.getType().getId());
         buffer.writeBoolean(packet.isLongDistance());
         buffer.writeFloat(packet.getX());
         buffer.writeFloat(packet.getY());
@@ -30,7 +30,7 @@ public class ParticleCodec implements Codec<ParticlePacket> {
 
     @Override
     public void decode(Buffer buffer, ParticlePacket packet) {
-        packet.setParticle(Particle.fromId(buffer.readInt()));
+        packet.setType(ParticleType.fromId(buffer.readInt()));
         packet.setLongDistance(buffer.readBoolean());
         packet.setX(buffer.readFloat());
         packet.setY(buffer.readFloat());

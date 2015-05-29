@@ -1,6 +1,6 @@
 package org.quartzpowered.protocol.data;
 
-public enum Particle {
+public enum ParticleType {
     EXPLODE,
     LARGE_EXPLOSION,
     HUGE_EXPLOSION,
@@ -48,7 +48,7 @@ public enum Particle {
         return ordinal();
     }
 
-    public static Particle fromId(int id) {
+    public static ParticleType fromId(int id) {
         return values()[id];
     }
 }
