@@ -34,7 +34,6 @@ public class AnimationCodec implements Codec<AnimationPacket> {
     @Override
     public void encode(Buffer buffer, AnimationPacket packet) {
     }
-
     @Override
     public void decode(Buffer buffer, AnimationPacket packet) {
 
