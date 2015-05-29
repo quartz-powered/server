@@ -24,56 +24,38 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.data;
+package org.quartzpowered.engine.terrain.chunk;
 
-public enum WindowType {
-    CHEST(9, "minecraft:chest"),
-    WORKBENCH(10, "minecraft:crafting_table"),
-    FURNACE(3, "minecraft:furnace"),
-    DISPENSER(9, "minecraft:dispenser"),
-    ENCHANTING(2, "minecraft:enchanting_table"),
-    BREWING(4, "minecraft:brewing_stand"),
-    TRADE(3, "minecraft:villager"),
-    BEACON(1, "minecraft:beacon"),
-    ANVIL(3, "minecraft:anvil"),
-    HOPPER(5, "minecraft:hopper"),
-    DROPPER(9, "minecraft:dropper"),
-    HORSE(3, "EntityHorse");
+public class ChunkSection {
+    private final byte[] types = new byte[16 * 16 * 16 * 2];
 
-
-    private final int size;
-    private final String title;
-
-    private WindowType(int defaultSize, String defaultTitle) {
-        this.size = defaultSize;
-        this.title = defaultTitle;
+    public static int getIndex(int x, int y, int z) {
+        return ((y << 8) | (z << 4) | x) << 1;
     }
 
-    public int getSize() {
-        return size;
+    public static int getType(int id, int meta) {
+        return (id << 4) | meta;
     }
 
-    public String getTitle() {
-        return title;
+    public static int getId(int type) {
+        return (type >> 4);
     }
 
-    public static WindowType fromString(String text) {
-        if (text != null) {
-            for (WindowType b : WindowType.values()) {
-                if (text.equalsIgnoreCase(b.getTitle())) {
-                    return b;
-                }
-            }
-        }
-        return null;
+    public static int getMeta(int type) {
+        return type & 0xf;
     }
 
-    public int getId() {
-        return ordinal();
+    public void setType(int x, int y, int z, int type) {
+        final int index = getIndex(x, y, z);
+
+        types[index] = (byte) (type & 0xff);
+        types[index + 1] = (byte) ((type >> 8) & 0xff);
     }
 
-    public static WindowType fromId(int id) {
-        return values()[id];
-    }
+    public int getType(int x, int y, int z) {
+        final int index = getIndex(x, y, z);
 
+        return types[index] & 0xff |
+                ((types[index + 1] & 0xff) << 8);
+    }
 }
