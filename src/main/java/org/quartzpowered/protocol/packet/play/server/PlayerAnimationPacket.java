@@ -24,20 +24,13 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.codec.v1_8_R1.play.server;
+package org.quartzpowered.protocol.packet.play.server;
 
-import org.quartzpowered.network.buffer.Buffer;
-import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.packet.play.server.AnimationPacket;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.quartzpowered.network.protocol.packet.Packet;
 
-public class AnimationCodec implements Codec<AnimationPacket> {
-    @Override
-    public void encode(Buffer buffer, AnimationPacket packet) {
-        
-    }
-    
-    @Override
-    public void decode(Buffer buffer, AnimationPacket packet) {
-
-    }
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class PlayerAnimationPacket extends Packet {
 }
