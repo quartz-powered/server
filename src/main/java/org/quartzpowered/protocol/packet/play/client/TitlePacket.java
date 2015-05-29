@@ -24,8 +24,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.engine.terrain;
+package org.quartzpowered.protocol.packet.play.client;
 
-public interface TerrainFactory {
-    TerrainCache createCache();
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.quartzpowered.network.protocol.packet.Packet;
+import org.quartzpowered.protocol.data.ChatPosition;
+import org.quartzpowered.protocol.data.TitleAction;
+import org.quartzpowered.protocol.data.component.TextComponent;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class TitlePacket extends Packet {
+    private TitleAction action;
+    private TextComponent text;
+    private int fadeIn;
+    private int stay;
+    private int fadeOut;
 }

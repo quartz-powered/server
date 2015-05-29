@@ -97,17 +97,20 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         serverBoundPacket(PLAY, 0x07, PlayerActionPacket.class, new PlayerActionCodec());
         serverBoundPacket(PLAY, 0x09, HeldItemChangePacket.class, new HeldItemChangeCodec());
         serverBoundPacket(PLAY, 0x0A, PlayerAnimationPacket.class, new PlayerAnimationCodec());
+        serverBoundPacket(PLAY, 0x0B, EntityActionPacket.class, new EntityActionCodec());
         serverBoundPacket(PLAY, 0x0D, CloseWindowPacket.class, new CloseWindowCodec());
         serverBoundPacket(PLAY, 0x0F, ConfirmTransactionPacket.class, new ConfirmTransactionCodec());
         serverBoundPacket(PLAY, 0x13, PlayerAbilitiesPacket.class, new PlayerAbilitiesCodec());
         serverBoundPacket(PLAY, 0x15, ClientSettingsPacket.class, new ClientSettingsCodec());
         serverBoundPacket(PLAY, 0x16, ClientStatusPacket.class, new ClientStatusCodec());
         serverBoundPacket(PLAY, 0x17, PluginMessagePacket.class, new PluginMessageCodec());
+        serverBoundPacket(PLAY, 0x19, ResourcePackStatusPacket.class, new ResourcePackStatusCodec());
 
 
         clientBoundPacket(PLAY, 0x00, KeepAlivePacket.class, new KeepAliveCodec());
         clientBoundPacket(PLAY, 0x01, JoinGamePacket.class, new JoinGameCodec());
         clientBoundPacket(PLAY, 0x02, ChatMessagePacket.class, new ChatMessageCodec());
+        clientBoundPacket(PLAY, 0x03, TimeUpdatePacket.class, new TimeUpdateCodec());
         clientBoundPacket(PLAY, 0x06, UpdateHealthPacket.class, new UpdateHealthCodec());
         clientBoundPacket(PLAY, 0x08, PlayerTeleportPacket.class, new PlayerTeleportCodec());
         clientBoundPacket(PLAY, 0x09, HeldItemChangePacket.class, new PlayerHeldItemChangeCodec());
@@ -120,11 +123,13 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(PLAY, 0x17, EntityLookMovePacket.class, new EntityLookMoveCodec());
         clientBoundPacket(PLAY, 0x18, EntityTeleportPacket.class, new EntityTeleportCodec());
         clientBoundPacket(PLAY, 0x19, EntityHeadLookPacket.class, new EntityHeadLookCodec());
+        clientBoundPacket(PLAY, 0x2D, OpenWindowPacket.class, new OpenWindowCodec());
         clientBoundPacket(PLAY, 0x21, ChunkPacket.class, new ChunkCodec());
         clientBoundPacket(PLAY, 0x26, ChunkBulkPacket.class, new ChunkBulkCodec());
         clientBoundPacket(PLAY, 0x32, ConfirmTransactionPacket.class, new ConfirmTransactionCodec());
         clientBoundPacket(PLAY, 0x38, PlayerInfoPacket.class, new PlayerInfoCodec());
         clientBoundPacket(PLAY, 0x40, KickPacket.class, new KickCodec());
+        clientBoundPacket(PLAY, 0x45, TitlePacket.class,new TitleCodec());
         clientBoundPacket(PLAY, 0x46, CompressionPacket.class, new CompressionCodec());
 
     }

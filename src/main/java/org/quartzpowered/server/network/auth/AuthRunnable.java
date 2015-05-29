@@ -26,6 +26,7 @@
  */
 package org.quartzpowered.server.network.auth;
 
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.assistedinject.Assisted;
 import org.boon.json.ObjectMapper;
 import org.quartzpowered.common.eventbus.EventBus;
@@ -72,7 +73,7 @@ public class AuthRunnable implements Runnable {
             String url = BASE_URL + "?username=" + username + "&serverId=" + hash;
             URLConnection connection = new URL(url).openConnection();
 
-            Map response;
+            Map<?, ?> response;
             try (InputStream is = connection.getInputStream()) {
                 try {
                     response = objectMapper.fromJson(is, Map.class);
@@ -96,10 +97,10 @@ public class AuthRunnable implements Runnable {
             }
 
 
-            List<Map> responseProperties = (List<Map>) response.get("properties");
+            List<Map<?, ?>> responseProperties = (List<Map<?, ?>>) response.get("properties");
 
             List<PlayerProperty> properties = new ArrayList<>(responseProperties.size());
-            for (Map property : responseProperties) {
+            for (Map<?, ?> property : responseProperties) {
                 String propName = (String) property.get("name");
                 String value = (String) property.get("value");
                 String signature = (String) property.get("signature");

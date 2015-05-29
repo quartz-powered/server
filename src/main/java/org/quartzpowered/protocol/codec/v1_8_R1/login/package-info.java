@@ -24,8 +24,4 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.engine.terrain;
-
-public interface TerrainFactory {
-    TerrainCache createCache();
-}
+package org.quartzpowered.protocol.codec.v1_8_R1.login;
