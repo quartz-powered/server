@@ -26,83 +26,47 @@
  */
 package org.quartzpowered.protocol.codec.v1_8_R1.play.server;
 
-import io.netty.buffer.ByteBuf;
 import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.network.session.Session;
-import org.quartzpowered.protocol.data.Block;
-import org.quartzpowered.protocol.data.ChatMode;
-import org.quartzpowered.protocol.data.Location;
 import org.quartzpowered.protocol.packet.play.server.BlockPlacePacket;
-import org.quartzpowered.protocol.packet.play.server.ClientSettingsPacket;
 
 public class BlockPlaceCodec implements Codec<BlockPlacePacket> {
     @Override
     public void encode(Buffer buffer, BlockPlacePacket packet) {
 
         System.out.println("ENCODING");
-        Location loc = packet.getLocation();
 
-        long val = (((int)loc.getX() & 0x3FFFFFF) << 38) | (((int)loc.getY() & 0xFFF) << 26) | ((int)loc.getZ() & 0x3FFFFFF);
-
-        buffer.writeLong(val);
+        buffer.writeLong(packet.getLocation());
         buffer.writeByte(packet.getFace());
-
-        buffer.writeShort(packet.getBlock().getId());
-        buffer.writeByte(packet.getBlock().getCount());
-        buffer.writeShort(packet.getBlock().getDamage());
-
-        System.out.println("TEST");
-
-        //buffer.writeBytes(packet.getBlock().getBuf());
-
+        buffer.writeShort(packet.getBlockId());
+        buffer.writeByte(packet.getBlockCount());
+        buffer.writeShort(packet.getBlockDamage());
+        buffer.writeByte((byte) 1/*Placeholder*/);
         buffer.writeByte(packet.getCursorX());
         buffer.writeByte(packet.getCursorY());
         buffer.writeByte(packet.getCursorZ());
-
-        buffer.writeByte(packet.getCursorX());
-        buffer.writeByte(packet.getCursorY());
-        buffer.writeByte(packet.getCursorZ());
-
 
     }
 
     @Override
     public void decode(Buffer buffer, BlockPlacePacket packet) {
 
-        long val = buffer.readLong();
-        long x = val >> 38;
-        long y = (val >> 26) & 0xFFF;
-        long z = val << 38 >> 38;
-        y++;
-
-        if(x >= 33554432)
-            x -= 67108864;
-        if(y >= 2048)
-            y -= 4096;
-        if(z >= 33554432)
-            z -= 67108864;
-
-        packet.setLocation(new Location(x, y, z));
+        packet.setLocation(buffer.readLong());
         packet.setFace(buffer.readByte());
 
         int id = buffer.readShort();
         if(id == -1)
             return;
 
-        int count = buffer.readByte();
-        if(count == 0)
-            return;
-        short damage = buffer.readShort();
-        Block block = new Block(id, count, damage);
-        packet.setBlock(block);
+        packet.setBlockId(id);
+        packet.setBlockCount(buffer.readByte());
+        packet.setBlockDamage(buffer.readShort());
+
+        buffer.readByte();
 
         packet.setCursorX(buffer.readByte());
         packet.setCursorY(buffer.readByte());
         packet.setCursorZ(buffer.readByte());
-
-        /*???*/
-        buffer.readByte();
 
     }
 }

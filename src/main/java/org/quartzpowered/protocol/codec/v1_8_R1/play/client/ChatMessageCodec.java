@@ -31,6 +31,7 @@ import org.quartzpowered.network.protocol.codec.Codec;
 import org.quartzpowered.protocol.data.ChatPosition;
 import org.quartzpowered.protocol.data.component.TextComponent;
 import org.quartzpowered.protocol.packet.play.client.ChatMessagePacket;
+import org.quartzpowered.protocol.packet.play.server.BlockPlacePacket;
 
 public class ChatMessageCodec implements Codec<ChatMessagePacket> {
     @Override

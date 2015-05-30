@@ -29,16 +29,15 @@ package org.quartzpowered.protocol.packet.play.server;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.quartzpowered.network.protocol.packet.Packet;
-import org.quartzpowered.protocol.data.Block;
-import org.quartzpowered.protocol.data.ChatMode;
-import org.quartzpowered.protocol.data.Location;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class BlockPlacePacket extends Packet {
-    private Location location;
+    private long location;
     private byte face;
-    private Block block;
+    private int blockId;
+    private int blockCount;
+    private int blockDamage;
     private byte cursorX;
     private byte cursorY;
     private byte cursorZ;
