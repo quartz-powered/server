@@ -24,19 +24,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.network.protocol.codec;
+package org.quartzpowered.protocol.packet.play.client;
 
-import org.quartzpowered.network.buffer.Buffer;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import org.quartzpowered.network.protocol.packet.Packet;
-
-public class NoopCodec<T extends Packet> implements Codec<T> {
-    @Override
-    public void encode(Buffer buffer, T packet) {
-
-    }
-
-    @Override
-    public void decode(Buffer buffer, T packet) {
-
-    }
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class EntityVelocityPacket extends Packet {
+    private int entityID;
+    private short velocityX;
+    private short velocityY;
+    private short velocityZ;
 }

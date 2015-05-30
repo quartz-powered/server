@@ -24,19 +24,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.network.protocol.codec;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
 
 import org.quartzpowered.network.buffer.Buffer;
-import org.quartzpowered.network.protocol.packet.Packet;
+import org.quartzpowered.network.protocol.codec.Codec;
+import org.quartzpowered.protocol.packet.play.client.EntityVelocityPacket;
 
-public class NoopCodec<T extends Packet> implements Codec<T> {
+public class EntityVelocityCodec implements Codec<EntityVelocityPacket> {
     @Override
-    public void encode(Buffer buffer, T packet) {
-
+    public void encode(Buffer buffer, EntityVelocityPacket packet) {
+        buffer.writeVarInt(packet.getEntityID());
+        buffer.writeShort(packet.getVelocityX());
+        buffer.writeShort(packet.getVelocityY());
+        buffer.writeShort(packet.getVelocityZ());
     }
 
     @Override
-    public void decode(Buffer buffer, T packet) {
-
+    public void decode(Buffer buffer, EntityVelocityPacket packet) {
+        packet.setEntityID(buffer.readVarInt());
+        packet.setVelocityX(buffer.readShort());
+        packet.setVelocityY(buffer.readShort());
+        packet.setVelocityZ(buffer.readShort());
     }
 }
