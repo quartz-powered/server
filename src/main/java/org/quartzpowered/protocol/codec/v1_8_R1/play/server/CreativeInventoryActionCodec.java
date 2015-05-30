@@ -29,38 +29,35 @@ package org.quartzpowered.protocol.codec.v1_8_R1.play.server;
 import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.codec.Codec;
 import org.quartzpowered.protocol.packet.play.server.BlockPlacePacket;
+import org.quartzpowered.protocol.packet.play.server.CreativeInventoryActionPacket;
 
-public class BlockPlaceCodec implements Codec<BlockPlacePacket> {
+public class CreativeInventoryActionCodec implements Codec<CreativeInventoryActionPacket> {
     @Override
-    public void encode(Buffer buffer, BlockPlacePacket packet) {
-
-        buffer.writeLong(packet.getLocation());
-        buffer.writeByte(packet.getFace());
-        buffer.writeShort(packet.getBlockId());
-        buffer.writeByte(packet.getBlockCount());
-        buffer.writeShort(packet.getBlockDamage());
-        buffer.writeByte((byte) 0/*Placeholder*/);
-        buffer.writeByte(packet.getCursorX());
-        buffer.writeByte(packet.getCursorY());
-        buffer.writeByte(packet.getCursorZ());
-
+    public void encode(Buffer buffer, CreativeInventoryActionPacket packet) {
+        buffer.writeShort(packet.getSlot());
+        buffer.writeShort(packet.getId());
+        if(packet.getId() != -1) {
+            buffer.writeByte(packet.getCount());
+            buffer.writeShort(packet.getDamage());
+            if(packet.getNbt() != 0) {
+                /* TODO NBT DATA */
+            }
+        }
     }
 
     @Override
-    public void decode(Buffer buffer, BlockPlacePacket packet) {
-
-        packet.setLocation(buffer.readLong());
-        packet.setFace(buffer.readByte());
-        int id = buffer.readShort();
-        packet.setBlockId(id);
+    public void decode(Buffer buffer, CreativeInventoryActionPacket packet) {
+        packet.setSlot(buffer.readShort());
+        short id = buffer.readShort();
+        packet.setId(id);
         if(id != -1) {
-            packet.setBlockCount(buffer.readByte());
-            packet.setBlockDamage(buffer.readShort());
-            buffer.readByte();
+            packet.setCount(buffer.readByte());
+            packet.setDamage(buffer.readShort());
+            byte nbt = buffer.readByte();
+            packet.setNbt(nbt);
+            if(nbt != 0) {
+                /* TODO NBT DATA */
+            }
         }
-        packet.setCursorX(buffer.readByte());
-        packet.setCursorY(buffer.readByte());
-        packet.setCursorZ(buffer.readByte());
-
     }
 }
