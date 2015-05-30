@@ -30,17 +30,15 @@ import lombok.Getter;
 import lombok.Setter;
 import org.quartzpowered.engine.math.Quaternion;
 import org.quartzpowered.engine.math.Vector3;
-import org.quartzpowered.engine.object.message.MessageHandler;
-import org.quartzpowered.engine.object.annotation.Property;
 import org.quartzpowered.engine.object.Component;
 import org.quartzpowered.engine.object.GameObject;
+import org.quartzpowered.engine.object.annotation.Property;
+import org.quartzpowered.engine.object.message.MessageHandler;
 import org.quartzpowered.engine.observe.Observer;
 import org.quartzpowered.network.protocol.packet.Packet;
 import org.quartzpowered.network.session.attribute.AttributeKey;
-import org.quartzpowered.network.session.attribute.AttributeRegistry;
 import org.quartzpowered.network.session.attribute.AttributeStorage;
 import org.quartzpowered.protocol.packet.play.client.PlayerTeleportPacket;
-import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -49,7 +47,9 @@ import java.util.List;
 public class Camera extends Component implements Observer {
     public static final AttributeKey<Camera> CAMERA_ATTRIBUTE = AttributeKey.create();
 
-    @Inject private AttributeRegistry attributeRegistry;
+    @Inject
+    @Getter
+    private AttributeStorage attributes;
 
     @Getter @Setter
     @Property
@@ -72,12 +72,12 @@ public class Camera extends Component implements Observer {
 
     public void removeViewer(Observer observer) {
         if (this.observers.remove(observer)) {
-            this.attributeRegistry.get(observer).set(CAMERA_ATTRIBUTE, null);
+            observer.getAttributes().set(CAMERA_ATTRIBUTE, null);
         }
     }
 
     public void addViewer(Observer observer) {
-        AttributeStorage attributes = this.attributeRegistry.get(observer);
+        AttributeStorage attributes = observer.getAttributes();
 
         Camera previousCamera = attributes.get(CAMERA_ATTRIBUTE);
         if (previousCamera != null) {

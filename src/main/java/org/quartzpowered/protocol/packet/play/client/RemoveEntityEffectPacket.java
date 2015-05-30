@@ -24,4 +24,15 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.codec.v1_8_R1.play.server;
+package org.quartzpowered.protocol.packet.play.client;
+
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.quartzpowered.network.protocol.packet.Packet;
+
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class RemoveEntityEffectPacket extends Packet {
+    private int entityID;
+    private byte effectID;
+}

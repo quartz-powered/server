@@ -27,7 +27,10 @@
 package org.quartzpowered.engine.observe;
 
 import org.quartzpowered.network.protocol.packet.Packet;
+import org.quartzpowered.network.session.attribute.AttributeStorage;
 
 public interface Observer {
-    public void observe(Packet packet);
+    void observe(Packet packet);
+
+    AttributeStorage getAttributes();
 }

@@ -26,6 +26,7 @@
  */
 package org.quartzpowered.protocol.codec.v1_8_R1;
 
+import org.quartzpowered.network.protocol.codec.NoopCodec;
 import org.quartzpowered.protocol.codec.indentifier.IdentifierProtocol;
 import org.quartzpowered.protocol.codec.indentifier.common.client.KickCodec;
 import org.quartzpowered.protocol.codec.v1_8_R1.common.client.CompressionCodec;
@@ -95,10 +96,8 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         serverBoundPacket(PLAY, 0x05, PlayerLookPacket.class, new PlayerLookCodec());
         serverBoundPacket(PLAY, 0x06, PlayerPositionLookPacket.class, new PlayerPositionLookCodec());
         serverBoundPacket(PLAY, 0x07, PlayerActionPacket.class, new PlayerActionCodec());
-        serverBoundPacket(PLAY, 0x08, BlockPlacePacket.class, new BlockPlaceCodec());
         serverBoundPacket(PLAY, 0x09, HeldItemChangePacket.class, new HeldItemChangeCodec());
-        serverBoundPacket(PLAY, 0x10, CreativeInventoryActionPacket.class, new CreativeInventoryActionCodec());
-        serverBoundPacket(PLAY, 0x0A, PlayerAnimationPacket.class, new PlayerAnimationCodec());
+        serverBoundPacket(PLAY, 0x0A, PlayerAnimationPacket.class, new NoopCodec<>());
         serverBoundPacket(PLAY, 0x0B, EntityActionPacket.class, new EntityActionCodec());
         serverBoundPacket(PLAY, 0x0D, CloseWindowPacket.class, new CloseWindowCodec());
         serverBoundPacket(PLAY, 0x0F, ConfirmTransactionPacket.class, new ConfirmTransactionCodec());
@@ -120,6 +119,7 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(PLAY, 0x2A, ParticlePacket.class, new ParticleCodec());
         clientBoundPacket(PLAY, 0x0B, AnimationPacket.class, new AnimationCodec());
         clientBoundPacket(PLAY, 0x0C, SpawnPlayerPacket.class, new SpawnPlayerCodec());
+        clientBoundPacket(PLAY, 0x0D, CollectItemPacket.class, new CollectItemCodec());
         clientBoundPacket(PLAY, 0x13, EntityDestroyPacket.class, new EntityDestroyCodec());
         clientBoundPacket(PLAY, 0x14, EntityPacket.class, new EntityCodec());
         clientBoundPacket(PLAY, 0x15, EntityMovePacket.class, new EntityMoveCodec());
@@ -127,7 +127,11 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(PLAY, 0x17, EntityLookMovePacket.class, new EntityLookMoveCodec());
         clientBoundPacket(PLAY, 0x18, EntityTeleportPacket.class, new EntityTeleportCodec());
         clientBoundPacket(PLAY, 0x19, EntityHeadLookPacket.class, new EntityHeadLookCodec());
+        clientBoundPacket(PLAY, 0x1A, EntityStatusPacket.class, new EntityStatusCodec());
+        clientBoundPacket(PLAY, 0x1B, AttachEntityPacket.class, new AttachEntityCodec());
         clientBoundPacket(PLAY, 0x2D, OpenWindowPacket.class, new OpenWindowCodec());
+        clientBoundPacket(PLAY, 0x2E, RemoveEntityEffectPacket.class, new RemoveEntityEffectCodec());
+        clientBoundPacket(PLAY, 0x2F, SetExperiencePacket.class, new SetExperienceCodec());
         clientBoundPacket(PLAY, 0x21, ChunkPacket.class, new ChunkCodec());
         clientBoundPacket(PLAY, 0x26, ChunkBulkPacket.class, new ChunkBulkCodec());
         clientBoundPacket(PLAY, 0x32, ConfirmTransactionPacket.class, new ConfirmTransactionCodec());

@@ -39,6 +39,7 @@ import org.quartzpowered.engine.object.message.MessageHandlerCacheRegistry;
 import org.quartzpowered.engine.observe.Observable;
 import org.quartzpowered.engine.observe.Observer;
 import org.quartzpowered.network.protocol.packet.Packet;
+import org.quartzpowered.network.session.attribute.AttributeStorage;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -63,6 +64,10 @@ public final class GameObject implements Observable, Observer {
 
     private final List<Component> components = new CopyOnWriteArrayList<>();
     private final List<Observer> observers = new CopyOnWriteArrayList<>();
+
+    @Inject
+    @Getter
+    private AttributeStorage attributes;
 
     @Inject
     private GameObject(FactoryRegistry factoryRegistry) {
