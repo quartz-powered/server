@@ -51,17 +51,13 @@ public class BlockPlaceCodec implements Codec<BlockPlacePacket> {
 
         packet.setLocation(buffer.readLong());
         packet.setFace(buffer.readByte());
-
         int id = buffer.readShort();
-        if(id == -1)
-            return;
-
         packet.setBlockId(id);
-        packet.setBlockCount(buffer.readByte());
-        packet.setBlockDamage(buffer.readShort());
-
-        buffer.readByte();
-
+        if(id != -1) {
+            packet.setBlockCount(buffer.readByte());
+            packet.setBlockDamage(buffer.readShort());
+            buffer.readByte();
+        }
         packet.setCursorX(buffer.readByte());
         packet.setCursorY(buffer.readByte());
         packet.setCursorZ(buffer.readByte());
