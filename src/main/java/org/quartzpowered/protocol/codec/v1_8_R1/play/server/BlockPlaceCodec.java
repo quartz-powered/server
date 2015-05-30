@@ -24,25 +24,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.server;
 
 import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.data.ChatPosition;
-import org.quartzpowered.protocol.data.component.TextComponent;
-import org.quartzpowered.protocol.packet.play.client.ChatMessagePacket;
 import org.quartzpowered.protocol.packet.play.server.BlockPlacePacket;
 
-public class ChatMessageCodec implements Codec<ChatMessagePacket> {
+public class BlockPlaceCodec implements Codec<BlockPlacePacket> {
     @Override
-    public void encode(Buffer buffer, ChatMessagePacket packet) {
-        buffer.writeString(packet.getMessage().toJson());
-        buffer.writeByte(packet.getPosition().getId());
+    public void encode(Buffer buffer, BlockPlacePacket packet) {
+
+        buffer.writeLong(packet.getLocation());
+        buffer.writeByte(packet.getFace());
+        buffer.writeShort(packet.getBlockId());
+        buffer.writeByte(packet.getBlockCount());
+        buffer.writeShort(packet.getBlockDamage());
+        buffer.writeByte((byte) 0/*Placeholder*/);
+        buffer.writeByte(packet.getCursorX());
+        buffer.writeByte(packet.getCursorY());
+        buffer.writeByte(packet.getCursorZ());
+
     }
 
     @Override
-    public void decode(Buffer buffer, ChatMessagePacket packet) {
-        packet.setMessage(TextComponent.fromJson(buffer.readString()));
-        packet.setPosition(ChatPosition.fromId(buffer.readByte()));
+    public void decode(Buffer buffer, BlockPlacePacket packet) {
+
+        packet.setLocation(buffer.readLong());
+        packet.setFace(buffer.readByte());
+        int id = buffer.readShort();
+        packet.setBlockId(id);
+        if(id != -1) {
+            packet.setBlockCount(buffer.readByte());
+            packet.setBlockDamage(buffer.readShort());
+            buffer.readByte();
+        }
+        packet.setCursorX(buffer.readByte());
+        packet.setCursorY(buffer.readByte());
+        packet.setCursorZ(buffer.readByte());
+
     }
 }

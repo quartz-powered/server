@@ -39,13 +39,13 @@ import org.quartzpowered.engine.object.component.Camera;
 import org.quartzpowered.engine.object.component.Player;
 import org.quartzpowered.network.server.NetworkServer;
 import org.quartzpowered.network.session.Session;
-import org.quartzpowered.protocol.data.Difficulty;
-import org.quartzpowered.protocol.data.Dimension;
-import org.quartzpowered.protocol.data.Gamemode;
+import org.quartzpowered.protocol.data.*;
+import org.quartzpowered.protocol.data.component.TextComponent;
 import org.quartzpowered.protocol.data.info.PlayerInfo;
 import org.quartzpowered.protocol.data.info.PlayerInfoAction;
 import org.quartzpowered.protocol.packet.login.client.LoginResponsePacket;
 import org.quartzpowered.protocol.packet.play.client.*;
+import org.quartzpowered.protocol.packet.play.server.BlockPlacePacket;
 import org.quartzpowered.server.event.player.PlayerLoginEvent;
 import org.quartzpowered.server.event.player.PlayerQuitEvent;
 import org.quartzpowered.server.network.HandshakeHandler;
@@ -198,6 +198,7 @@ public class Server {
 
             session.getAttributes().set(PlayHandler.PLAYER_OBJECT, playerObject);
         });
+        
     }
 
     @Handler
