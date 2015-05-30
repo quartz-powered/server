@@ -39,6 +39,8 @@ public class OpenWindowCodec implements Codec<OpenWindowPacket> {
         buffer.writeByte(1 /*TODO*/);
         buffer.writeString(packet.getType().getTitle());
 
+        System.out.println(packet.getType().getTitle());
+
         buffer.writeString(packet.getTitle().toJson());
         if(packet.getType().equals(WindowType.CHEST))
             buffer.writeByte(packet.getSlots());
@@ -46,6 +48,8 @@ public class OpenWindowCodec implements Codec<OpenWindowPacket> {
             buffer.writeByte(packet.getType().getSize());
         if(packet.getEntityId() != 0)
             buffer.writeInt(packet.getEntityId());
+
+        System.out.println(packet.getType());
     }
 
     @Override
