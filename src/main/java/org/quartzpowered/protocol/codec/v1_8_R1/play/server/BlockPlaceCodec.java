@@ -34,8 +34,6 @@ public class BlockPlaceCodec implements Codec<BlockPlacePacket> {
     @Override
     public void encode(Buffer buffer, BlockPlacePacket packet) {
 
-        System.out.println("ENCODING");
-
         buffer.writeLong(packet.getLocation());
         buffer.writeByte(packet.getFace());
         buffer.writeShort(packet.getBlockId());
