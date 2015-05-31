@@ -27,6 +27,7 @@ apply from: 'extra/buildscripts/project.gradle'
 
 dependencies {
     provided 'org.projectlombok:lombok:1.16.4'
+
     compile 'io.netty:netty-all:5.0.0.Alpha2'
     compile 'com.google.guava:guava:18.0'
     compile 'com.google.inject:guice:4.0'
