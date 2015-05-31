@@ -1,4 +1,4 @@
-/**
+/*
  * This file is a component of Quartz Powered, this license makes sure any work
  * associated with Quartz Powered, must follow the conditions of the license included.
  *
@@ -24,39 +24,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.server;
 
 import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.data.ChatPosition;
-import org.quartzpowered.protocol.data.WindowType;
-import org.quartzpowered.protocol.data.component.TextComponent;
-import org.quartzpowered.protocol.packet.play.client.OpenWindowPacket;
+import org.quartzpowered.protocol.packet.play.server.BlockPlacePacket;
+import org.quartzpowered.protocol.packet.play.server.CreativeInventoryActionPacket;
 
-public class OpenWindowCodec implements Codec<OpenWindowPacket> {
+public class CreativeInventoryActionCodec implements Codec<CreativeInventoryActionPacket> {
     @Override
-    public void encode(Buffer buffer, OpenWindowPacket packet) {
-        buffer.writeByte(1 /*TODO*/);
-        buffer.writeString(packet.getType().getTitle());
-
-        buffer.writeString(packet.getTitle().toJson());
-        if(packet.getType().equals(WindowType.CHEST))
-            buffer.writeByte(packet.getSlots());
-        else
-            buffer.writeByte(packet.getType().getSize());
-        if(packet.getEntityId() != 0)
-            buffer.writeInt(packet.getEntityId());
+    public void encode(Buffer buffer, CreativeInventoryActionPacket packet) {
+        buffer.writeShort(packet.getSlot());
+        buffer.writeShort(packet.getId());
+        if(packet.getId() != -1) {
+            buffer.writeByte(packet.getCount());
+            buffer.writeShort(packet.getDamage());
+            if(packet.getNbt() != 0) {
+                /* TODO NBT DATA */
+            }
+        }
     }
 
     @Override
-    public void decode(Buffer buffer, OpenWindowPacket packet) {
-        packet.setType(WindowType.fromString(buffer.readString()));
-        packet.setTitle(new TextComponent(buffer.readString()));
-        packet.setSlots(buffer.readByte());
-
-        int entId = buffer.readInt();
-
-        if(entId != 0)
-            packet.setEntityId(buffer.readInt());
+    public void decode(Buffer buffer, CreativeInventoryActionPacket packet) {
+        packet.setSlot(buffer.readShort());
+        short id = buffer.readShort();
+        packet.setId(id);
+        if(id != -1) {
+            packet.setCount(buffer.readByte());
+            packet.setDamage(buffer.readShort());
+            byte nbt = buffer.readByte();
+            packet.setNbt(nbt);
+            if(nbt != 0) {
+                /* TODO NBT DATA */
+            }
+        }
     }
 }
