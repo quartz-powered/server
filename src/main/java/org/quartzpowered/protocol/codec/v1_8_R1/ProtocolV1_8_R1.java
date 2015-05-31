@@ -135,6 +135,7 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(PLAY, 0x2F, SetExperiencePacket.class, new SetExperienceCodec());
         clientBoundPacket(PLAY, 0x21, ChunkPacket.class, new ChunkCodec());
         clientBoundPacket(PLAY, 0x26, ChunkBulkPacket.class, new ChunkBulkCodec());
+        clientBoundPacket(PLAY, 0x29, SoundEffectPacket.class, new SoundEffectCodec());
         clientBoundPacket(PLAY, 0x32, ConfirmTransactionPacket.class, new ConfirmTransactionCodec());
         clientBoundPacket(PLAY, 0x38, PlayerInfoPacket.class, new PlayerInfoCodec());
         clientBoundPacket(PLAY, 0x40, KickPacket.class, new KickCodec());
