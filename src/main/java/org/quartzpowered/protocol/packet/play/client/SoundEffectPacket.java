@@ -38,6 +38,6 @@ public class SoundEffectPacket extends Packet {
     private int effectPositionX;
     private int effectPositionY;
     private int effectPositionZ;
-    private float volume;
-    private byte pitch;
+    private double volume;
+    private int pitch;
 }

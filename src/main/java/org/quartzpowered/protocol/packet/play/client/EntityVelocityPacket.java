@@ -33,7 +33,7 @@ import org.quartzpowered.network.protocol.packet.Packet;
 @EqualsAndHashCode(callSuper = true)
 public class EntityVelocityPacket extends Packet {
     private int entityID;
-    private short velocityX;
-    private short velocityY;
-    private short velocityZ;
+    private int velocityX;
+    private int velocityY;
+    private int velocityZ;
 }
