@@ -33,7 +33,6 @@ import org.quartzpowered.protocol.packet.play.server.BlockPlacePacket;
 public class BlockPlaceCodec implements Codec<BlockPlacePacket> {
     @Override
     public void encode(Buffer buffer, BlockPlacePacket packet) {
-
         buffer.writeLong(packet.getLocation());
         buffer.writeByte(packet.getFace());
         buffer.writeShort(packet.getBlockId());
@@ -48,7 +47,6 @@ public class BlockPlaceCodec implements Codec<BlockPlacePacket> {
 
     @Override
     public void decode(Buffer buffer, BlockPlacePacket packet) {
-
         packet.setLocation(buffer.readLong());
         packet.setFace(buffer.readByte());
         int id = buffer.readShort();
@@ -61,6 +59,5 @@ public class BlockPlaceCodec implements Codec<BlockPlacePacket> {
         packet.setCursorX(buffer.readByte());
         packet.setCursorY(buffer.readByte());
         packet.setCursorZ(buffer.readByte());
-
     }
 }

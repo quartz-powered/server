@@ -198,7 +198,7 @@ public class Server {
 
             session.getAttributes().set(PlayHandler.PLAYER_OBJECT, playerObject);
         });
-        
+
     }
 
     @Handler
