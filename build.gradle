@@ -58,6 +58,11 @@ task jarWithDependenciesJar(type: Jar, dependsOn: classes) {
     }
 }
 
+license {
+    include '**/*.java'
+    strictCheck true
+}
+
 artifacts {
     archives sourcesJar, javadocJar, jarWithDependenciesJar
 }

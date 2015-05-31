@@ -1,4 +1,4 @@
-/*
+/**
  * This file is a component of Quartz Powered, this license makes sure any work
  * associated with Quartz Powered, must follow the conditions of the license included.
  *
