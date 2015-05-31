@@ -1,4 +1,4 @@
-# Server
+# Server [![Build Status](https://travis-ci.org/quartz-powered/server.svg)](https://travis-ci.org/quartz-powered/server)
 <!--
   I don't know enough information about the project to fill this in.
   You guys can go ahead and do that.
