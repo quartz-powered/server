@@ -6,3 +6,6 @@ jdk:
 cache:
    directories:
    - '$HOME/.gradle/'
+
+script: ./gradlew check
+after_success: ./gradlew publish
