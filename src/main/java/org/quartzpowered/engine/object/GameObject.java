@@ -29,9 +29,8 @@ package org.quartzpowered.engine.object;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
+import org.quartzpowered.apigen.Expose;
 import org.quartzpowered.common.factory.FactoryRegistry;
-import org.quartzpowered.common.reflector.Reflector;
-import org.quartzpowered.engine.object.message.MessageHandler;
 import org.quartzpowered.engine.object.annotation.Property;
 import org.quartzpowered.engine.object.component.Transform;
 import org.quartzpowered.engine.object.message.MessageHandlerCache;
@@ -43,9 +42,7 @@ import org.quartzpowered.network.session.attribute.AttributeStorage;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
@@ -66,7 +63,6 @@ public final class GameObject implements Observable, Observer {
     private final List<Observer> observers = new CopyOnWriteArrayList<>();
 
     @Inject
-    @Getter
     private AttributeStorage attributes;
 
     @Inject
@@ -323,5 +319,11 @@ public final class GameObject implements Observable, Observer {
 
     public static GameObject none() {
         return null;
+    }
+
+    @Override
+    @Expose
+    public AttributeStorage getAttributes() {
+        return attributes;
     }
 }

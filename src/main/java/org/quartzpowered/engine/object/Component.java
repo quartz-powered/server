@@ -27,12 +27,14 @@
 package org.quartzpowered.engine.object;
 
 import lombok.Getter;
+import org.quartzpowered.apigen.Expose;
 import org.quartzpowered.common.util.ReflectionUtil;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
 import java.lang.reflect.Field;
 
+@Expose
 public abstract class Component {
     private static final Field objectField = ReflectionUtil.getConstantField(Component.class, "gameObject");
 

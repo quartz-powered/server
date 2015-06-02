@@ -29,10 +29,12 @@ package org.quartzpowered.engine.math;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.quartzpowered.apigen.Expose;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Expose
 public class Vector3 {
     public static Vector3 back() {
         return new Vector3(0, 0, -1);
