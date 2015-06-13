@@ -120,6 +120,7 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(PLAY, 0x0B, AnimationPacket.class, new AnimationCodec());
         clientBoundPacket(PLAY, 0x0C, SpawnPlayerPacket.class, new SpawnPlayerCodec());
         clientBoundPacket(PLAY, 0x0D, CollectItemPacket.class, new CollectItemCodec());
+        clientBoundPacket(PLAY, 0x12, EntityVelocityPacket.class, new EntityVelocityCodec());
         clientBoundPacket(PLAY, 0x13, EntityDestroyPacket.class, new EntityDestroyCodec());
         clientBoundPacket(PLAY, 0x14, EntityPacket.class, new EntityCodec());
         clientBoundPacket(PLAY, 0x15, EntityMovePacket.class, new EntityMoveCodec());
@@ -134,6 +135,7 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(PLAY, 0x2F, SetExperiencePacket.class, new SetExperienceCodec());
         clientBoundPacket(PLAY, 0x21, ChunkPacket.class, new ChunkCodec());
         clientBoundPacket(PLAY, 0x26, ChunkBulkPacket.class, new ChunkBulkCodec());
+        clientBoundPacket(PLAY, 0x29, SoundEffectPacket.class, new SoundEffectCodec());
         clientBoundPacket(PLAY, 0x32, ConfirmTransactionPacket.class, new ConfirmTransactionCodec());
         clientBoundPacket(PLAY, 0x38, PlayerInfoPacket.class, new PlayerInfoCodec());
         clientBoundPacket(PLAY, 0x40, KickPacket.class, new KickCodec());
