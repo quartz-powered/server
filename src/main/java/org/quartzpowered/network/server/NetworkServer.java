@@ -31,7 +31,9 @@ import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
-import org.quartzpowered.network.pipeline.MinecraftChannelInitializer;
+import org.quartzpowered.network.init.NetworkChannelInitializer;
+import org.quartzpowered.network.init.NetworkChannelInitializerFactory;
+import org.quartzpowered.network.pipeline.PacketHandler;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -49,11 +51,12 @@ public class NetworkServer {
     private final EventLoopGroup childGroup = new NioEventLoopGroup();
 
     @Inject
-    private NetworkServer(MinecraftChannelInitializer channelInitializer) {
+    private NetworkServer(NetworkChannelInitializerFactory channelInitializerFactory,
+                          PacketHandler handler) {
         bootstrap
                 .group(parentGroup, childGroup)
                 .channel(NioServerSocketChannel.class)
-                .childHandler(channelInitializer)
+                .childHandler(channelInitializerFactory.create(false, handler))
                 .childOption(TCP_NODELAY, true)
                 .childOption(SO_KEEPALIVE, true);
     }

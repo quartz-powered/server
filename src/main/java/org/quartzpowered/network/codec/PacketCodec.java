@@ -26,6 +26,7 @@
  */
 package org.quartzpowered.network.codec;
 
+import com.google.inject.assistedinject.Assisted;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageCodec;
@@ -50,6 +51,12 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
     @Inject private SessionManager sessionManager;
     @Inject private FactoryRegistry factoryRegistry;
 
+    private final boolean clientSide;
+
+    @Inject private PacketCodec(@Assisted boolean clientSide) {
+        this.clientSide = clientSide;
+    }
+
     @Override
     @SuppressWarnings("unchecked")
     protected void encode(ChannelHandlerContext ctx, Packet packet, ByteBuf out) throws Exception {
@@ -58,11 +65,11 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
         ProtocolState state = session.getState();
 
         Protocol protocol = session.getProtocol();
-        PacketRegistry packets = protocol.getClientBoundPackets(state);
-        CodecRegistry codecs = protocol.getClientBoundCodecs(state);
+        PacketRegistry packets = clientSide ? protocol.getServerBoundPackets(state) : protocol.getClientBoundPackets(state);
+        CodecRegistry codecs = clientSide ? protocol.getServerBoundCodecs(state) : protocol.getClientBoundCodecs(state);
 
         if (packets == null || codecs == null) {
-            logger.error("No client bound packets/codecs registered for {} - {}", protocol, state);
+            logger.error("No {} bound packets/codecs registered for {} - {}", clientSide ? "server" : "client", protocol, state);
             return;
         }
 
@@ -72,7 +79,7 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
         Codec codec = codecs.lookup(id);
 
         if (codec == null) {
-            logger.error("Unregistered client bound codec for {} - {} - {}", protocol, state, type);
+            logger.error("Unregistered {} bound codec for {} - {} - {}", clientSide ? "server" : "client", protocol, state, type);
             return;
         }
 
@@ -95,11 +102,11 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
         ProtocolState state = session.getState();
 
         Protocol protocol = session.getProtocol();
-        PacketRegistry packets = protocol.getServerBoundPackets(state);
-        CodecRegistry codecs = protocol.getServerBoundCodecs(state);
+        PacketRegistry packets = clientSide ? protocol.getClientBoundPackets(state) : protocol.getServerBoundPackets(state);
+        CodecRegistry codecs = clientSide ? protocol.getClientBoundCodecs(state) : protocol.getServerBoundCodecs(state);
 
         if (packets == null || codecs == null) {
-            logger.error("No server bound packets/codecs registered for {} - {}", protocol, state);
+            logger.error("No {} bound packets/codecs registered for {} - {}", clientSide ? "client" : "server", protocol, state);
             return;
         }
 
@@ -116,7 +123,7 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
         }
 
         if (codec == null) {
-            logger.error("Unregistered server bound codec for {} - {} - {}", protocol, state, type);
+            logger.error("Unregistered {} bound codec for {} - {} - {}", clientSide ? "client" : "server", protocol, state, type);
             buffer.skipBytes(buffer.readableBytes());
             return;
         }

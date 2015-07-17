@@ -26,16 +26,22 @@
  */
 package org.quartzpowered.network.client;
 
+import com.google.inject.assistedinject.Assisted;
 import io.netty.bootstrap.Bootstrap;
+import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.EventLoopGroup;
+import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.channel.nio.NioEventLoopGroup;
-import io.netty.channel.socket.nio.NioServerSocketChannel;
-import org.quartzpowered.network.pipeline.MinecraftChannelInitializer;
+import io.netty.channel.socket.nio.NioSocketChannel;
+import lombok.Getter;
+import org.quartzpowered.network.init.NetworkChannelInitializerFactory;
+import org.quartzpowered.network.protocol.packet.Packet;
+import org.quartzpowered.network.session.Session;
+import org.quartzpowered.network.session.SessionManager;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
-
 import java.net.InetSocketAddress;
 
 import static io.netty.channel.ChannelOption.SO_KEEPALIVE;
@@ -43,22 +49,34 @@ import static io.netty.channel.ChannelOption.TCP_NODELAY;
 
 public class NetworkClient {
     @Inject private Logger logger;
+    @Inject private SessionManager sessionManager;
 
     private final Bootstrap bootstrap = new Bootstrap();
     private final EventLoopGroup eventLoop = new NioEventLoopGroup();
 
+    @Getter
+    private Channel channel;
+
+    @Getter
+    private Session session;
+
     @Inject
-    private NetworkClient(MinecraftChannelInitializer channelInitializer) {
+    private NetworkClient(NetworkChannelInitializerFactory channelInitializerFactory,
+                          @Assisted SimpleChannelInboundHandler<Packet> handler) {
         bootstrap
                 .group(eventLoop)
-                .channel(NioServerSocketChannel.class)
-                .handler(channelInitializer)
+                .channel(NioSocketChannel.class)
+                .handler(channelInitializerFactory.create(true, handler))
                 .option(TCP_NODELAY, true)
                 .option(SO_KEEPALIVE, true);
     }
 
     public ChannelFuture connect(InetSocketAddress address) {
-        return bootstrap.connect(address).addListener(future -> {
+        ChannelFuture future = bootstrap.connect(address);
+        return future.addListener(ignored -> {
+            channel = future.channel();
+            session = sessionManager.get(channel);
+
             if (future.isSuccess()) {
                 onConnectSuccess(address);
             } else {
@@ -68,11 +86,11 @@ public class NetworkClient {
     }
 
     private void onConnectSuccess(InetSocketAddress address) {
-        logger.info("Connected to {}", address);
+        logger.debug("Connected to {}", address);
     }
 
     private void onConnectFailure(InetSocketAddress address, Throwable cause) {
-        logger.error("Failed to bind", cause);
+        logger.error("Failed to connect", cause);
     }
 
     public void shutdown() {

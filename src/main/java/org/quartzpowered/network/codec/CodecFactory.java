@@ -27,7 +27,7 @@
 package org.quartzpowered.network.codec;
 
 public interface CodecFactory {
-    public FrameCodec createFrameCodec();
+    FrameCodec createFrameCodec();
 
-    public PacketCodec createPacketCodec();
+    PacketCodec createPacketCodec(boolean clientSide);
 }

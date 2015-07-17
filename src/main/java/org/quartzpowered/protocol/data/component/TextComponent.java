@@ -26,12 +26,14 @@
  */
 package org.quartzpowered.protocol.data.component;
 
+import lombok.Getter;
 import org.boon.json.JsonFactory;
 import org.boon.json.ObjectMapper;
 
 public class TextComponent {
     private static final ObjectMapper objectMapper = JsonFactory.create();
 
+    @Getter
     private String text;
 
     public TextComponent(String text) {

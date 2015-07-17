@@ -24,25 +24,40 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.network.inject;
+package org.quartzpowered.network.init;
 
-import com.google.inject.AbstractModule;
-import com.google.inject.assistedinject.FactoryModuleBuilder;
-import org.quartzpowered.common.inject.CommonModule;
-import org.quartzpowered.network.client.NetworkClientFactory;
+import com.google.inject.assistedinject.Assisted;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.SimpleChannelInboundHandler;
+import io.netty.channel.socket.SocketChannel;
 import org.quartzpowered.network.codec.CodecFactory;
-import org.quartzpowered.network.init.NetworkChannelInitializerFactory;
-import org.quartzpowered.network.pipeline.HandlerFactory;
-import org.quartzpowered.network.session.SessionFactory;
+import org.quartzpowered.network.pipeline.NoopHandler;
+import org.quartzpowered.network.protocol.packet.Packet;
 
-public class NetworkModule extends AbstractModule {
+import javax.inject.Inject;
+import javax.inject.Singleton;
+
+public class NetworkChannelInitializer extends ChannelInitializer<SocketChannel> {
+    @Inject private CodecFactory codecFactory;
+    @Inject private NoopHandler noop;
+
+    private final boolean clientSide;
+    private final SimpleChannelInboundHandler<Packet> handler;
+
+    @Inject
+    private NetworkChannelInitializer(@Assisted boolean clientSide,
+                                      @Assisted SimpleChannelInboundHandler<Packet> handler) {
+        this.clientSide = clientSide;
+        this.handler = handler;
+    }
+
     @Override
-    protected void configure() {
-        install(new CommonModule());
-        install(new FactoryModuleBuilder().build(SessionFactory.class));
-        install(new FactoryModuleBuilder().build(CodecFactory.class));
-        install(new FactoryModuleBuilder().build(HandlerFactory.class));
-        install(new FactoryModuleBuilder().build(NetworkClientFactory.class));
-        install(new FactoryModuleBuilder().build(NetworkChannelInitializerFactory.class));
+    protected void initChannel(SocketChannel ch) throws Exception {
+        ch.pipeline()
+                .addLast("encryption", noop)
+                .addLast("frame", codecFactory.createFrameCodec())
+                .addLast("compression", noop)
+                .addLast("packet", codecFactory.createPacketCodec(clientSide))
+                .addLast("handler", handler);
     }
 }
