@@ -88,6 +88,7 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
 
         clientBoundPacket(LOGIN, 0x01, EncryptionRequestPacket.class, new EncryptionRequestCodec());
         clientBoundPacket(LOGIN, 0x02, LoginResponsePacket.class, new LoginResponseCodec());
+        clientBoundPacket(LOGIN, 0x03, CompressionPacket.class, new CompressionCodec());
 
         serverBoundPacket(PLAY, 0x00, KeepAlivePacket.class, new KeepAliveCodec());
         serverBoundPacket(PLAY, 0x01, PlayerChatMessagePacket.class, new PlayerChatMessageCodec());

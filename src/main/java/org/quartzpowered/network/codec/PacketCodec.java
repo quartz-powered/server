@@ -41,6 +41,7 @@ import org.quartzpowered.network.protocol.packet.Packet;
 import org.quartzpowered.network.protocol.packet.PacketRegistry;
 import org.quartzpowered.network.session.Session;
 import org.quartzpowered.network.session.SessionManager;
+import org.quartzpowered.protocol.packet.common.client.CompressionPacket;
 import org.slf4j.Logger;
 
 import javax.inject.Inject;
@@ -142,6 +143,10 @@ public class PacketCodec extends ByteToMessageCodec<Packet> {
             buffer.skipBytes(buffer.readableBytes());
         }
 
-        out.add(packet);
+        if (packet instanceof CompressionPacket) {
+            ctx.fireChannelRead(packet);
+        } else {
+            out.add(packet);
+        }
     }
 }
