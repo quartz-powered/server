@@ -32,36 +32,41 @@ import org.quartzpowered.protocol.data.BlockPosition;
 import org.quartzpowered.protocol.data.ItemSlot;
 
 import java.io.IOException;
-import java.util.Vector;
 
 public enum MetadataType {
-    BYTE((buf, obj) -> buf.writeByte((Byte) obj)),
-    SHORT((buf, obj) -> buf.writeShort((Short) obj)),
-    INT((buf, obj) -> buf.writeInt((Integer) obj)),
-    FLOAT((buf, obj) -> buf.writeFloat((Float) obj)),
-    STRING((buf, obj) -> buf.writeString((String) obj)),
-    ITEM_SLOT((buf, obj) -> ((ItemSlot) obj).write(buf)),
+    BYTE((buf, obj) -> buf.writeByte((Byte) obj), Buffer::readByte),
+    SHORT((buf, obj) -> buf.writeShort((Short) obj), Buffer::readShort),
+    INT((buf, obj) -> buf.writeInt((Integer) obj), Buffer::readInt),
+    FLOAT((buf, obj) -> buf.writeFloat((Float) obj), Buffer::readFloat),
+    STRING((buf, obj) -> buf.writeString((String) obj), Buffer::readString),
+    ITEM_SLOT((buf, obj) -> ((ItemSlot) obj).write(buf), buf -> new ItemSlot().read(buf)),
     BLOCK_POSITION((buf, obj) -> {
         BlockPosition position = (BlockPosition) obj;
         buf.writeInt(position.getX());
         buf.writeInt(position.getY());
         buf.writeInt(position.getZ());
-    }),
+    }, buf -> new BlockPosition(buf.readInt(), buf.readInt(), buf.readInt())),
     ROTATION((buf, obj) -> {
         Vector3 vec = (Vector3) obj;
         buf.writeFloat((float) vec.getX());
         buf.writeFloat((float) vec.getY());
         buf.writeFloat((float) vec.getZ());
-    });
+    }, buf -> new Vector3(buf.readFloat(), buf.readFloat(), buf.readFloat()));
 
     private WriteHandler writeHandler;
+    private ReadHandler readHandler;
 
-    MetadataType(WriteHandler writeHandler) {
+    MetadataType(WriteHandler writeHandler, ReadHandler readHandler) {
         this.writeHandler = writeHandler;
+        this.readHandler = readHandler;
     }
 
     private static interface WriteHandler {
         public void write(Buffer buf, Object obj) throws IOException;
+    }
+
+    private static interface ReadHandler {
+        public Object read(Buffer buf) throws IOException;
     }
 
     public void write(Buffer buf, Object obj) {
@@ -70,6 +75,15 @@ public enum MetadataType {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public Object read(Buffer buf) {
+        try {
+            return readHandler.read(buf);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public int getId() {

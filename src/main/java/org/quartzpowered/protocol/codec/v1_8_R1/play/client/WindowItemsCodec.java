@@ -24,35 +24,33 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.data;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
 
-import io.netty.buffer.ByteBuf;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.quartzpowered.network.buffer.Buffer;
+import org.quartzpowered.network.protocol.codec.Codec;
+import org.quartzpowered.protocol.data.ItemSlot;
+import org.quartzpowered.protocol.packet.play.client.WindowItemsPacket;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class ItemSlot {
-    private int itemId;
-    private int count;
-    private int damage;
+import java.util.ArrayList;
+import java.util.List;
 
-    public void write(Buffer buffer) {
-        buffer.writeShort(itemId);
-        buffer.writeByte(count);
-        buffer.writeShort(damage);
-        buffer.writeByte(0);
+public class WindowItemsCodec implements Codec<WindowItemsPacket> {
+
+    @Override
+    public void encode(Buffer buffer, WindowItemsPacket packet) {
+        buffer.writeByte(packet.getWindowId());
+        buffer.writeShort(packet.getItems().size());
+        packet.getItems().stream().forEach((i) -> i.write(buffer));
     }
 
-    public ItemSlot read(Buffer buffer) {
-        itemId = buffer.readShort();
-        count = buffer.readByte();
-        damage = buffer.readShort();
-        buffer.readByte();
+    @Override
+    public void decode(Buffer buffer, WindowItemsPacket packet) {
+        packet.setWindowId(buffer.readByte());
 
-        return this;
+        int count = buffer.readShort();
+        List<ItemSlot> items = packet.getItems();
+        for (int i = 0; i < count; i++) {
+            items.add(new ItemSlot().read(buffer));
+        }
     }
 }

@@ -24,35 +24,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.data;
+package org.quartzpowered.protocol.packet.play.client;
 
-import io.netty.buffer.ByteBuf;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
-import org.quartzpowered.network.buffer.Buffer;
+import lombok.EqualsAndHashCode;
+import org.quartzpowered.engine.math.Vector3;
+import org.quartzpowered.network.protocol.packet.Packet;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class ItemSlot {
-    private int itemId;
-    private int count;
-    private int damage;
+@EqualsAndHashCode(callSuper = true)
+public class EntityVelocityPacket extends Packet {
+    private int entityId;
+    private double vx;
+    private double vy;
+    private double vz;
 
-    public void write(Buffer buffer) {
-        buffer.writeShort(itemId);
-        buffer.writeByte(count);
-        buffer.writeShort(damage);
-        buffer.writeByte(0);
-    }
-
-    public ItemSlot read(Buffer buffer) {
-        itemId = buffer.readShort();
-        count = buffer.readByte();
-        damage = buffer.readShort();
-        buffer.readByte();
-
-        return this;
+    public void setVelocity(Vector3 velocity) {
+        this.vx = velocity.getX();
+        this.vy = velocity.getY();
+        this.vz = velocity.getZ();
     }
 }

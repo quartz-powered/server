@@ -24,35 +24,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.data;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
 
-import io.netty.buffer.ByteBuf;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.quartzpowered.network.buffer.Buffer;
+import org.quartzpowered.network.protocol.codec.Codec;
+import org.quartzpowered.protocol.packet.play.client.ServerDifficultyPacket;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class ItemSlot {
-    private int itemId;
-    private int count;
-    private int damage;
-
-    public void write(Buffer buffer) {
-        buffer.writeShort(itemId);
-        buffer.writeByte(count);
-        buffer.writeShort(damage);
-        buffer.writeByte(0);
+public class ServerDifficultyCodec implements Codec<ServerDifficultyPacket> {
+    @Override
+    public void encode(Buffer buffer, ServerDifficultyPacket packet) {
+        buffer.writeByte(packet.getDifficulty());
     }
 
-    public ItemSlot read(Buffer buffer) {
-        itemId = buffer.readShort();
-        count = buffer.readByte();
-        damage = buffer.readShort();
-        buffer.readByte();
-
-        return this;
+    @Override
+    public void decode(Buffer buffer, ServerDifficultyPacket packet) {
+        packet.setDifficulty(buffer.readByte());
     }
 }

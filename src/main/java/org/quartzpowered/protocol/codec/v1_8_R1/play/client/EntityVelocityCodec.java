@@ -24,35 +24,26 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.data;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
 
-import io.netty.buffer.ByteBuf;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.quartzpowered.network.buffer.Buffer;
+import org.quartzpowered.network.protocol.codec.Codec;
+import org.quartzpowered.protocol.packet.play.client.EntityVelocityPacket;
 
-@Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class ItemSlot {
-    private int itemId;
-    private int count;
-    private int damage;
-
-    public void write(Buffer buffer) {
-        buffer.writeShort(itemId);
-        buffer.writeByte(count);
-        buffer.writeShort(damage);
-        buffer.writeByte(0);
+public class EntityVelocityCodec implements Codec<EntityVelocityPacket> {
+    @Override
+    public void encode(Buffer buffer, EntityVelocityPacket packet) {
+        buffer.writeVarInt(packet.getEntityId());
+        buffer.writeFixedPointInt(packet.getVx());
+        buffer.writeFixedPointInt(packet.getVy());
+        buffer.writeFixedPointInt(packet.getVz());
     }
 
-    public ItemSlot read(Buffer buffer) {
-        itemId = buffer.readShort();
-        count = buffer.readByte();
-        damage = buffer.readShort();
-        buffer.readByte();
-
-        return this;
+    @Override
+    public void decode(Buffer buffer, EntityVelocityPacket packet) {
+        packet.setEntityId(buffer.readVarInt());
+        packet.setVx(buffer.readFixedPointInt());
+        packet.setVy(buffer.readFixedPointInt());
+        packet.setVz(buffer.readFixedPointInt());
     }
 }

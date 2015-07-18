@@ -32,6 +32,7 @@ import lombok.EqualsAndHashCode;
 import lombok.NonNull;
 import lombok.experimental.Delegate;
 import org.quartzpowered.protocol.data.BlockPosition;
+import org.quartzpowered.protocol.data.Statistic;
 
 import java.util.UUID;
 
@@ -150,5 +151,10 @@ public class Buffer extends ByteBuf {
                 mostSignificantBits,
                 leastSignificantBits
         );
+    }
+
+    public void writeStatistic(Statistic s) {
+        writeString(s.getName());
+        writeVarInt(s.getValue());
     }
 }

@@ -110,7 +110,7 @@ public class Metadata {
         buffer.writeByte(0x7F);
     }
 
-    public void read(Buffer buffer) {
+    public Metadata read(Buffer buffer) {
         while (true) {
             int item = buffer.readUnsignedByte();
             if (item == 0x7F) {
@@ -120,8 +120,9 @@ public class Metadata {
             int index = item & 0x1F;
             MetadataType type = MetadataType.fromId(item >> 5);
 
-            // todo type.read
+            values[index] = type.read(buffer);
         }
+        return this;
     }
 
     private MetadataType typeOf(Object value) {
