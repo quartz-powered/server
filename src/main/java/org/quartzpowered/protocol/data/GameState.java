@@ -27,25 +27,16 @@
 package org.quartzpowered.protocol.data;
 
 public enum GameState {
-    INVALID_BED(false),
-    END_RAINING(false),
-    BEGIN_RAINING(false),
-    CHANGE_GAMEMODE(true),
-    ENTER_CREDITS(false),
-    DEMO_MESSAGE(true),
-    ARROW_HITING_PLAYER(false),
-    FADE_VALUE(true),
-    FADE_TIME(true),
-    PLAY_MOB_APPEARANCE(false);
-
-    private boolean hasWriteValue;
-    private GameState(boolean hasWriteValue) {
-        this.hasWriteValue = hasWriteValue;
-    }
-
-    public boolean hasWriteValue() {
-        return hasWriteValue;
-    }
+    INVALID_BED,
+    END_RAINING,
+    BEGIN_RAINING,
+    CHANGE_GAMEMODE,
+    ENTER_CREDITS,
+    DEMO_MESSAGE,
+    ARROW_HITING_PLAYER,
+    FADE_VALUE,
+    FADE_TIME,
+    PLAY_MOB_APPEARANCE;
 
     public int getId() {
         return ordinal();
