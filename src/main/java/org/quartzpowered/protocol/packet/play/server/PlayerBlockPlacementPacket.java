@@ -24,31 +24,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
+package org.quartzpowered.protocol.packet.play.server;
 
-import org.quartzpowered.network.buffer.Buffer;
-import org.quartzpowered.network.protocol.codec.Codec;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.quartzpowered.network.protocol.packet.Packet;
+import org.quartzpowered.protocol.data.BlockPosition;
 import org.quartzpowered.protocol.data.ItemSlot;
-import org.quartzpowered.protocol.packet.play.client.PlayerBlockPlacementPacket;
 
-public class PlayerBlockPlacementCodec implements Codec<PlayerBlockPlacementPacket> {
-    @Override
-    public void encode(Buffer buffer, PlayerBlockPlacementPacket packet) {
-        buffer.writeBlockPosition(packet.getLocation());
-        buffer.writeByte(packet.getFace());
-        packet.getHeldItem().write(buffer);
-        buffer.writeByte(packet.getCursorPositionX());
-        buffer.writeByte(packet.getCursorPositionY());
-        buffer.writeByte(packet.getCursorPositionZ());
-    }
-
-    @Override
-    public void decode(Buffer buffer, PlayerBlockPlacementPacket packet) {
-        packet.setLocation(buffer.readBlockPosition());
-        packet.setFace(buffer.readByte());
-        packet.setHeldItem(new ItemSlot().read(buffer));
-        packet.setCursorPositionX(buffer.readByte());
-        packet.setCursorPositionY(buffer.readByte());
-        packet.setCursorPositionZ(buffer.readByte());
-    }
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class PlayerBlockPlacementPacket extends Packet {
+    private BlockPosition location;
+    private int face;
+    private ItemSlot heldItem;
+    private int cursorPositionX;
+    private int cursorPositionY;
+    private int cursorPositionZ;
 }

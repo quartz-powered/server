@@ -100,12 +100,12 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         serverBoundPacket(PLAY, 0x09, HeldItemChangePacket.class, new HeldItemChangeCodec());
         serverBoundPacket(PLAY, 0x0A, PlayerAnimationPacket.class, new NoopCodec<>());
         serverBoundPacket(PLAY, 0x0B, EntityActionPacket.class, new EntityActionCodec());
-//        serverBoundPacket(PLAY, 0x0C, SteerVehiclePacket.class, new SteerVehicleCodec());
+        serverBoundPacket(PLAY, 0x0C, SteerVehiclePacket.class, new SteerVehicleCodec());
         serverBoundPacket(PLAY, 0x0D, CloseWindowPacket.class, new CloseWindowCodec());
 //        serverBoundPacket(PLAY, 0x0E, ClickWindowPacket.class, new ClickWindowCodec());
         serverBoundPacket(PLAY, 0x0F, ConfirmTransactionPacket.class, new ConfirmTransactionCodec());
 
-//        serverBoundPacket(PLAY, 0x10, CreativeInventoryActionPacket.class, new CreativeInventoryActionCodec());
+        serverBoundPacket(PLAY, 0x10, CreativeInventoryActionPacket.class, new CreativeInventoryActionCodec());
 //        serverBoundPacket(PLAY, 0x11, EnchantItemPacket.class, new EnchantItemCodec());
 //        serverBoundPacket(PLAY, 0x12, UpdateSignPacket.class, new UpdateSignCodec());
         serverBoundPacket(PLAY, 0x13, PlayerAbilitiesPacket.class, new PlayerAbilitiesCodec());
