@@ -24,21 +24,17 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.packet.play.client;
+package org.quartzpowered.protocol.packet.play.server;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.quartzpowered.network.protocol.packet.Packet;
-import org.quartzpowered.protocol.data.BlockPosition;
-import org.quartzpowered.protocol.data.ItemSlot;
+import org.quartzpowered.protocol.data.SteerVehicleFlag;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
-public class PlayerBlockPlacementPacket extends Packet {
-    private BlockPosition location;
-    private int face;
-    private ItemSlot heldItem;
-    private int cursorPositionX;
-    private int cursorPositionY;
-    private int cursorPositionZ;
+public class SteerVehiclePacket extends Packet {
+    private double sideways;
+    private double forward;
+    private SteerVehicleFlag flags;
 }
