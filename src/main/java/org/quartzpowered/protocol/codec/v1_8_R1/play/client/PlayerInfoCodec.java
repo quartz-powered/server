@@ -107,9 +107,10 @@ public class PlayerInfoCodec implements Codec<PlayerInfoPacket> {
     public void decode(Buffer buffer, PlayerInfoPacket packet) {
         PlayerInfoAction action = PlayerInfoAction.fromId(buffer.readVarInt());
 
-        List<PlayerInfo> info = new ArrayList<>(buffer.readVarInt());
+        int infoSize = buffer.readVarInt();
+        List<PlayerInfo> info = new ArrayList<>(infoSize);
 
-        for (int i = 0; i < info.size(); i++) {
+        for (int i = 0; i < infoSize; i++) {
             PlayerInfo entry = new PlayerInfo();
 
             UUID playerId = buffer.readUuid();
@@ -117,8 +118,9 @@ public class PlayerInfoCodec implements Codec<PlayerInfoPacket> {
             switch (action) {
                 case ADD:
                     String name = buffer.readString();
-                    List<PlayerProperty> properties = new ArrayList<>(buffer.readVarInt());
-                    for (int j = 0; j < properties.size(); j++) {
+                    int propertiesSize = buffer.readVarInt();
+                    List<PlayerProperty> properties = new ArrayList<>(propertiesSize);
+                    for (int j = 0; j < propertiesSize; j++) {
                         String propertyName = buffer.readString();
                         String propertyValue = buffer.readString();
                         String signature = null;
@@ -126,7 +128,7 @@ public class PlayerInfoCodec implements Codec<PlayerInfoPacket> {
                             signature = buffer.readString();
                         }
 
-                        properties.set(j, new PlayerProperty(propertyName, propertyValue, signature));
+                        properties.add(new PlayerProperty(propertyName, propertyValue, signature));
                     }
                     entry.setProfile(new PlayerProfile(name, playerId, properties));
 
@@ -155,7 +157,7 @@ public class PlayerInfoCodec implements Codec<PlayerInfoPacket> {
                 case REMOVE:
                     break;
             }
-            info.set(i, entry);
+            info.add(entry);
         }
 
         packet.setInfo(info);

@@ -35,13 +35,13 @@ import org.quartzpowered.network.protocol.packet.Packet;
 @EqualsAndHashCode(callSuper = true)
 public class EntityVelocityPacket extends Packet {
     private int entityId;
-    private double vx;
-    private double vy;
-    private double vz;
+    private double x;
+    private double y;
+    private double z;
 
     public void setVelocity(Vector3 velocity) {
-        this.vx = velocity.getX();
-        this.vy = velocity.getY();
-        this.vz = velocity.getZ();
+        this.x = velocity.getX();
+        this.y = velocity.getY();
+        this.z = velocity.getZ();
     }
 }

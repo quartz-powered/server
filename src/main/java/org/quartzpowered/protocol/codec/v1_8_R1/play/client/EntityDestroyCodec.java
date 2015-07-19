@@ -43,9 +43,12 @@ public class EntityDestroyCodec implements Codec<EntityDestroyPacket> {
 
     @Override
     public void decode(Buffer buffer, EntityDestroyPacket packet) {
-        List<Integer> entityIds = new ArrayList<>(buffer.readVarInt());
-        for (int i = 0; i < entityIds.size(); i++) {
-            entityIds.set(i, buffer.readVarInt());
+        int entityIdSize = buffer.readVarInt();
+        List<Integer> entityIds = new ArrayList<>(entityIdSize);
+        for (int i = 0; i < entityIdSize; i++) {
+            entityIds.add(buffer.readVarInt());
         }
+
+        packet.setEntityIds(entityIds);
     }
 }

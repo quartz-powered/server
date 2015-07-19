@@ -93,7 +93,6 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
 
         serverBoundPacket(PLAY, 0x00, KeepAlivePacket.class, new KeepAliveCodec());
         serverBoundPacket(PLAY, 0x01, PlayerChatMessagePacket.class, new PlayerChatMessageCodec());
-        serverBoundPacket(PLAY, 0x02, UseEntityPacket.class, new UseEntityCodecIn());
         serverBoundPacket(PLAY, 0x03, PlayerPacket.class, new PlayerCodec());
         serverBoundPacket(PLAY, 0x04, PlayerPositionPacket.class, new PlayerPositionCodec());
         serverBoundPacket(PLAY, 0x05, PlayerLookPacket.class, new PlayerLookCodec());
@@ -152,7 +151,7 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(PLAY, 0x1C, EntityMetadataPacket.class, new EntityMetadataCodec());
 //        clientBoundPacket(PLAY, 0x1D, EntityEffectPacket.class, new EntityEffectCodec());
         clientBoundPacket(PLAY, 0x1E, RemoveEntityEffectPacket.class, new RemoveEntityEffectCodec());
-//        clientBoundPacket(PLAY, 0x1F, PlayerExperiencePacket.class, new PlayerExperienceCodec());
+        clientBoundPacket(PLAY, 0x1F, SetExperiencePacket.class, new SetExperienceCodec());
 
 //        clientBoundPacket(PLAY, 0x20, EntityPropertiesPacket.class, new EntityPropertiesCodec());
         clientBoundPacket(PLAY, 0x21, ChunkPacket.class, new ChunkCodec());
