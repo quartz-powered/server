@@ -173,10 +173,10 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(PLAY, 0x30, WindowItemsPacket.class, new WindowItemsCodec());
 //        clientBoundPacket(PLAY, 0x31, WindowPropertyPacket.class, new WindowPropertyCodec());
         clientBoundPacket(PLAY, 0x32, ConfirmTransactionPacket.class, new ConfirmTransactionCodec());
-//        clientBoundPacket(PLAY, 0x33, UpdateSignPacket.class, new UpdateSigneCodec());
+//        clientBoundPacket(PLAY, 0x33, UpdateSignPacket.class, new UpdateSignCodec());
 //        clientBoundPacket(PLAY, 0x34, MapsPacket.class, new MapsCodec());
 //        clientBoundPacket(PLAY, 0x35, UpdateBlockEntityPacket.class, new UpdateBlockEntityCodec());
-//        clientBoundPacket(PLAY, 0x36, SignEditorOpenPacket.class, new SigneEditorOpenCodec());
+//        clientBoundPacket(PLAY, 0x36, SignEditorOpenPacket.class, new SignEditorOpenCodec());
         clientBoundPacket(PLAY, 0x37, StatisticsPacket.class, new StatisticsCodec());
         clientBoundPacket(PLAY, 0x38, PlayerInfoPacket.class, new PlayerInfoCodec());
         clientBoundPacket(PLAY, 0x39, PlayerAbilitiesPacket.class, new PlayerAbilitiesCodec());
@@ -195,7 +195,7 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(PLAY, 0x45, TitlePacket.class, new TitleCodec());
         clientBoundPacket(PLAY, 0x46, CompressionPacket.class, new CompressionCodec());
 //        clientBoundPacket(PLAY, 0x47, PlayerListHeaderFooterPacket.class, new PlayerListHeaderFooterCodec());
-//        clientBoundPacket(PLAY, 0x48, ResourcePackSendPacket.class, new ResourcePackeSendCodec());
+//        clientBoundPacket(PLAY, 0x48, ResourcePackSendPacket.class, new ResourcePackSendCodec());
 //        clientBoundPacket(PLAY, 0x49, UpdateEntityNBTPacket.class, new UpdateEntityNBTCodec());
 
     }
