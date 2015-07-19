@@ -151,7 +151,7 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(PLAY, 0x1C, EntityMetadataPacket.class, new EntityMetadataCodec());
 //        clientBoundPacket(PLAY, 0x1D, EntityEffectPacket.class, new EntityEffectCodec());
         clientBoundPacket(PLAY, 0x1E, RemoveEntityEffectPacket.class, new RemoveEntityEffectCodec());
-//        clientBoundPacket(PLAY, 0x1F, PlayerExperiencePacket.class, new PlayerExperienceCodec());
+        clientBoundPacket(PLAY, 0x1F, SetExperiencePacket.class, new SetExperienceCodec());
 
 //        clientBoundPacket(PLAY, 0x20, EntityPropertiesPacket.class, new EntityPropertiesCodec());
         clientBoundPacket(PLAY, 0x21, ChunkPacket.class, new ChunkCodec());
@@ -163,14 +163,10 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
 //        clientBoundPacket(PLAY, 0x27, ExplosionPacket.class, new ExplosionCodec());
 //        clientBoundPacket(PLAY, 0x28, EffectPacket.class, new EffectCodec());
 //        clientBoundPacket(PLAY, 0x29, SoundEffectPacket.class, new SoundEffectCodec());
-        clientBoundPacket(PLAY, 0x1F, SetExperiencePacket.class, new SetExperienceCodec());
         clientBoundPacket(PLAY, 0x2A, ParticlePacket.class, new ParticleCodec());
 //        clientBoundPacket(PLAY, 0x2B, ChangeGameStatePacket.class, new ChangeGameStateCodec());
 //        clientBoundPacket(PLAY, 0x2C, SpawnGlobalEntityPacket.class, new SpawnGlobalEntityCodec());
         clientBoundPacket(PLAY, 0x2D, OpenWindowPacket.class, new OpenWindowCodec());
-        clientBoundPacket(PLAY, 0x2E, RemoveEntityEffectPacket.class, new RemoveEntityEffectCodec());
-        clientBoundPacket(PLAY, 0x21, ChunkPacket.class, new ChunkCodec());
-        clientBoundPacket(PLAY, 0x26, ChunkBulkPacket.class, new ChunkBulkCodec());
         clientBoundPacket(PLAY, 0x2E, CloseWindowPacket.class, new CloseWindowCodec());
         clientBoundPacket(PLAY, 0x2F, SetExperiencePacket.class, new SetExperienceCodec());
 
