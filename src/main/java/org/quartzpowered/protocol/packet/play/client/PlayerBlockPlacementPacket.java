@@ -24,34 +24,21 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.data;
+package org.quartzpowered.protocol.packet.play.client;
 
-public enum GameState {
-    INVALID_BED(false),
-    END_RAINING(false),
-    BEGIN_RAINING(false),
-    CHANGE_GAMEMODE(true),
-    ENTER_CREDITS(false),
-    DEMO_MESSAGE(true),
-    ARROW_HITING_PLAYER(false),
-    FADE_VALUE(true),
-    FADE_TIME(true),
-    PLAY_MOB_APPEARANCE(false);
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.quartzpowered.network.protocol.packet.Packet;
+import org.quartzpowered.protocol.data.BlockPosition;
+import org.quartzpowered.protocol.data.ItemSlot;
 
-    private boolean hasWriteValue;
-    private GameState(boolean hasWriteValue) {
-        this.hasWriteValue = hasWriteValue;
-    }
-
-    public boolean hasWriteValue() {
-        return hasWriteValue;
-    }
-
-    public int getId() {
-        return ordinal();
-    }
-
-    public static GameState fromId(int id) {
-        return values()[id];
-    }
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class PlayerBlockPlacementPacket extends Packet {
+    private BlockPosition location;
+    private int face;
+    private ItemSlot heldItem;
+    private int cursorPositionX;
+    private int cursorPositionY;
+    private int cursorPositionZ;
 }

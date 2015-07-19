@@ -24,34 +24,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.data;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
 
-public enum GameState {
-    INVALID_BED(false),
-    END_RAINING(false),
-    BEGIN_RAINING(false),
-    CHANGE_GAMEMODE(true),
-    ENTER_CREDITS(false),
-    DEMO_MESSAGE(true),
-    ARROW_HITING_PLAYER(false),
-    FADE_VALUE(true),
-    FADE_TIME(true),
-    PLAY_MOB_APPEARANCE(false);
+import org.quartzpowered.network.buffer.Buffer;
+import org.quartzpowered.network.protocol.codec.Codec;
+import org.quartzpowered.protocol.data.ItemSlot;
+import org.quartzpowered.protocol.packet.play.client.PlayerBlockPlacementPacket;
 
-    private boolean hasWriteValue;
-    private GameState(boolean hasWriteValue) {
-        this.hasWriteValue = hasWriteValue;
+public class PlayerBlockPlacementCodec implements Codec<PlayerBlockPlacementPacket> {
+    @Override
+    public void encode(Buffer buffer, PlayerBlockPlacementPacket packet) {
+        buffer.writeBlockPosition(packet.getLocation());
+        buffer.writeByte(packet.getFace());
+        packet.getHeldItem().write(buffer);
+        buffer.writeByte(packet.getCursorPositionX());
+        buffer.writeByte(packet.getCursorPositionY());
+        buffer.writeByte(packet.getCursorPositionZ());
     }
 
-    public boolean hasWriteValue() {
-        return hasWriteValue;
-    }
-
-    public int getId() {
-        return ordinal();
-    }
-
-    public static GameState fromId(int id) {
-        return values()[id];
+    @Override
+    public void decode(Buffer buffer, PlayerBlockPlacementPacket packet) {
+        packet.setLocation(buffer.readBlockPosition());
+        packet.setFace(buffer.readByte());
+        ItemSlot itemSlot = new ItemSlot();
+        packet.setHeldItem(itemSlot.read(buffer));
+        packet.setCursorPositionX(buffer.readByte());
+        packet.setCursorPositionY(buffer.readByte());
+        packet.setCursorPositionY(buffer.readByte());
     }
 }
