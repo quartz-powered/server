@@ -24,20 +24,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.codec.v1_8_R1.play.server;
+package org.quartzpowered.protocol.packet.play.shared;
 
-import org.quartzpowered.network.buffer.Buffer;
-import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.packet.play.server.CloseWindowPacket;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.quartzpowered.network.protocol.packet.Packet;
 
-public class CloseWindowCodec implements Codec<CloseWindowPacket> {
-    @Override
-    public void encode(Buffer buffer, CloseWindowPacket packet) {
-        buffer.writeByte(packet.getWindowId());
-    }
-
-    @Override
-    public void decode(Buffer buffer, CloseWindowPacket packet) {
-        packet.setWindowId(buffer.readByte());
-    }
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class CloseWindowPacket extends Packet {
+    private int windowId;
 }
