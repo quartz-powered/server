@@ -51,8 +51,9 @@ public class NetworkClient {
     @Inject private Logger logger;
     @Inject private SessionManager sessionManager;
 
+    private static final EventLoopGroup eventLoop = new NioEventLoopGroup();
+
     private final Bootstrap bootstrap = new Bootstrap();
-    private final EventLoopGroup eventLoop = new NioEventLoopGroup();
 
     @Getter
     private Channel channel;
