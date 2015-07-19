@@ -46,33 +46,8 @@ public class ChunkCodec implements Codec<ChunkPacket> {
     public void decode(Buffer buffer, ChunkPacket packet) {
         packet.setX(buffer.readInt());
         packet.setZ(buffer.readInt());
-
-        boolean continuous = buffer.readBoolean();
-        packet.setContinuous(continuous);
-
-        int bitmask = buffer.readShort();
-        packet.setMask(bitmask);
-
-        int sectionCount = 0;
-        for (int i = 0; i < 16; i++) {
-            if ((bitmask & (1 << i)) > 0) {
-                sectionCount++;
-            }
-        }
-
-        int byteCount = 0;
-
-        byteCount += 8192 * sectionCount;
-        byteCount += 2048 * sectionCount;
-
-        if (continuous) {
-            byteCount += 256;
-        }
-
-        byte[] bytes = new byte[byteCount];
-
-        buffer.readBytes(bytes);
-
-        packet.setData(bytes);
+        packet.setContinuous(buffer.readBoolean());
+        packet.setMask(buffer.readShort());
+        packet.setData(buffer.readByteArray());
     }
 }

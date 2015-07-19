@@ -58,16 +58,17 @@ public class ChunkBulkCodec implements Codec<ChunkBulkPacket> {
     public void decode(Buffer buffer, ChunkBulkPacket packet) {
         packet.setSkylight(buffer.readBoolean());
 
-        final List<ChunkPacket> chunks = new ArrayList<>(buffer.readVarInt());
+        int chunksSize = buffer.readVarInt();
+        final List<ChunkPacket> chunks = new ArrayList<>(chunksSize);
 
-        for (int i = 0; i < chunks.size(); i++) {
+        for (int i = 0; i < chunksSize; i++) {
             ChunkPacket chunk = new ChunkPacket();
 
             chunk.setX(buffer.readInt());
             chunk.setZ(buffer.readInt());
             chunk.setMask(buffer.readShort());
 
-            chunks.set(i, chunk);
+            chunks.add(chunk);
         }
 
         for (ChunkPacket chunk : chunks) {

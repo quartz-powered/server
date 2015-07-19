@@ -133,10 +133,10 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(PLAY, 0x1A, EntityStatusPacket.class, new EntityStatusCodec());
         clientBoundPacket(PLAY, 0x1B, AttachEntityPacket.class, new AttachEntityCodec());
         clientBoundPacket(PLAY, 0x1C, EntityMetadataPacket.class, new EntityMetadataCodec());
+        clientBoundPacket(PLAY, 0x1F, SetExperiencePacket.class, new SetExperienceCodec());
         clientBoundPacket(PLAY, 0x2A, ParticlePacket.class, new ParticleCodec());
         clientBoundPacket(PLAY, 0x2D, OpenWindowPacket.class, new OpenWindowCodec());
         clientBoundPacket(PLAY, 0x2E, RemoveEntityEffectPacket.class, new RemoveEntityEffectCodec());
-        clientBoundPacket(PLAY, 0x2F, SetExperiencePacket.class, new SetExperienceCodec());
         clientBoundPacket(PLAY, 0x21, ChunkPacket.class, new ChunkCodec());
         clientBoundPacket(PLAY, 0x26, ChunkBulkPacket.class, new ChunkBulkCodec());
         clientBoundPacket(PLAY, 0x30, WindowItemsPacket.class, new WindowItemsCodec());

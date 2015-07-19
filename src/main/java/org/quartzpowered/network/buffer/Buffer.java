@@ -122,6 +122,14 @@ public class Buffer extends ByteBuf {
         writeInt((int) (value * 32));
     }
 
+    public double readFixedPointShort() {
+        return (double) readShort() / 8000;
+    }
+
+    public void writeFixedPointShort(double value) {
+        writeShort((short) (value * 8000));
+    }
+
     public double readFixedPointByte() {
         return (double) readByte() / 32;
     }
@@ -151,10 +159,5 @@ public class Buffer extends ByteBuf {
                 mostSignificantBits,
                 leastSignificantBits
         );
-    }
-
-    public void writeStatistic(Statistic s) {
-        writeString(s.getName());
-        writeVarInt(s.getValue());
     }
 }

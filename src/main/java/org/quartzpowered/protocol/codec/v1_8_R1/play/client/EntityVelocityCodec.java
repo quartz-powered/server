@@ -34,16 +34,16 @@ public class EntityVelocityCodec implements Codec<EntityVelocityPacket> {
     @Override
     public void encode(Buffer buffer, EntityVelocityPacket packet) {
         buffer.writeVarInt(packet.getEntityId());
-        buffer.writeFixedPointInt(packet.getVx());
-        buffer.writeFixedPointInt(packet.getVy());
-        buffer.writeFixedPointInt(packet.getVz());
+        buffer.writeFixedPointShort(packet.getX());
+        buffer.writeFixedPointShort(packet.getY());
+        buffer.writeFixedPointShort(packet.getZ());
     }
 
     @Override
     public void decode(Buffer buffer, EntityVelocityPacket packet) {
         packet.setEntityId(buffer.readVarInt());
-        packet.setVx(buffer.readFixedPointInt());
-        packet.setVy(buffer.readFixedPointInt());
-        packet.setVz(buffer.readFixedPointInt());
+        packet.setX(buffer.readFixedPointShort());
+        packet.setY(buffer.readFixedPointShort());
+        packet.setZ(buffer.readFixedPointShort());
     }
 }

@@ -35,7 +35,7 @@ public class SetExperienceCodec implements Codec<SetExperiencePacket> {
     public void encode(Buffer buffer, SetExperiencePacket packet) {
         buffer.writeFloat(packet.getExperienceBar());
         buffer.writeVarInt(packet.getLevel());
-        buffer.writeVarInt(packet.getLevel());
+        buffer.writeVarInt(packet.getTotalExperience());
     }
 
     @Override

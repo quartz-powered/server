@@ -28,17 +28,34 @@ package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
 
 import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.codec.Codec;
+import org.quartzpowered.protocol.data.Statistic;
 import org.quartzpowered.protocol.packet.play.client.StatisticsPacket;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class StatisticsCodec implements Codec<StatisticsPacket> {
     @Override
     public void encode(Buffer buffer, StatisticsPacket packet) {
         buffer.writeVarInt(packet.getStatistics().size());
-        packet.getStatistics().stream().forEach(s -> buffer.writeStatistic(s));
+
+        for (Statistic statistic : packet.getStatistics()) {
+            buffer.writeString(statistic.getName());
+            buffer.writeVarInt(statistic.getValue());
+        }
     }
 
     @Override
     public void decode(Buffer buffer, StatisticsPacket packet) {
+        int statisticsSize = buffer.readVarInt();
+        List<Statistic> statistics = new ArrayList<>(statisticsSize);
+        for (int i = 0; i < statisticsSize; i++) {
+            String statisticName = buffer.readString();
+            int statisticValue = buffer.readVarInt();
 
+            statistics.add(new Statistic(statisticName, statisticValue));
+        }
+
+        packet.setStatistics(statistics);
     }
 }

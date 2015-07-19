@@ -31,6 +31,7 @@ import net.engio.mbassy.listener.Handler;
 import org.quartzpowered.engine.object.GameObject;
 import org.quartzpowered.engine.object.component.Camera;
 import org.quartzpowered.engine.object.component.Player;
+import org.quartzpowered.network.protocol.packet.Packet;
 import org.quartzpowered.network.session.Session;
 import org.quartzpowered.network.session.attribute.AttributeKey;
 import org.quartzpowered.protocol.data.Animation;
@@ -72,23 +73,24 @@ public class PlayHandler {
     public void onPlayerChatMessage(PlayerChatMessagePacket packet) {
         Session session = packet.getSender();
 
+        if(packet.getMessage().startsWith("/")) {
 
-        KeepAlivePacket keepAlivePacket = new KeepAlivePacket();
-        keepAlivePacket.setKeepAliveId(10);
-        session.send(keepAlivePacket);
-
-        String formatChat = session.getProfile().getName() + ": " + packet.getMessage();
-
-        ChatMessagePacket chatMessagePacketOut = new ChatMessagePacket();
-        chatMessagePacketOut.setMessage(new TextComponent(formatChat));
-        chatMessagePacketOut.setPosition(ChatPosition.CHAT);
-
-        for (WeakReference<Session> reference : sessionList) {
-            if(reference.get() != null) {
-                reference.get().send(chatMessagePacketOut);
-            }
         }
-        logger.info(formatChat);
+        else {
+
+            KeepAlivePacket keepAlivePacket = new KeepAlivePacket();
+            keepAlivePacket.setKeepAliveId(10);
+            session.send(keepAlivePacket);
+
+            String formatChat = session.getProfile().getName() + ": " + packet.getMessage();
+
+            ChatMessagePacket chatMessagePacket = new ChatMessagePacket();
+            chatMessagePacket.setMessage(new TextComponent(formatChat));
+            chatMessagePacket.setPosition(ChatPosition.CHAT);
+
+            sendToAll(chatMessagePacket);
+            logger.info(formatChat);
+        }
     }
 
     @Handler
@@ -100,11 +102,7 @@ public class PlayHandler {
         animationPacket.setEntityId(entityId);
         animationPacket.setAnimation(Animation.SWING_ARM);
 
-        for (WeakReference<Session> reference : sessionList) {
-            if(reference.get() != null) {
-                reference.get().send(animationPacket);
-            }
-        }
+        sendToAll(animationPacket);
     }
 
     @Handler
@@ -130,5 +128,12 @@ public class PlayHandler {
         Camera camera = playerObject.getComponent(Camera.class);
 
         camera.setRemoteRotation(packet.getRotation());
+    }
+    public void sendToAll(Packet packet) {
+        for (WeakReference<Session> reference : sessionList) {
+            if(reference.get() != null) {
+                reference.get().send(packet);
+            }
+        }
     }
 }
