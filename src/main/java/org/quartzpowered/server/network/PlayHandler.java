@@ -36,7 +36,7 @@ import org.quartzpowered.network.session.Session;
 import org.quartzpowered.network.session.attribute.AttributeKey;
 import org.quartzpowered.protocol.data.Animation;
 import org.quartzpowered.protocol.data.ChatPosition;
-import org.quartzpowered.protocol.data.component.TextComponent;
+import org.quartzpowered.protocol.data.chat.component.TextComponent;
 import org.quartzpowered.protocol.packet.play.client.AnimationPacket;
 import org.quartzpowered.protocol.packet.play.client.ChatMessagePacket;
 import org.quartzpowered.protocol.packet.play.server.*;

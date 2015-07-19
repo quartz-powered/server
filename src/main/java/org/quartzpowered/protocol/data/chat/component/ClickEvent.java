@@ -24,21 +24,50 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.data.info;
+package org.quartzpowered.protocol.data.chat.component;
 
-import lombok.Data;
-import org.quartzpowered.network.session.profile.PlayerProfile;
-import org.quartzpowered.protocol.data.Gamemode;
-import org.quartzpowered.protocol.data.chat.component.BaseComponent;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
-@Data
-public class PlayerInfo {
-    private PlayerProfile profile;
-    private Gamemode gamemode;
-    private int ping;
-    private BaseComponent displayName;
+@Getter
+@ToString
+@RequiredArgsConstructor
+public final class ClickEvent {
 
-    public boolean hasDisplayName() {
-        return displayName != null;
+    /**
+     * The type of action to preform on click
+     */
+    private final Action action;
+    /**
+     * Depends on action
+     *
+     * @see Action
+     */
+    private final String value;
+
+    public enum Action {
+
+        /**
+         * Open a url at the path given by
+         * {@link ClickEvent#value}
+         */
+        OPEN_URL,
+        /**
+         * Open a file at the path given by
+         * {@link ClickEvent#value}
+         */
+        OPEN_FILE,
+        /**
+         * Run the command given by
+         * {@link ClickEvent#value}
+         */
+        RUN_COMMAND,
+        /**
+         * Inserts the string given by
+         * {@link ClickEvent#value} into the players
+         * text box
+         */
+        SUGGEST_COMMAND
     }
 }

@@ -29,7 +29,7 @@ package org.quartzpowered.server.network;
 import net.engio.mbassy.listener.Handler;
 import org.quartzpowered.common.util.CryptoUtil;
 import org.quartzpowered.network.session.Session;
-import org.quartzpowered.protocol.data.component.TextComponent;
+import org.quartzpowered.protocol.data.chat.component.TextComponent;
 import org.quartzpowered.protocol.packet.common.client.KickPacket;
 import org.quartzpowered.protocol.packet.login.client.EncryptionRequestPacket;
 import org.quartzpowered.protocol.packet.login.server.EncryptionResponsePacket;

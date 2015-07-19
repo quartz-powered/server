@@ -31,7 +31,7 @@ import org.quartzpowered.network.protocol.codec.Codec;
 import org.quartzpowered.network.session.profile.PlayerProfile;
 import org.quartzpowered.network.session.profile.PlayerProperty;
 import org.quartzpowered.protocol.data.Gamemode;
-import org.quartzpowered.protocol.data.component.TextComponent;
+import org.quartzpowered.protocol.data.chat.component.serialize.ComponentSerializer;
 import org.quartzpowered.protocol.data.info.PlayerInfo;
 import org.quartzpowered.protocol.data.info.PlayerInfoAction;
 import org.quartzpowered.protocol.packet.play.client.PlayerInfoPacket;
@@ -78,7 +78,7 @@ public class PlayerInfoCodec implements Codec<PlayerInfoPacket> {
 
                     buffer.writeBoolean(hasDisplayName);
                     if (hasDisplayName) {
-                        buffer.writeString(entry.getDisplayName().toJson());
+                        buffer.writeString(ComponentSerializer.toString(entry.getDisplayName()));
                     }
                     break;
 
@@ -93,7 +93,7 @@ public class PlayerInfoCodec implements Codec<PlayerInfoPacket> {
                 case UPDATE_DISPLAY_NAME:
                     buffer.writeBoolean(hasDisplayName);
                     if (hasDisplayName) {
-                        buffer.writeString(entry.getDisplayName().toJson());
+                        buffer.writeString(ComponentSerializer.toString(entry.getDisplayName()));
                     }
                     break;
 
@@ -136,7 +136,7 @@ public class PlayerInfoCodec implements Codec<PlayerInfoPacket> {
                     entry.setPing(buffer.readVarInt());
 
                     if (buffer.readBoolean()) {
-                        entry.setDisplayName(TextComponent.fromJson(buffer.readString()));
+                        entry.setDisplayName(ComponentSerializer.parse(buffer.readString()));
                     }
                     break;
 
@@ -150,7 +150,7 @@ public class PlayerInfoCodec implements Codec<PlayerInfoPacket> {
 
                 case UPDATE_DISPLAY_NAME:
                     if (buffer.readBoolean()) {
-                        entry.setDisplayName(TextComponent.fromJson(buffer.readString()));
+                        entry.setDisplayName(ComponentSerializer.parse(buffer.readString()));
                     }
                     break;
 

@@ -31,12 +31,12 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 import org.quartzpowered.network.protocol.packet.Packet;
-import org.quartzpowered.protocol.data.component.TextComponent;
+import org.quartzpowered.protocol.data.chat.component.BaseComponent;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @EqualsAndHashCode(callSuper = true)
 public class KickPacket extends Packet {
-    private TextComponent message;
+    private BaseComponent message;
 }

@@ -31,7 +31,7 @@ import org.quartzpowered.network.protocol.Protocol;
 import org.quartzpowered.network.protocol.ProtocolRegistry;
 import org.quartzpowered.network.protocol.ProtocolState;
 import org.quartzpowered.network.session.Session;
-import org.quartzpowered.protocol.data.component.TextComponent;
+import org.quartzpowered.protocol.data.chat.component.TextComponent;
 import org.quartzpowered.protocol.packet.common.client.KickPacket;
 import org.quartzpowered.protocol.packet.handshake.server.HandshakePacket;
 

@@ -26,11 +26,11 @@
  */
 package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
 
+import org.quartzpowered.engine.object.Component;
 import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.network.protocol.codec.Codec;
 import org.quartzpowered.protocol.data.TitleAction;
-import org.quartzpowered.protocol.data.component.TextComponent;
+import org.quartzpowered.protocol.data.chat.component.serialize.ComponentSerializer;
 import org.quartzpowered.protocol.packet.play.client.TitlePacket;
 
 public class TitleCodec implements Codec<TitlePacket> {
@@ -43,11 +43,11 @@ public class TitleCodec implements Codec<TitlePacket> {
 
         if(action == 0) {
 
-            buffer.writeString(packet.getText().toJson());
+            buffer.writeString(ComponentSerializer.toString(packet.getText()));
 
         } else if(action == 1) {
 
-            buffer.writeString(packet.getText().toJson());
+            buffer.writeString(ComponentSerializer.toString(packet.getText()));
 
         } else if(action == 2) {
 
@@ -70,11 +70,11 @@ public class TitleCodec implements Codec<TitlePacket> {
         
         if(action == 0) {
 
-            packet.setText(TextComponent.fromJson(buffer.readString()));
+            packet.setText(ComponentSerializer.parse(buffer.readString()));
 
         } else if(action == 1) {
 
-            packet.setText(TextComponent.fromJson(buffer.readString()));
+            packet.setText(ComponentSerializer.parse(buffer.readString()));
 
         } else if(action == 2) {
 

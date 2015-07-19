@@ -24,26 +24,37 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.data.component;
+package org.quartzpowered.protocol.data.chat.component.serialize;
 
-import lombok.Data;
-import org.boon.json.JsonFactory;
-import org.boon.json.ObjectMapper;
+import com.google.gson.*;
 import org.quartzpowered.protocol.data.chat.component.BaseComponent;
+import org.quartzpowered.protocol.data.chat.component.TranslatableComponent;
 
-@Data
-public class StatusComponent {
-    private static final ObjectMapper objectMapper = JsonFactory.create();
+import java.lang.reflect.Type;
+import java.util.Arrays;
 
-    private VersionComponent version;
-    private PlayersComponent players;
-    private String description;
+public class TranslatableComponentSerializer extends BaseComponentSerializer implements JsonSerializer<TranslatableComponent>, JsonDeserializer<TranslatableComponent> {
 
-    public String toJson() {
-        return objectMapper.toJson(this);
+    @Override
+    public TranslatableComponent deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        TranslatableComponent component = new TranslatableComponent();
+        JsonObject object = json.getAsJsonObject();
+        deserialize(object, component, context);
+        component.setTranslate(object.get("translate").getAsString());
+        if (object.has("with")) {
+            component.setWith(Arrays.asList((BaseComponent[]) context.deserialize(object.get("with"), BaseComponent[].class)));
+        }
+        return component;
     }
 
-    public static StatusComponent fromJson(String json) {
-        return objectMapper.fromJson(json, StatusComponent.class);
+    @Override
+    public JsonElement serialize(TranslatableComponent src, Type typeOfSrc, JsonSerializationContext context) {
+        JsonObject object = new JsonObject();
+        serialize(object, src, context);
+        object.addProperty("translate", src.getTranslate());
+        if (src.getWith() != null) {
+            object.add("with", context.serialize(src.getWith()));
+        }
+        return object;
     }
 }

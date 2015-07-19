@@ -28,9 +28,9 @@ package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
 
 import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.data.ChatPosition;
 import org.quartzpowered.protocol.data.WindowType;
-import org.quartzpowered.protocol.data.component.TextComponent;
+import org.quartzpowered.protocol.data.chat.component.TextComponent;
+import org.quartzpowered.protocol.data.chat.component.serialize.ComponentSerializer;
 import org.quartzpowered.protocol.packet.play.client.OpenWindowPacket;
 
 public class OpenWindowCodec implements Codec<OpenWindowPacket> {
@@ -41,7 +41,7 @@ public class OpenWindowCodec implements Codec<OpenWindowPacket> {
 
         System.out.println(packet.getType().getTitle());
 
-        buffer.writeString(packet.getTitle().toJson());
+        buffer.writeString(ComponentSerializer.toString(packet.getTitle()));
         if(packet.getType().equals(WindowType.CHEST))
             buffer.writeByte(packet.getSlots());
         else

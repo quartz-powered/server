@@ -24,21 +24,35 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.data.info;
+package org.quartzpowered.protocol.data.chat.component.serialize;
 
-import lombok.Data;
-import org.quartzpowered.network.session.profile.PlayerProfile;
-import org.quartzpowered.protocol.data.Gamemode;
+import com.google.gson.*;
 import org.quartzpowered.protocol.data.chat.component.BaseComponent;
+import org.quartzpowered.protocol.data.chat.component.TextComponent;
 
-@Data
-public class PlayerInfo {
-    private PlayerProfile profile;
-    private Gamemode gamemode;
-    private int ping;
-    private BaseComponent displayName;
+import java.lang.reflect.Type;
+import java.util.List;
 
-    public boolean hasDisplayName() {
-        return displayName != null;
+public class TextComponentSerializer extends BaseComponentSerializer implements JsonSerializer<TextComponent>, JsonDeserializer<TextComponent> {
+
+    @Override
+    public TextComponent deserialize(JsonElement json, Type typeOfT, JsonDeserializationContext context) throws JsonParseException {
+        TextComponent component = new TextComponent();
+        JsonObject object = json.getAsJsonObject();
+        deserialize(object, component, context);
+        component.setText(object.get("text").getAsString());
+        return component;
+    }
+
+    @Override
+    public JsonElement serialize(TextComponent src, Type typeOfSrc, JsonSerializationContext context) {
+        List<BaseComponent> extra = src.getExtra();
+        if (!src.hasFormatting() && (extra == null || extra.isEmpty())) {
+            return new JsonPrimitive(src.getText());
+        }
+        JsonObject object = new JsonObject();
+        serialize(object, src, context);
+        object.addProperty("text", src.getText());
+        return object;
     }
 }

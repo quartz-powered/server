@@ -29,15 +29,14 @@ package org.quartzpowered.protocol.packet.play.client;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.quartzpowered.network.protocol.packet.Packet;
-import org.quartzpowered.protocol.data.ChatPosition;
 import org.quartzpowered.protocol.data.WindowType;
-import org.quartzpowered.protocol.data.component.TextComponent;
+import org.quartzpowered.protocol.data.chat.component.BaseComponent;
 
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class OpenWindowPacket extends Packet {
     private WindowType type;
-    private TextComponent title;
+    private BaseComponent title;
     private byte slots;
     private int entityId;
 }

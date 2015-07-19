@@ -24,21 +24,24 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.data.info;
+package org.quartzpowered.protocol.data.chat.component;
 
-import lombok.Data;
-import org.quartzpowered.network.session.profile.PlayerProfile;
-import org.quartzpowered.protocol.data.Gamemode;
-import org.quartzpowered.protocol.data.chat.component.BaseComponent;
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
-@Data
-public class PlayerInfo {
-    private PlayerProfile profile;
-    private Gamemode gamemode;
-    private int ping;
-    private BaseComponent displayName;
+@Getter
+@ToString
+@RequiredArgsConstructor
+final public class HoverEvent {
 
-    public boolean hasDisplayName() {
-        return displayName != null;
+    private final Action action;
+    private final BaseComponent[] value;
+
+    public enum Action {
+
+        SHOW_TEXT,
+        SHOW_ACHIEVEMENT,
+        SHOW_ITEM
     }
 }

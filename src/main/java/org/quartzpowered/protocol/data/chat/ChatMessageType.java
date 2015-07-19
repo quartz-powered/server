@@ -24,27 +24,14 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.data.component;
+package org.quartzpowered.protocol.data.chat;
 
-import lombok.Getter;
-import org.boon.json.JsonFactory;
-import org.boon.json.ObjectMapper;
+/**
+ * Represents the position on the screen where a message will appear.
+ */
+public enum ChatMessageType {
 
-public class TextComponent {
-    private static final ObjectMapper objectMapper = JsonFactory.create();
-
-    @Getter
-    private String text;
-
-    public TextComponent(String text) {
-        this.text = text;
-    }
-
-    public String toJson() {
-        return objectMapper.toJson(this);
-    }
-
-    public static TextComponent fromJson(String json) {
-        return objectMapper.fromJson(json, TextComponent.class);
-    }
+    CHAT,
+    SYSTEM,
+    ACTION_BAR
 }

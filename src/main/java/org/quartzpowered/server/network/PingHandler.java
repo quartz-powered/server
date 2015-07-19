@@ -29,9 +29,9 @@ package org.quartzpowered.server.network;
 import net.engio.mbassy.listener.Handler;
 import org.quartzpowered.network.protocol.Protocol;
 import org.quartzpowered.network.session.Session;
+import org.quartzpowered.protocol.data.chat.component.TextComponent;
 import org.quartzpowered.protocol.data.component.PlayersComponent;
 import org.quartzpowered.protocol.data.component.StatusComponent;
-import org.quartzpowered.protocol.data.component.TextComponent;
 import org.quartzpowered.protocol.data.component.VersionComponent;
 import org.quartzpowered.protocol.packet.status.client.PongPacket;
 import org.quartzpowered.protocol.packet.status.client.StatusResponsePacket;
@@ -58,7 +58,7 @@ public class PingHandler {
         status.setVersion(version);
         status.setPlayers(players);
 
-        status.setDescription(new TextComponent("Hello Quartz!"));
+        status.setDescription("Hello Quartz!");
 
         response.setStatus(status);
 
