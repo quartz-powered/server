@@ -46,10 +46,9 @@ public class PlayerBlockPlacementCodec implements Codec<PlayerBlockPlacementPack
     public void decode(Buffer buffer, PlayerBlockPlacementPacket packet) {
         packet.setLocation(buffer.readBlockPosition());
         packet.setFace(buffer.readByte());
-        ItemSlot itemSlot = new ItemSlot();
-        packet.setHeldItem(itemSlot.read(buffer));
+        packet.setHeldItem(new ItemSlot().read(buffer));
         packet.setCursorPositionX(buffer.readByte());
         packet.setCursorPositionY(buffer.readByte());
-        packet.setCursorPositionY(buffer.readByte());
+        packet.setCursorPositionZ(buffer.readByte());
     }
 }

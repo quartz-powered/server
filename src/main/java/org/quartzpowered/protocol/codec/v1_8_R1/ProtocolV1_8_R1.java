@@ -96,7 +96,7 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         serverBoundPacket(PLAY, 0x05, PlayerLookPacket.class, new PlayerLookCodec());
         serverBoundPacket(PLAY, 0x06, PlayerPositionLookPacket.class, new PlayerPositionLookCodec());
         serverBoundPacket(PLAY, 0x07, PlayerActionPacket.class, new PlayerActionCodec());
-//        serverBoundPacket(PLAY, 0x08, PlayerBlockPlacementPacket.class, new PlayerBlockPlacementCodec());
+        serverBoundPacket(PLAY, 0x08, PlayerBlockPlacementPacket.class, new PlayerBlockPlacementCodec());
         serverBoundPacket(PLAY, 0x09, HeldItemChangePacket.class, new HeldItemChangeCodec());
         serverBoundPacket(PLAY, 0x0A, PlayerAnimationPacket.class, new NoopCodec<>());
         serverBoundPacket(PLAY, 0x0B, EntityActionPacket.class, new EntityActionCodec());
@@ -158,11 +158,11 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
 //        clientBoundPacket(PLAY, 0x24, BlockActionPacket.class, new BlockActionCodec());
 //        clientBoundPacket(PLAY, 0x25, BlockBreakAnimationPacket.cass, new BlockBreakAnimationCodec());
         clientBoundPacket(PLAY, 0x26, ChunkBulkPacket.class, new ChunkBulkCodec());
-//        clientBoundPacket(PLAY, 0x27, ExplosionPacket.class, new ExplosionCodec());
+        clientBoundPacket(PLAY, 0x27, ExplosionPacket.class, new ExplosionCodec());
 //        clientBoundPacket(PLAY, 0x28, EffectPacket.class, new EffectCodec());
 //        clientBoundPacket(PLAY, 0x29, SoundEffectPacket.class, new SoundEffectCodec());
         clientBoundPacket(PLAY, 0x2A, ParticlePacket.class, new ParticleCodec());
-//        clientBoundPacket(PLAY, 0x2B, ChangeGameStatePacket.class, new ChangeGameStateCodec());
+        clientBoundPacket(PLAY, 0x2B, ChangeGameStatePacket.class, new ChangeGameStateCodec());
 //        clientBoundPacket(PLAY, 0x2C, SpawnGlobalEntityPacket.class, new SpawnGlobalEntityCodec());
         clientBoundPacket(PLAY, 0x2D, OpenWindowPacket.class, new OpenWindowCodec());
         clientBoundPacket(PLAY, 0x2E, CloseWindowPacket.class, new CloseWindowCodec());
@@ -188,7 +188,7 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(PLAY, 0x40, KickPacket.class, new KickCodec());
         clientBoundPacket(PLAY, 0x41, ServerDifficultyPacket.class, new ServerDifficultyCodec());
 //        clientBoundPacket(PLAY, 0x42, CombatEventPacket.class, new CombatEventCodec());
-//        clientBoundPacket(PLAY, 0x43, CameraPacket.class, new CameraCodec());
+        clientBoundPacket(PLAY, 0x43, CameraPacket.class, new CameraCodec());
 //        clientBoundPacket(PLAY, 0x44, WorldBorderPacket.class, new WorldBorderCodec());
         clientBoundPacket(PLAY, 0x45, TitlePacket.class, new TitleCodec());
         clientBoundPacket(PLAY, 0x46, CompressionPacket.class, new CompressionCodec());
