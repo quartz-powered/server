@@ -1,4 +1,4 @@
-/**
+/*
  * This file is a component of Quartz Powered, this license makes sure any work
  * associated with Quartz Powered, must follow the conditions of the license included.
  *
@@ -24,39 +24,43 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.server;
 
 import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.data.ChatPosition;
-import org.quartzpowered.protocol.data.WindowType;
-import org.quartzpowered.protocol.data.component.TextComponent;
-import org.quartzpowered.protocol.packet.play.client.OpenWindowPacket;
+import org.quartzpowered.protocol.packet.play.server.BlockPlacePacket;
 
-public class OpenWindowCodec implements Codec<OpenWindowPacket> {
+public class BlockPlaceCodec implements Codec<BlockPlacePacket> {
     @Override
-    public void encode(Buffer buffer, OpenWindowPacket packet) {
-        buffer.writeByte(1 /*TODO*/);
-        buffer.writeString(packet.getType().getTitle());
+    public void encode(Buffer buffer, BlockPlacePacket packet) {
 
-        buffer.writeString(packet.getTitle().toJson());
-        if(packet.getType().equals(WindowType.CHEST))
-            buffer.writeByte(packet.getSlots());
-        else
-            buffer.writeByte(packet.getType().getSize());
-        if(packet.getEntityId() != 0)
-            buffer.writeInt(packet.getEntityId());
+        buffer.writeLong(packet.getLocation());
+        buffer.writeByte(packet.getFace());
+        buffer.writeShort(packet.getBlockId());
+        buffer.writeByte(packet.getBlockCount());
+        buffer.writeShort(packet.getBlockDamage());
+        buffer.writeByte((byte) 0/*Placeholder*/);
+        buffer.writeByte(packet.getCursorX());
+        buffer.writeByte(packet.getCursorY());
+        buffer.writeByte(packet.getCursorZ());
+
     }
 
     @Override
-    public void decode(Buffer buffer, OpenWindowPacket packet) {
-        packet.setType(WindowType.fromString(buffer.readString()));
-        packet.setTitle(new TextComponent(buffer.readString()));
-        packet.setSlots(buffer.readByte());
+    public void decode(Buffer buffer, BlockPlacePacket packet) {
 
-        int entId = buffer.readInt();
+        packet.setLocation(buffer.readLong());
+        packet.setFace(buffer.readByte());
+        int id = buffer.readShort();
+        packet.setBlockId(id);
+        if(id != -1) {
+            packet.setBlockCount(buffer.readByte());
+            packet.setBlockDamage(buffer.readShort());
+            buffer.readByte();
+        }
+        packet.setCursorX(buffer.readByte());
+        packet.setCursorY(buffer.readByte());
+        packet.setCursorZ(buffer.readByte());
 
-        if(entId != 0)
-            packet.setEntityId(buffer.readInt());
     }
 }
