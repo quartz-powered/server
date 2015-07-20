@@ -74,6 +74,36 @@ public class Buffer extends ByteBuf {
         }
     }
 
+    public long readVarLong() {
+        long result = 0;
+        int count = 0;
+        while (true) {
+            byte in = readByte();
+            result |= (in & 0x7f) << (count++ * 7);
+            if (count > 10) {
+                throw new BufferException("VarLong byte count > 10");
+            }
+            if ((in & 0x80) != 0x80) {
+                break;
+            }
+        }
+        return result;
+    }
+
+    public void writeVarLong(long value) {
+        while (true) {
+            byte part = (byte) (value & 0x7f);
+            value >>>= 7;
+            if (value != 0) {
+                part |= 0x80;
+            }
+            writeByte(part);
+            if (value == 0) {
+                break;
+            }
+        }
+    }
+
     public byte[] readByteArray() {
         int size = readVarInt();
         byte[] result = new byte[size];
