@@ -34,12 +34,15 @@ public class BlockChangeCodec implements Codec<BlockChangePacket> {
     @Override
     public void encode(Buffer buffer, BlockChangePacket packet) {
         buffer.writeBlockPosition(packet.getLocation());
-        buffer.writeVarInt(packet.getBlockId());
+        buffer.writeVarInt((packet.getId() << 4) | (packet.getData() & 0xf));
     }
 
     @Override
     public void decode(Buffer buffer, BlockChangePacket packet) {
         packet.setLocation(buffer.readBlockPosition());
-        packet.setBlockId(buffer.readVarInt());
+
+        int block = buffer.readVarInt();
+        packet.setId(block << 4);
+        packet.setData(block & 0xf);
     }
 }

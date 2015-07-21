@@ -150,7 +150,7 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
 
 //        clientBoundPacket(PLAY, 0x20, EntityPropertiesPacket.class, new EntityPropertiesCodec());
         clientBoundPacket(PLAY, 0x21, ChunkPacket.class, new ChunkCodec());
-//        clientBoundPacket(PLAY, 0x22, MultiBlockChangePacket.class, new MultiBlockChangeCodec());
+        clientBoundPacket(PLAY, 0x22, MultiBlockChangePacket.class, new MultiBlockChangeCodec());
         clientBoundPacket(PLAY, 0x23, BlockChangePacket.class, new BlockChangeCodec());
         clientBoundPacket(PLAY, 0x24, BlockActionPacket.class, new BlockActionCodec());
         clientBoundPacket(PLAY, 0x25, BlockBreakAnimationPacket.class, new BlockBreakAnimationCodec());

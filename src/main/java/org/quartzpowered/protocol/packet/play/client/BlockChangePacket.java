@@ -35,5 +35,6 @@ import org.quartzpowered.protocol.data.BlockPosition;
 @EqualsAndHashCode(callSuper = true)
 public class BlockChangePacket extends Packet {
     private BlockPosition location;
-    private int blockId;
+    private int id;
+    private int data;
 }
