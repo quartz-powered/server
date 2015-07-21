@@ -24,23 +24,18 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
+package org.quartzpowered.protocol.packet.play.client;
 
-import org.quartzpowered.network.buffer.Buffer;
-import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.data.GameState;
-import org.quartzpowered.protocol.packet.play.client.ChangeGameStatePacket;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.quartzpowered.network.protocol.packet.Packet;
+import org.quartzpowered.protocol.data.EntityEquipmentSlot;
+import org.quartzpowered.protocol.data.ItemSlot;
 
-public class ChangeGameStateCodec implements Codec<ChangeGameStatePacket> {
-    @Override
-    public void encode(Buffer buffer, ChangeGameStatePacket packet) {
-        buffer.writeByte(packet.getReason().getId());
-        buffer.writeFloat((float) packet.getValue());
-    }
-
-    @Override
-    public void decode(Buffer buffer, ChangeGameStatePacket packet) {
-        packet.setReason(GameState.fromId(buffer.readByte()));
-        packet.setValue(buffer.readFloat());
-    }
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class EntityEquipmentPacket extends Packet {
+    private int entityId;
+    private EntityEquipmentSlot slot;
+    private ItemSlot item;
 }

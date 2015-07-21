@@ -24,23 +24,22 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.server;
 
 import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.data.GameState;
-import org.quartzpowered.protocol.packet.play.client.ChangeGameStatePacket;
+import org.quartzpowered.protocol.packet.play.server.EnchantItemPacket;
 
-public class ChangeGameStateCodec implements Codec<ChangeGameStatePacket> {
+public class EnchantItemCodec implements Codec<EnchantItemPacket> {
     @Override
-    public void encode(Buffer buffer, ChangeGameStatePacket packet) {
-        buffer.writeByte(packet.getReason().getId());
-        buffer.writeFloat((float) packet.getValue());
+    public void encode(Buffer buffer, EnchantItemPacket packet) {
+        buffer.writeByte(packet.getWindowId());
+        buffer.writeByte(packet.getEnchantment());
     }
 
     @Override
-    public void decode(Buffer buffer, ChangeGameStatePacket packet) {
-        packet.setReason(GameState.fromId(buffer.readByte()));
-        packet.setValue(buffer.readFloat());
+    public void decode(Buffer buffer, EnchantItemPacket packet) {
+        packet.setWindowId(buffer.readByte());
+        packet.setEnchantment(buffer.readByte());
     }
 }

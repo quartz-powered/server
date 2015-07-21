@@ -24,23 +24,32 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
+package org.quartzpowered.protocol.codec.v1_8_R1.play.server;
 
 import org.quartzpowered.network.buffer.Buffer;
 import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.data.GameState;
-import org.quartzpowered.protocol.packet.play.client.ChangeGameStatePacket;
+import org.quartzpowered.protocol.packet.play.server.TabCompletePacket;
 
-public class ChangeGameStateCodec implements Codec<ChangeGameStatePacket> {
+public class TabCompleteCodec implements Codec<TabCompletePacket> {
     @Override
-    public void encode(Buffer buffer, ChangeGameStatePacket packet) {
-        buffer.writeByte(packet.getReason().getId());
-        buffer.writeFloat((float) packet.getValue());
+    public void encode(Buffer buffer, TabCompletePacket packet) {
+        buffer.writeString(packet.getText());
+        buffer.writeBoolean(packet.isHasPosition());
+
+        if (packet.isHasPosition()) {
+           buffer.writeBlockPosition(packet.getLookedAtBlock());
+        }
     }
 
     @Override
-    public void decode(Buffer buffer, ChangeGameStatePacket packet) {
-        packet.setReason(GameState.fromId(buffer.readByte()));
-        packet.setValue(buffer.readFloat());
+    public void decode(Buffer buffer, TabCompletePacket packet) {
+        packet.setText(buffer.readString());
+
+        boolean hasPosition = buffer.readBoolean();
+        packet.setHasPosition(hasPosition);
+
+        if (hasPosition) {
+            packet.setLookedAtBlock(buffer.readBlockPosition());
+        }
     }
 }

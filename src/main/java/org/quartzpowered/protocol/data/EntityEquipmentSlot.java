@@ -24,23 +24,20 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
+package org.quartzpowered.protocol.data;
 
-import org.quartzpowered.network.buffer.Buffer;
-import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.data.GameState;
-import org.quartzpowered.protocol.packet.play.client.ChangeGameStatePacket;
+public enum EntityEquipmentSlot {
+    HELD,
+    BOOTS,
+    LEGGINGS,
+    CHESTPLATE,
+    HELMET;
 
-public class ChangeGameStateCodec implements Codec<ChangeGameStatePacket> {
-    @Override
-    public void encode(Buffer buffer, ChangeGameStatePacket packet) {
-        buffer.writeByte(packet.getReason().getId());
-        buffer.writeFloat((float) packet.getValue());
+    public int getId() {
+        return ordinal();
     }
 
-    @Override
-    public void decode(Buffer buffer, ChangeGameStatePacket packet) {
-        packet.setReason(GameState.fromId(buffer.readByte()));
-        packet.setValue(buffer.readFloat());
+    public static EntityEquipmentSlot fromId(int id) {
+        return values()[id];
     }
 }

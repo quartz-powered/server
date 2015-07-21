@@ -24,23 +24,16 @@
  * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
  * THE SOFTWARE.
  */
-package org.quartzpowered.protocol.codec.v1_8_R1.play.client;
+package org.quartzpowered.protocol.packet.play.server;
 
-import org.quartzpowered.network.buffer.Buffer;
-import org.quartzpowered.network.protocol.codec.Codec;
-import org.quartzpowered.protocol.data.GameState;
-import org.quartzpowered.protocol.packet.play.client.ChangeGameStatePacket;
+import lombok.Data;
+import lombok.EqualsAndHashCode;
+import org.quartzpowered.network.protocol.packet.Packet;
 
-public class ChangeGameStateCodec implements Codec<ChangeGameStatePacket> {
-    @Override
-    public void encode(Buffer buffer, ChangeGameStatePacket packet) {
-        buffer.writeByte(packet.getReason().getId());
-        buffer.writeFloat((float) packet.getValue());
-    }
+import java.util.UUID;
 
-    @Override
-    public void decode(Buffer buffer, ChangeGameStatePacket packet) {
-        packet.setReason(GameState.fromId(buffer.readByte()));
-        packet.setValue(buffer.readFloat());
-    }
+@Data
+@EqualsAndHashCode(callSuper = true)
+public class SpectatePacket extends Packet {
+    private UUID targetPlayer;
 }
