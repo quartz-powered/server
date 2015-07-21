@@ -186,12 +186,12 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(PLAY, 0x41, ServerDifficultyPacket.class, new ServerDifficultyCodec());
         clientBoundPacket(PLAY, 0x42, CombatEventPacket.class, new CombatEventCodec());
         clientBoundPacket(PLAY, 0x43, CameraPacket.class, new CameraCodec());
-//        clientBoundPacket(PLAY, 0x44, WorldBorderPacket.class, new WorldBorderCodec());
+        clientBoundPacket(PLAY, 0x44, WorldBorderPacket.class, new WorldBorderCodec());
         clientBoundPacket(PLAY, 0x45, TitlePacket.class, new TitleCodec());
         clientBoundPacket(PLAY, 0x46, CompressionPacket.class, new CompressionCodec());
         clientBoundPacket(PLAY, 0x47, PlayerListHeaderFooterPacket.class, new PlayerListHeaderFooterCodec());
         clientBoundPacket(PLAY, 0x48, ResourcePackSendPacket.class, new ResourcePackSendCodec());
-//        clientBoundPacket(PLAY, 0x49, UpdateEntityNBTPacket.class, new UpdateEntityNBTCodec());
+        clientBoundPacket(PLAY, 0x49, UpdateEntityNbtPacket.class, new UpdateEntityNbtCodec());
 
     }
 }
