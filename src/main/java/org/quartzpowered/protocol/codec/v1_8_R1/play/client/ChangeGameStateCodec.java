@@ -35,12 +35,12 @@ public class ChangeGameStateCodec implements Codec<ChangeGameStatePacket> {
     @Override
     public void encode(Buffer buffer, ChangeGameStatePacket packet) {
         buffer.writeByte(packet.getReason().getId());
-        buffer.writeDouble(packet.getValue());
+        buffer.writeFloat((float) packet.getValue());
     }
 
     @Override
     public void decode(Buffer buffer, ChangeGameStatePacket packet) {
         packet.setReason(GameState.fromId(buffer.readByte()));
-        packet.setValue(buffer.readDouble());
+        packet.setValue(buffer.readFloat());
     }
 }

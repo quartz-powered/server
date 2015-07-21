@@ -26,23 +26,39 @@
  */
 package org.quartzpowered.protocol.data;
 
-public enum GameState {
-    INVALID_BED,
-    END_RAINING,
-    BEGIN_RAINING,
-    CHANGE_GAMEMODE,
-    ENTER_CREDITS,
-    DEMO_MESSAGE,
-    ARROW_HITING_PLAYER,
-    FADE_VALUE,
-    FADE_TIME,
-    PLAY_MOB_APPEARANCE;
+import lombok.Getter;
 
-    public int getId() {
-        return ordinal();
+import java.util.HashMap;
+import java.util.Map;
+
+public enum GameState {
+    INVALID_BED(0),
+    END_RAINING(1),
+    BEGIN_RAINING(2),
+    CHANGE_GAMEMODE(3),
+    ENTER_CREDITS(4),
+    DEMO_MESSAGE(5),
+    ARROW_HITING_PLAYER(6),
+    FADE_VALUE(7),
+    FADE_TIME(8),
+    PLAY_MOB_APPEARANCE(10);
+
+    @Getter
+    private final int id;
+
+    private GameState(int id) {
+        this.id = id;
+    }
+
+    private static final Map<Integer, GameState> idMap = new HashMap<>();
+
+    static {
+        for (GameState gameState : values()) {
+            idMap.put(gameState.id, gameState);
+        }
     }
 
     public static GameState fromId(int id) {
-        return values()[id];
+        return idMap.get(id);
     }
 }
