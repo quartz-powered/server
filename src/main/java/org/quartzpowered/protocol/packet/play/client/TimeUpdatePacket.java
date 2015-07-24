@@ -33,6 +33,6 @@ import org.quartzpowered.network.protocol.packet.Packet;
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class TimeUpdatePacket extends Packet {
-    private Long worldAge;
-    private Long timeOfDay;
+    private long worldAge;
+    private long timeOfDay;
 }
