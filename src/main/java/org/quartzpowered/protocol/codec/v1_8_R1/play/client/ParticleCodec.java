@@ -49,9 +49,7 @@ public class ParticleCodec implements Codec<ParticlePacket> {
         buffer.writeFloat(packet.getParticleData());
         buffer.writeInt(packet.getParticleCount());
 
-        List<Integer> data = packet.getData();
-        buffer.writeVarInt(data.size());
-        data.forEach(buffer::writeVarInt);
+        packet.getData().forEach(buffer::writeVarInt);
     }
 
     @Override
@@ -64,11 +62,12 @@ public class ParticleCodec implements Codec<ParticlePacket> {
         packet.setOffsetX(buffer.readFloat());
         packet.setOffsetY(buffer.readFloat());
         packet.setOffsetZ(buffer.readFloat());
+        packet.setParticleData(buffer.readFloat());
         packet.setParticleCount(buffer.readInt());
 
-        List<Integer> data = new ArrayList<>(buffer.readVarInt());
-        for (int i = 0; i < data.size(); i++) {
-            data.set(i, buffer.readVarInt());
+        List<Integer> data = packet.getData();
+        while (buffer.isReadable()) {
+            data.add(buffer.readVarInt());
         }
     }
 }

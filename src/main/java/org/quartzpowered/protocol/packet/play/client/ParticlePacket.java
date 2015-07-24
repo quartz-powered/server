@@ -31,6 +31,7 @@ import lombok.EqualsAndHashCode;
 import org.quartzpowered.network.protocol.packet.Packet;
 import org.quartzpowered.protocol.data.ParticleType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Data
@@ -46,5 +47,5 @@ public class ParticlePacket extends Packet {
     private float offsetZ;
     private float particleData;
     private int particleCount;
-    private List<Integer> data;
+    private List<Integer> data = new ArrayList<>();
 }

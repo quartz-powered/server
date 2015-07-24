@@ -163,7 +163,7 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(PLAY, 0x2C, SpawnGlobalEntityPacket.class, new SpawnGlobalEntityCodec());
         clientBoundPacket(PLAY, 0x2D, OpenWindowPacket.class, new OpenWindowCodec());
         clientBoundPacket(PLAY, 0x2E, CloseWindowPacket.class, new CloseWindowCodec());
-        clientBoundPacket(PLAY, 0x2F, SetExperiencePacket.class, new SetExperienceCodec());
+//        clientBoundPacket(PLAY, 0x2F, SetSlotPacket.class, new SetSlotCodec());
 
         clientBoundPacket(PLAY, 0x30, WindowItemsPacket.class, new WindowItemsCodec());
         clientBoundPacket(PLAY, 0x31, WindowPropertyPacket.class, new WindowPropertyCodec());
