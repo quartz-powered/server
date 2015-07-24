@@ -42,7 +42,7 @@ public class BlockChangeCodec implements Codec<BlockChangePacket> {
         packet.setLocation(buffer.readBlockPosition());
 
         int block = buffer.readVarInt();
-        packet.setId(block << 4);
+        packet.setId(block >> 4);
         packet.setData(block & 0xf);
     }
 }

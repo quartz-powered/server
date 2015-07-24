@@ -57,10 +57,10 @@ public class MultiBlockChangeCodec implements Codec<MultiBlockChangePacket> {
         for (int i = 0; i < count; i++) {
             RelativeBlockRecord record = new RelativeBlockRecord();
 
-            int pos = buffer.readByte();
+            int pos = buffer.readUnsignedByte();
             record.setX(pos >> 4);
             record.setZ(pos & 0xf);
-            record.setY(buffer.readByte());
+            record.setY(buffer.readUnsignedByte());
 
             int block = buffer.readVarInt();
             record.setId(block >> 4);

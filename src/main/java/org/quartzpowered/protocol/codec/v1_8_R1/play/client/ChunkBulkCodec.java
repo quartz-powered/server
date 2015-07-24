@@ -67,6 +67,7 @@ public class ChunkBulkCodec implements Codec<ChunkBulkPacket> {
             chunk.setX(buffer.readInt());
             chunk.setZ(buffer.readInt());
             chunk.setMask(buffer.readUnsignedShort());
+            chunk.setContinuous(true);
 
             chunks.add(chunk);
         }
