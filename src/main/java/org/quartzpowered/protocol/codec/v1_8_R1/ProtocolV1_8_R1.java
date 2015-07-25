@@ -88,6 +88,7 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
 
         serverBoundPacket(PLAY, 0x00, KeepAlivePacket.class, new KeepAliveCodec());
         serverBoundPacket(PLAY, 0x01, PlayerChatMessagePacket.class, new PlayerChatMessageCodec());
+        serverBoundPacket(PLAY, 0x02, UseEntityPacket.class, new UseEntityCodec());
         serverBoundPacket(PLAY, 0x03, PlayerPacket.class, new PlayerCodec());
         serverBoundPacket(PLAY, 0x04, PlayerPositionPacket.class, new PlayerPositionCodec());
         serverBoundPacket(PLAY, 0x05, PlayerLookPacket.class, new PlayerLookCodec());
@@ -129,7 +130,7 @@ public class ProtocolV1_8_R1 extends IdentifierProtocol {
         clientBoundPacket(PLAY, 0x0C, SpawnPlayerPacket.class, new SpawnPlayerCodec());
         clientBoundPacket(PLAY, 0x0D, CollectItemPacket.class, new CollectItemCodec());
 //        clientBoundPacket(PLAY, 0x0E, SpawnObjectPacket.class, new SpawnObjectCodec());
-//        clientBoundPacket(PLAY, 0x0F, SpawnMobPacket.class, new SpawnMobCodec());
+        clientBoundPacket(PLAY, 0x0F, SpawnMobPacket.class, new SpawnMobCodec());
 
 //        clientBoundPacket(PLAY, 0x10, SpawnPaintingPacket.class, new SpawnPaintingCodec());
         clientBoundPacket(PLAY, 0x11, SpawnExperiencePacket.class, new SpawnExperienceCodec());
